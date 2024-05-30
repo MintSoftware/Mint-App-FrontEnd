@@ -2,11 +2,14 @@ import { useEffect, useState } from "react";
 import { Route, Routes, } from "react-router-dom";
 import CriarConta from "./view/criarconta";
 import Entrar from "./view/entrar";
+import { Layout } from "./view/layout";
 import LoadingScreen from "./view/loading/Loading";
+import PaginaNaoEncontrada from "./view/paginanaoencontrada";
+import Produto from "./view/produto";
 import RecuperarSenha from "./view/recuperarsenha";
 
 function MainRoutes() {
-    const usuarioLogado = false;
+    const usuarioLogado = true;
     const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
@@ -29,28 +32,17 @@ function MainRoutes() {
         )
     }
 
-    if (!usuarioLogado) {
-        return (
+    return (
+        <Layout>
             <Routes>
-                <Route path="/" element={<Entrar />} />
+                <Route path="/" element={<PaginaNaoEncontrada />} />
+                <Route path="/produtos" element={<Produto />} />
+                <Route path="*" element={<PaginaNaoEncontrada />} />
+                <Route path="/entrar" element={<Entrar />} />
                 <Route path="/criarconta" element={<CriarConta />} />
                 <Route path="/recuperarsenha" element={<RecuperarSenha />} />
             </Routes>
-        )
-    }
-
-    return (
-        // <Layout>
-        //     <Routes>
-        //         <Route path="*" element={<PaginaNaoEncontrada />} />
-        //         {/* <Route path="/agenda" element={<Agenda />} />
-        // <Route path="/clientes" element={<Clientes />} />
-        // <Route path="/locais" element={<Locais />} />
-        // <Route path="/configuracoes/*" element={<Configuracoes />} />
-        // <Route path="/filial" element={<Filial />} /> */}
-        //     </Routes>
-        // </Layout>
-        <></>
+        </Layout>
     )
 }
 

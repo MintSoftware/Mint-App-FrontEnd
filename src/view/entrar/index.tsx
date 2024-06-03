@@ -1,12 +1,12 @@
-import { Button } from "@/components/ui/button"
-import { Label } from "@/components/ui/label"
-import { ToastAction } from "@/components/ui/toast"
-import { useToast } from "@/components/ui/use-toast"
-import Api from "@/infra/helpers/api"
-import { useState } from "react"
-import { Link } from "react-router-dom"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../../components/ui/card"
-import { Input } from "../../components/ui/input"
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { ToastAction } from "@/components/ui/toast";
+import { useToast } from "@/components/ui/use-toast";
+import Api from "@/infra/helpers/api";
+import { useState } from "react";
+import { Link } from "react-router-dom";
 
 export default function Entrar() {
     const [email, setEmail] = useState(""),
@@ -50,9 +50,8 @@ export default function Entrar() {
         }
     }
 
-
     return (
-        <div className="w-sreen h-screen bg-blue-700 z-50">
+        <div className="fixed flex justify-center items-center w-full h-full bg-background z-50 top-0 left-0 border">
             <form onSubmit={logar}>
                 <Card className="mx-auto max-w-sm w-full h-full">
                     <CardHeader>

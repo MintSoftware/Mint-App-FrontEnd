@@ -3,12 +3,28 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { ToastAction } from "@/components/ui/toast"
+import { useToast } from "@/components/ui/use-toast"
+import Api from "@/infra/helpers/api"
 import { useState } from "react"
 import { Link } from "react-router-dom"
 
 export default function CriarConta() {
     const [activeTab, setActiveTab] = useState("info");
     const [cpfcnpjFormatado, setCpfcnpjFormatado] = useState("");
+    const [nome, setNome] = useState("");
+    const [sobrenome, setSobrenome] = useState("");
+    const [email, setEmail] = useState("");
+    const [senha, setSenha] = useState("");
+    const [dataNascimento, setDataNascimento] = useState("");
+    const [telefone, setTelefone] = useState("");
+    const [endereco, setEndereco] = useState("");
+    const [complemento, setComplemento] = useState("");
+    const [cep, setCep] = useState("");
+    const [cidade, setCidade] = useState("");
+    const [estado, setEstado] = useState("");
+    const [pais, setPais] = useState("");
+    const { toast } = useToast();
 
     const formatarCfpCnpj = (event: React.ChangeEvent<HTMLInputElement>) => {
         let { value } = event.target;
@@ -38,18 +54,56 @@ export default function CriarConta() {
         setActiveTab("address");
     };
 
-    const criarConta = (e: React.FormEvent<HTMLFormElement>) => {
+    const criarConta = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
         const dto = {
-
+            nome,
+            sobrenome,
+            email,
+            senha,
+            dataNascimento,
+            telefone,
+            endereco,
+            complemento,
+            cep,
+            cidade,
+            estado,
+            pais
         };
 
-        console.log(dto);
+        try {
+            await Api.post("usuario/cadastrar", dto);
+                toast({
+                    variant: "sucesso",
+                    description: "Cadastro realizado com sucesso!",
+                })
+                window.location.href = "/";
+        } catch (error: any) {
+            if (error.response) {
+                toast({
+                    variant: "destructive",
+                    title: "Erro!",
+                    description: error.response.data,
+                    action: <ToastAction altText="Tentar Novamente" onClick={() => criarConta(e)}>Tentar novamente</ToastAction>,
+                })
+            } else {
+                toast({
+                    variant: "destructive",
+                    title: "Erro",
+                    description: "Erro ao realizar cadastro!",
+                    action: <ToastAction altText="Tentar Novamente" onClick={() => criarConta(e)}>Tentar novamente</ToastAction>,
+                })
+            }
+        }
+
     };
 
     return (
         <div className="fixed flex justify-center items-center w-full h-full bg-background z-50 top-0 left-0 border">
+            <div className="fixed top-0 left-0 w-[15%] h-[10%] bg-[#3F48CC] flex justify-center items-center">
+                <img src="/logo.png" alt="Logo" className="w-20 h-20" />
+            </div>
             <form onSubmit={criarConta}>
                 <Tabs className="mx-auto max-w-sm max-w-[45rem] w-[45rem]" value={activeTab}>
                     <TabsList className="grid w-full grid-cols-2">
@@ -67,27 +121,27 @@ export default function CriarConta() {
                                     <div className="grid grid-cols-2 gap-4">
                                         <div className="grid gap-2">
                                             <Label htmlFor="nome">Nome</Label>
-                                            <Input id="nome" placeholder="José" required />
+                                            <Input id="nome" placeholder="José" required onChange={(e) => setNome(e.target.value)} />
                                         </div>
                                         <div className="grid gap-2">
                                             <Label htmlFor="sobrenome">Sobrenome</Label>
-                                            <Input id="sobrenome" placeholder="Silva" required />
+                                            <Input id="sobrenome" placeholder="Silva" required onChange={(e) => setSobrenome(e.target.value)} />
                                         </div>
                                     </div>
                                     <div className="grid grid-cols-2 gap-4">
                                         <div className="grid gap-2">
                                             <Label htmlFor="email">Email</Label>
-                                            <Input id="email" placeholder="jose.silva@mintecommerce.com.br" required type="email" />
+                                            <Input id="email" placeholder="jose.silva@mintecommerce.com.br" required type="email" onChange={(e) => setEmail(e.target.value)} />
                                         </div>
                                         <div className="grid gap-2">
                                             <Label htmlFor="senha">Senha</Label>
-                                            <Input id="senha" required type="password" />
+                                            <Input id="senha" required type="password" onChange={(e) => setSenha(e.target.value)} />
                                         </div>
                                     </div>
                                     <div className="grid grid-cols-2 gap-4">
                                         <div className="grid gap-2">
                                             <Label htmlFor="data-nascimento">Data de Nascimento</Label>
-                                            <Input id="data-nascimento" placeholder="dd/mm/aaaa" required type="date" />
+                                            <Input id="data-nascimento" placeholder="dd/mm/aaaa" required type="date" onChange={(e) => setDataNascimento(e.target.value)} />
                                         </div>
                                         <div className="grid gap-2">
                                             <Label htmlFor="cpf">CPF/CNPJ</Label>
@@ -97,7 +151,7 @@ export default function CriarConta() {
                                     <div className="grid grid-cols-2 gap-4">
                                         <div className="grid gap-2">
                                             <Label htmlFor="telefone">Telefone</Label>
-                                            <Input id="telefone" placeholder="(00) 00000-0000" required />
+                                            <Input id="telefone" placeholder="(00) 00000-0000" required onChange={(e) => setTelefone(e.target.value)} />
                                         </div>
                                     </div>
                                     <Button className="w-full" variant="default" onClick={handleNextClick}>
@@ -109,7 +163,7 @@ export default function CriarConta() {
                                 </div>
                                 <div className="mt-4 text-center text-sm">
                                     Já tem uma conta?
-                                    <Link className="underline" to="/">
+                                    <Link className="underline" to="/entrar">
                                         Entrar
                                     </Link>
                                 </div>
@@ -127,31 +181,31 @@ export default function CriarConta() {
                                     <div className="grid grid-cols-2 gap-4">
                                         <div className="grid gap-2">
                                             <Label htmlFor="endereco">Endereço</Label>
-                                            <Input id="endereco" placeholder="Rua, Número" required />
+                                            <Input id="endereco" placeholder="Rua, Número" required onChange={(e) => setEndereco(e.target.value)} />
                                         </div>
                                         <div className="grid gap-2">
                                             <Label htmlFor="complemento">Complemento</Label>
-                                            <Input id="complemento" placeholder="Apartamento, Casa, etc." />
+                                            <Input id="complemento" placeholder="Apartamento, Casa, etc." onChange={(e) => setComplemento(e.target.value)} />
                                         </div>
                                     </div>
                                     <div className="grid grid-cols-2 gap-4">
                                         <div className="grid gap-2">
                                             <Label htmlFor="cep">CEP</Label>
-                                            <Input id="cep" placeholder="00000-000" required />
+                                            <Input id="cep" placeholder="00000-000" required onChange={(e) => setCep(e.target.value)} />
                                         </div>
                                         <div className="grid gap-2">
                                             <Label htmlFor="cidade">Cidade</Label>
-                                            <Input id="cidade" placeholder="Sua cidade" required />
+                                            <Input id="cidade" placeholder="Sua cidade" required onChange={(e) => setCidade(e.target.value)} />
                                         </div>
                                     </div>
                                     <div className="grid grid-cols-2 gap-4">
                                         <div className="grid gap-2">
                                             <Label htmlFor="estado">Estado</Label>
-                                            <Input id="estado" placeholder="Seu estado" required />
+                                            <Input id="estado" placeholder="Seu estado" required onChange={(e) => setEstado(e.target.value)} />
                                         </div>
                                         <div className="grid gap-2">
                                             <Label htmlFor="pais">País</Label>
-                                            <Input id="pais" placeholder="Seu país" required />
+                                            <Input id="pais" placeholder="Seu país" required onChange={(e) => setPais(e.target.value)} />
                                         </div>
                                     </div>
                                     <div className="flex gap-2">

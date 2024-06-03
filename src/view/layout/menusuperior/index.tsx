@@ -6,6 +6,9 @@ import { Link } from "react-router-dom";
 export default function MenuSuperior() {
     return (
         <div className="sticky top-0 z-30 flex h-14 w-full justify-end items-center gap-4 border-b bg-background px-4 pt-2 sm:static sm:h-auto sm:border-0 sm:bg-transparent sm:px-6">
+            <Link to='/criarconta'>
+                <Button variant={"link"} className="text-white" >Criar conta</Button>
+            </Link>
             <Link to='/entrar'>
                 <Button variant={"link"} className="text-white" >Entrar</Button>
             </Link>

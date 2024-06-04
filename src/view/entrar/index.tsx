@@ -28,6 +28,9 @@ export default function Entrar() {
                     variant: "success",
                     description: "Login realizado com sucesso!",
                 })
+                const UsuarioLogado = JSON.stringify(data);
+                localStorage.setItem("UsuarioLogado", UsuarioLogado);
+                window.location.href = "/";
             }
 
         } catch (error: any) {

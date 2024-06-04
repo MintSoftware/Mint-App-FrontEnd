@@ -7,6 +7,7 @@ import LoadingScreen from "./view/loading/Loading";
 import PaginaNaoEncontrada from "./view/paginanaoencontrada";
 import Produto from "./view/produto";
 import RecuperarSenha from "./view/recuperarsenha";
+import Pedido from "./view/pedido";
 
 function MainRoutes() {
     const usuarioLogado = true;
@@ -37,6 +38,7 @@ function MainRoutes() {
             <Routes>
                 <Route path="/" element={<PaginaNaoEncontrada />} />
                 <Route path="/produtos" element={<Produto />} />
+                <Route path="/pedidos" element={<Pedido />} />
                 <Route path="*" element={<PaginaNaoEncontrada />} />
                 <Route path="/entrar" element={<Entrar />} />
                 <Route path="/criarconta" element={<CriarConta />} />

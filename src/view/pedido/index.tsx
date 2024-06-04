@@ -37,7 +37,7 @@ export default function Pedido() {
 
     return (
         <div id="tabela-Pedido" className="w-full px-5 pt-[50px] h-full">
-            <Label className="text-xl p-5">Pedido</Label>
+            <Label className="text-xl p-5">Pedidos</Label>
             <Tabela
                 colunas={colunas()}
                 dados={Pedido}

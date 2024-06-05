@@ -1,31 +1,29 @@
 import { Button } from "@/components/ui/button";
-import { CardContent } from "@/components/ui/card";
+import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
 import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import Api from "@/infra/helpers/api";
 import { useState } from "react";
 
 const CadastroProduto = () => {
-    const [nome, setNome] = useState("");
-    const [email, setEmail] = useState("");
-    const [telefone, setTelefone] = useState("");
-    const [endereco, setEndereco] = useState("");
-    const [dataNascimento, setDataNascimento] = useState("");
-    const [cpf, setCpf] = useState("");
-    const [observacao, setObservacao] = useState("");
+    const [nome, setNome] = useState<string>("");
+    const [descricao, setDescricao] = useState<string>("");
+    const [preco, setPreco] = useState<number>(0);
+    const [quantidade, setQuantidade] = useState<number>(0);
+    const [quantidadeEstoque, setQuantidadeEstoque] = useState<number>(0);
+    const [categoria, setCategoria] = useState<string>("");
 
     const dto = {
         nome,
-        status: 1,
-        email,
-        telefone,
-        endereco,
-        dataNascimento,
-        cpf,
-        observacao
-    }
+        descricao,
+        preco,
+        quantidade,
+        quantidadeestoque: quantidadeEstoque,
+        categoria
+    };
 
     const salvar = async () => {
         const { data } = await Api.post("produto", dto);
@@ -35,57 +33,103 @@ const CadastroProduto = () => {
         <div>
             <Dialog>
                 <DialogTrigger asChild>
-                    <Button variant="default">Novo produto</Button>
+                    <Button variant="default">Cadastrar Produto</Button>
                 </DialogTrigger>
-                <DialogContent onInteractOutside={(evento) => evento.preventDefault()} className="sm:max-w-[700px]">
-                    <DialogHeader>
-                        <DialogTitle>Novo Produto</DialogTitle>
-                        <DialogDescription>Insira as informações do produto para salvá-las.</DialogDescription>
-                    </DialogHeader>
-                    <CardContent className="space-y-4 w-[100%]">
-                        <div className="grid grid-cols-2 gap-4">
-                            <div className="space-y-2">
-                                <Label htmlFor="name">Nome</Label>
-                                <Input onChange={(e) => setNome(e.target.value)} className="w-[300px]" id="name" placeholder="Digite o nome do produto" />
+                <DialogContent onInteractOutside={(evento) => evento.preventDefault()} className="flex flex-row items-center sm:max-w-[50%] max-h-50 h-[35rem] p-[2rem] gap-8">
+                    <div className="flex justify-center w-[50%] h-full">
+                        <Carousel className="border max-w-[80%] h-full">
+                            <CarouselNext />
+                            <CarouselContent>
+                                <CarouselItem>
+                                    <img
+                                        src="/placeholder.svg"
+                                        width={448}
+                                        height={252}
+                                        alt="Image"
+                                        className="aspect-video object-cover rounded-md"
+                                    />
+                                </CarouselItem>
+                                <CarouselItem>
+                                    <img
+                                        src="/placeholder.svg"
+                                        width={448}
+                                        height={252}
+                                        alt="Image"
+                                        className="aspect-video object-cover rounded-md"
+                                    />
+                                </CarouselItem>
+                                <CarouselItem>
+                                    <img
+                                        src="/placeholder.svg"
+                                        width={448}
+                                        height={252}
+                                        alt="Image"
+                                        className="aspect-video object-cover rounded-md"
+                                    />
+                                </CarouselItem>
+                            </CarouselContent>
+                            <CarouselPrevious />
+                        </Carousel>
+                    </div>
+                    <div>
+                        <DialogHeader>
+                            <DialogTitle>Cadastrar Novo Produto</DialogTitle>
+                            <DialogDescription>Preencha os campos abaixo para adicionar um novo produto.</DialogDescription>
+                        </DialogHeader>
+                        <div className="grid gap-4 py-4 pb-24">
+                            <div className="grid grid-cols-2 gap-4">
+                                <div className="grid gap-2">
+                                    <Label htmlFor="id">ID</Label>
+                                    <Input id="id" placeholder="ID do produto" disabled />
+                                </div>
+                                <div className="grid gap-2">
+                                    <Label htmlFor="name">Nome</Label>
+                                    <Input id="name" placeholder="Nome do produto" onChange={(e) => setNome(e.target.value)} />
+                                </div>
                             </div>
-                            <div className="space-y-2">
-                                <Label htmlFor="email">Email</Label>
-                                <Input onChange={(e) => setEmail(e.target.value)} className="w-[300px]" type="email" id="email" placeholder="Digite o email do produto" />
+                            <div className="grid gap-2">
+                                <Label htmlFor="description">Descrição</Label>
+                                <Textarea id="description" placeholder="Descrição do produto" onChange={(e) => setDescricao(e.target.value)} />
+                            </div>
+                            <div className="grid grid-cols-2 gap-4">
+                                <div className="grid gap-2">
+                                    <Label htmlFor="price">Preço</Label>
+                                    <Input id="price" type="number" placeholder="Preço do produto" onChange={(e) => setPreco(Number(e.target.value))} />
+                                </div>
+                                <div className="grid gap-2">
+                                    <Label htmlFor="quantity">Quantidade</Label>
+                                    <Input id="quantity" type="number" placeholder="Quantidade do produto" onChange={(e) => setQuantidade(Number(e.target.value))} />
+                                </div>
+                            </div>
+                            <div className="grid grid-cols-2 gap-4">
+                                <div className="grid gap-2">
+                                    <Label htmlFor="stock">Estoque</Label>
+                                    <Input id="stock" type="number" placeholder="Quantidade em estoque" onChange={(e) => setQuantidadeEstoque(Number(e.target.value))} />
+                                </div>
+                                <div className="grid gap-2 ">
+                                    <Label htmlFor="category">Categoria</Label>
+                                    <Select defaultValue="default">
+                                        <SelectTrigger className="w-full">
+                                            <SelectValue placeholder="Selecione uma categoria" />
+                                        </SelectTrigger>
+                                        <SelectContent>
+                                            <SelectItem value="default">Selecione uma categoria</SelectItem>
+                                            <SelectItem value="eletronicos">Eletrônicos</SelectItem>
+                                            <SelectItem value="vestuario">Vestuário</SelectItem>
+                                            <SelectItem value="moveis">Móveis</SelectItem>
+                                            <SelectItem value="esporte">Esporte</SelectItem>
+                                        </SelectContent>
+                                    </Select>
+                                </div>
                             </div>
                         </div>
-                        <div className="grid grid-cols-2 gap-4">
-                            <div className="space-y-2">
-                                <Label htmlFor="phone">Telefone</Label>
-                                <Input onChange={(e) => setTelefone(e.target.value)} className="w-[300px]" id="phone" placeholder="Digite o telefone do produto" />
-                            </div>
-                            <div className="space-y-2">
-                                <Label htmlFor="address">Endereço</Label>
-                                <Input onChange={(e) => setEndereco(e.target.value)} className="w-[300px]" id="address" placeholder="Digite o endereço do produto" />
-                            </div>
-                        </div>
-                        <div className="grid grid-cols-2 gap-4">
-                            <div className="space-y-2">
-                                <Label htmlFor="dob">Data de Nascimento</Label>
-                                <Input onChange={(e) => setDataNascimento(e.target.value)} className="w-[300px] fill-white stroke-white" id="dob" placeholder="Digite a data de nascimento do produto" type="date" />
-                            </div>
-                            <div className="space-y-2">
-                                <Label htmlFor="cnpj">CPF/CNPJ</Label>
-                                <Input onChange={(e) => setCpf(e.target.value)} className="w-[300px]" id="cnpj" placeholder="Digite o CPF/CNPJ do produto" />
-                            </div>
-                        </div>
-                        <div className="space-y-2">
-                            <Label htmlFor="observation">Observação</Label>
-                            <Textarea onChange={(e) => setObservacao(e.target.value)} className="h-[100px]" id="observation" placeholder="Digite uma observação sobre o produto" />
-                        </div>
-                    </CardContent>
-                    <DialogFooter>
-                        <div className="flex justify-end gap-2">
-                            <DialogClose asChild>
-                                <Button variant="outline">Fechar</Button>
+                        <DialogFooter className="flex">
+                            <Button type="submit">Salvar</Button>
+                            <DialogClose>
+                                <Button variant="outline">Cancelar</Button>
                             </DialogClose>
-                            <Button onClick={salvar}>Salvar</Button>
-                        </div>
-                    </DialogFooter>
+                        </DialogFooter>
+                    </div>
                 </DialogContent>
             </Dialog>
         </div>

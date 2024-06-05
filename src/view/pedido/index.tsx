@@ -4,8 +4,8 @@ import { ToastAction } from "@/components/ui/toast";
 import { useToast } from "@/components/ui/use-toast";
 import Api from "@/infra/helpers/api";
 import { Produto } from "@/types/Produto";
-import CadastroProduto from "@/view/produto/cadastro";
 import { useEffect, useState } from "react";
+import CadastroPedido from "./cadastro";
 import colunas from "./colunas";
 
 export default function Pedido() {
@@ -41,7 +41,7 @@ export default function Pedido() {
             <Tabela
                 colunas={colunas()}
                 dados={Pedido}
-                modal={<CadastroProduto />}
+                modal={<CadastroPedido />}
                 functionSearch={buscarPedido}
                 loading={loading}
             />

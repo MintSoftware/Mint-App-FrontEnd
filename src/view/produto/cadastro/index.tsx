@@ -5,8 +5,10 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
+import { useToast } from "@/components/ui/use-toast";
 import Api from "@/infra/helpers/api";
-import { useState } from "react";
+import { Categoria } from "@/types/Categoria";
+import { useEffect, useState } from "react";
 
 const CadastroProduto = () => {
     const [nome, setNome] = useState<string>("");
@@ -14,19 +16,63 @@ const CadastroProduto = () => {
     const [preco, setPreco] = useState<number>(0);
     const [quantidade, setQuantidade] = useState<number>(0);
     const [quantidadeEstoque, setQuantidadeEstoque] = useState<number>(0);
-    const [categoria, setCategoria] = useState<string>("");
+    const [categoria, setCategoria] = useState<Categoria>();
+    const [categoriaList, setCategoriaList] = useState<Categoria[]>([]);
+    const { toast } = useToast();
 
-    const dto = {
-        nome,
-        descricao,
-        preco,
-        quantidade,
-        quantidadeestoque: quantidadeEstoque,
-        categoria
+    useEffect(() => {
+        recuperarCategorias();
+    }, []);
+
+    const recuperarCategorias = async () => {
+        
+        try {
+            const { data } = await Api.get("categoria/listar");
+            setCategoriaList(data);
+        } catch (error) {
+            toast({
+                variant: "destructive",
+                title: "Erro!",
+                description: "Erro ao buscar categorias!",
+            });
+        }
     };
 
     const salvar = async () => {
-        const { data } = await Api.post("produto", dto);
+
+        const dto = {
+            nome,
+            descricao,
+            preco,
+            quantidade,
+            quantidadeestoque: quantidadeEstoque,
+            categoria
+        };
+
+
+        try {
+            const { data } = await Api.post("produto/cadastrar", dto);
+            if (data) {
+                // toast({
+                //     variant: "success",
+                //     description: "Produto cadastrado com sucesso!",
+                // });
+            }
+        } catch (error: any) {
+            if (error.response) {
+                // toast({
+                //     variant: "destructive",
+                //     title: "Erro!",
+                //     description: error.response.data,
+                // });
+            } else {
+                // toast({
+                //     variant: "destructive",
+                //     title: "Erro",
+                //     description: "Erro ao cadastrar produto!",
+                // });
+            }
+        }
     }
 
     return (
@@ -106,26 +152,26 @@ const CadastroProduto = () => {
                                     <Label htmlFor="stock">Estoque</Label>
                                     <Input id="stock" type="number" placeholder="Quantidade em estoque" onChange={(e) => setQuantidadeEstoque(Number(e.target.value))} />
                                 </div>
-                                <div className="grid gap-2 ">
+                                <div className="flex flex-col gap-2 ">
                                     <Label htmlFor="category">Categoria</Label>
-                                    <Select defaultValue="default">
+                                    <Select onValueChange={(value) => setCategoria(JSON.parse(value))}>
                                         <SelectTrigger className="w-full">
-                                            <SelectValue placeholder="Selecione uma categoria" />
+                                            <SelectValue placeholder="Selecione a categoria" />
                                         </SelectTrigger>
                                         <SelectContent>
-                                            <SelectItem value="default">Selecione uma categoria</SelectItem>
-                                            <SelectItem value="eletronicos">Eletrônicos</SelectItem>
-                                            <SelectItem value="vestuario">Vestuário</SelectItem>
-                                            <SelectItem value="moveis">Móveis</SelectItem>
-                                            <SelectItem value="esporte">Esporte</SelectItem>
+                                            {categoriaList.map((categoria) => (
+                                                <SelectItem key={categoria.id} value={JSON.stringify(categoria)}>
+                                                    {categoria.nome}
+                                                </SelectItem>
+                                            ))}
                                         </SelectContent>
                                     </Select>
                                 </div>
                             </div>
                         </div>
                         <DialogFooter className="flex">
-                            <Button type="submit">Salvar</Button>
-                            <DialogClose>
+                            <Button onClick={salvar}>Salvar</Button>
+                            <DialogClose asChild>
                                 <Button variant="outline">Cancelar</Button>
                             </DialogClose>
                         </DialogFooter>

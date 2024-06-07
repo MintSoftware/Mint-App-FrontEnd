@@ -45,11 +45,11 @@ const CadastroPedido = () => {
                     <CardContent className="space-y-4 w-[100%]">
                         <div className="grid grid-cols-2 gap-4">
                             <div className="space-y-2">
-                                <Label htmlFor="name">Nome</Label>
+                                <Label htmlFor="name">Nome do produto</Label>
                                 <Input onChange={(e) => setNome(e.target.value)} className="w-[300px]" id="name" placeholder="Digite o nome do produto" />
                             </div>
                             <div className="space-y-2">
-                                <Label htmlFor="email">Email</Label>
+                                <Label htmlFor="email">Data</Label>
                                 <Input onChange={(e) => setEmail(e.target.value)} className="w-[300px]" type="email" id="email" placeholder="Digite o email do produto" />
                             </div>
                         </div>

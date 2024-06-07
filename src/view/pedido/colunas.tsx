@@ -39,34 +39,34 @@ export const colunas = (): ColumnDef<Pedido>[] => [
         enableSorting: false,
         enableHiding: false,
     }, {
-        accessorKey: 'nome',
+        accessorKey: 'id',
         header: ({ column }) => (
-            <Cabecalho column={column} title="Nome" />
+            <Cabecalho column={column} title="ID" />
         ),
     }, {
-        accessorKey: 'status',
+        accessorKey: 'dataPedido',
         header: ({ column }) => (
-            <Cabecalho column={column} title="Status" />
+            <Cabecalho column={column} title="Data do Pedido" />
         ),
         cell: ({ row }) => (
-            <Badge className='w-[60px] justify-center' variant={row.original.status ? "outline" : "secondary"}>
-                {row.original.status.toString() === '1' ? "Ativo" : "Inativo"}
+            <Badge className='w-[60px] justify-center' variant={row.original.enumStatusPedido ? "outline" : "secondary"}>
+                {row.original.enumStatusPedido.toString() === '1' ? "Ativo" : "Inativo"}
             </Badge>
         ),
     }, {
-        accessorKey: 'descricao',
+        accessorKey: 'valorTotal',
         header: ({ column }) => (
-            <Cabecalho column={column} title="Descrição" />
+            <Cabecalho column={column} title="Valor Total" />
         ),
     }, {
-        accessorKey: 'preco',
+        accessorKey: 'usuario',
         header: ({ column }) => (
-            <Cabecalho column={column} title="Preço" />
+            <Cabecalho column={column} title="Usuário" />
         ),
     }, {
-        accessorKey: 'quantidadeestoque',
+        accessorKey: 'produto',
         header: ({ column }) => (
-            <Cabecalho column={column} title="Estoque" />
+            <Cabecalho column={column} title="Produto" />
         ),
     }, {
         id: "actions",
@@ -87,7 +87,7 @@ export const colunas = (): ColumnDef<Pedido>[] => [
                         <DropdownMenuSeparator />
                         <DropdownMenuLabel className="font-bold">Ações</DropdownMenuLabel>
                         <DropdownMenuItem className="cursor-pointer">Editar</DropdownMenuItem>
-                        {row.original.status.toString() === '1' ?
+                        {row.original.enumStatusPedido.toString() === '1' ?
                             <DropdownMenuItem onClick={inativar(row.original)} className="cursor-pointer text-red-500">Inativar</DropdownMenuItem>
                             : <DropdownMenuItem onClick={ativar(row.original)} className="cursor-pointer text-green-500">Ativar</DropdownMenuItem>
                         }

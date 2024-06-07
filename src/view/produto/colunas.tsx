@@ -7,9 +7,13 @@ import Api from "@/infra/helpers/api"
 import { Produto } from "@/types/Produto"
 import { ColumnDef } from "@tanstack/react-table"
 import { EllipsisVerticalIcon } from "lucide-react"
+import { useState } from "react"
+import CadastroProduto from "./cadastro"
+import EditarProduto from "./editar"
+import { DialogTrigger } from "@/components/ui/dialog"
 
 const inativar = (produto: Produto) => async () => {
-    await Api.put(`/produto/${produto.id}/inativar`)
+    await Api.put(`/produto/${produto.id}/inativar`)    
 }
 
 const ativar = (produto: Produto) => async () => {
@@ -71,7 +75,7 @@ export const colunas = (): ColumnDef<Produto>[] => [
     }, {
         id: "actions",
         cell: ({ row }) => {
-            const produto = row.original
+            const produto = row.original;
 
             return (
                 <DropdownMenu>
@@ -86,7 +90,7 @@ export const colunas = (): ColumnDef<Produto>[] => [
                         <DropdownMenuItem className="cursor-pointer">Produto</DropdownMenuItem>
                         <DropdownMenuSeparator />
                         <DropdownMenuLabel className="font-bold">Ações</DropdownMenuLabel>
-                        <DropdownMenuItem className="cursor-pointer">Editar</DropdownMenuItem>
+                        {<EditarProduto produto={produto} /> }
                         {row.original.status.toString() === '1' ?
                             <DropdownMenuItem onClick={inativar(row.original)} className="cursor-pointer text-red-500">Inativar</DropdownMenuItem>
                             : <DropdownMenuItem onClick={ativar(row.original)} className="cursor-pointer text-green-500">Ativar</DropdownMenuItem>

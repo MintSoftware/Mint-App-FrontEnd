@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
 import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { DropdownMenuItem } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -8,9 +9,14 @@ import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/components/ui/use-toast";
 import Api from "@/infra/helpers/api";
 import { Categoria } from "@/types/Categoria";
+import { Produto } from "@/types/Produto";
 import { useEffect, useState } from "react";
 
-const CadastroProduto = () => {
+interface EditarProps {
+    produto: Produto;
+}
+
+const EditarProduto = ({ produto }: EditarProps) => {
     const [nome, setNome] = useState<string>("");
     const [descricao, setDescricao] = useState<string>("");
     const [preco, setPreco] = useState<number>(0);
@@ -22,10 +28,11 @@ const CadastroProduto = () => {
 
     useEffect(() => {
         recuperarCategorias();
+        atualizarProduto();
     }, []);
 
     const recuperarCategorias = async () => {
-        
+
         try {
             const { data } = await Api.get("categoria/listar");
             setCategoriaList(data);
@@ -37,6 +44,15 @@ const CadastroProduto = () => {
             // });
         }
     };
+
+    const atualizarProduto = () => {
+        setNome(produto.nome as string);
+        setDescricao(produto.descricao as string);
+        setPreco(produto.preco);
+        setQuantidade(produto.quantidade);
+        setQuantidadeEstoque(produto.quantidadeestoque);
+        setCategoria(produto.categoria);
+    }
 
     const salvar = async () => {
 
@@ -78,8 +94,10 @@ const CadastroProduto = () => {
     return (
         <div>
             <Dialog>
-                <DialogTrigger asChild>
-                    <Button variant="default">Cadastrar Produto</Button>
+                <DialogTrigger asChild className="relative flex cursor-pointer select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none transition-colors focus:bg-accent focus:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50">
+                    <div>
+                        Editar
+                    </div>
                 </DialogTrigger>
                 <DialogContent onInteractOutside={(evento) => evento.preventDefault()} className="flex flex-row items-center sm:max-w-[50%] max-h-50 h-[35rem] p-[2rem] gap-8">
                     <div className="flex justify-center w-[50%] h-full">
@@ -182,4 +200,4 @@ const CadastroProduto = () => {
     )
 }
 
-export default CadastroProduto;
+export default EditarProduto;

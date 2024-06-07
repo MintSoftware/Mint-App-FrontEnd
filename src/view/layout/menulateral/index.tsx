@@ -26,7 +26,7 @@ import { Link, useLocation } from 'react-router-dom';
             <Tooltip>
               <TooltipTrigger asChild>
                 <Link
-                  className={pathname === '/' ? 'flex h-9 w-9 items-center justify-center rounded-lg bg-accent text-accent-foreground transition-colors hover:text-foreground md:h-8 md:w-8' : 'flex h-9 w-9 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:text-foreground md:h-8 md:w-8'}
+                  className={pathname === '/dashboard' ? 'flex h-9 w-9 items-center justify-center rounded-lg bg-accent text-accent-foreground transition-colors hover:text-foreground md:h-8 md:w-8' : 'flex h-9 w-9 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:text-foreground md:h-8 md:w-8'}
                   to="/dashboard"
                   style={pathname === '/' ? { color: '#fff' } : {}}
                 >
@@ -39,26 +39,26 @@ import { Link, useLocation } from 'react-router-dom';
             <Tooltip>
               <TooltipTrigger asChild>
                 <Link
-                  className={pathname === '/agenda' ? 'flex h-9 w-9 items-center justify-center rounded-lg bg-accent text-accent-foreground transition-colors hover:text-foreground md:h-8 md:w-8' : 'flex h-9 w-9 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:text-foreground md:h-8 md:w-8'}
+                  className={pathname === '/produtos' ? 'flex h-9 w-9 items-center justify-center rounded-lg bg-accent text-accent-foreground transition-colors hover:text-foreground md:h-8 md:w-8' : 'flex h-9 w-9 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:text-foreground md:h-8 md:w-8'}
                   to="/produtos"
                 >
                   <PackageIcon className="h-5 w-5" />
-                  <span className="sr-only">Agenda</span>
+                  <span className="sr-only">Produtos</span>
                 </Link>
               </TooltipTrigger>
-              <TooltipContent side="right">Agenda</TooltipContent>
+              <TooltipContent side="right">Produtos</TooltipContent>
             </Tooltip>
             <Tooltip>
               <TooltipTrigger asChild>
                 <Link
-                  className={pathname === '/clientes' ? 'flex h-9 w-9 items-center justify-center rounded-lg bg-accent text-accent-foreground transition-colors hover:text-foreground md:h-8 md:w-8' : 'flex h-9 w-9 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:text-foreground md:h-8 md:w-8'}
+                  className={pathname === '/pedidos' ? 'flex h-9 w-9 items-center justify-center rounded-lg bg-accent text-accent-foreground transition-colors hover:text-foreground md:h-8 md:w-8' : 'flex h-9 w-9 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:text-foreground md:h-8 md:w-8'}
                   to="/pedidos"
                 >
                   <ListIcon className="h-5 w-5" />
-                  <span className="sr-only">Clientes</span>
+                  <span className="sr-only">Pedidos</span>
                 </Link>
               </TooltipTrigger>
-              <TooltipContent side="right">Clientes</TooltipContent>
+              <TooltipContent side="right">Pedidos</TooltipContent>
             </Tooltip>
           </TooltipProvider>
         </nav>

@@ -1,7 +1,8 @@
 import { Produto } from "./Produto";
+import { Usuario } from "./Usuario";
 
 export type Pedido = {
-    status: any;
+    status: unknown;
     id: string;
     dataPedido: Date;
     enumStatusPedido: EnumStatusPedido;

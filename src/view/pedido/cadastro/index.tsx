@@ -9,7 +9,7 @@ import { useState } from "react";
 
 const CadastroPedido = () => {
     const [nome, setNome] = useState("");
-    const [email, setEmail] = useState("");
+    const [data, setData] = useState("");
     const [telefone, setTelefone] = useState("");
     const [endereco, setEndereco] = useState("");
     const [dataNascimento, setDataNascimento] = useState("");
@@ -19,17 +19,21 @@ const CadastroPedido = () => {
     const dto = {
         nome,
         status: 1,
-        email,
+        data,
         telefone,
         endereco,
         dataNascimento,
         cpf,
         observacao
+    
     }
+
+    const dataAtual = new Date();
 
     const salvar = async () => {
         const { data } = await Api.post("pedido", dto);
     }
+    
 
     return (
         <div>
@@ -45,12 +49,12 @@ const CadastroPedido = () => {
                     <CardContent className="space-y-4 w-[100%]">
                         <div className="grid grid-cols-2 gap-4">
                             <div className="space-y-2">
-                                <Label htmlFor="name">Nome</Label>
+                                <Label htmlFor="name">Nome do produto</Label>
                                 <Input onChange={(e) => setNome(e.target.value)} className="w-[300px]" id="name" placeholder="Digite o nome do produto" />
                             </div>
                             <div className="space-y-2">
-                                <Label htmlFor="email">Email</Label>
-                                <Input onChange={(e) => setEmail(e.target.value)} className="w-[300px]" type="email" id="email" placeholder="Digite o email do produto" />
+                                <Label htmlFor="email">Data</Label>
+                                <Input value={new Date().toISOString().split('T')[0]} onChange={(e) => setData(e.target.value)} className="w-[300px]" type="date" id="date" />
                             </div>
                         </div>
                         <div className="grid grid-cols-2 gap-4">

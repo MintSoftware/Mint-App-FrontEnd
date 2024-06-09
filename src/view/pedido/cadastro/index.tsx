@@ -28,13 +28,11 @@ const CadastroPedido = () => {
     
     }
 
-    const dataAtual = new Date();
-
     const salvar = async () => {
         const { data } = await Api.post("pedido", dto);
+        console.log(data);
     }
     
-
     return (
         <div>
             <Dialog>

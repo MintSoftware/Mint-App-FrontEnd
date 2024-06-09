@@ -40,7 +40,7 @@ export default function Pedido() {
             <Label className="text-xl p-5"> Meus Pedidos</Label>
             <Tabela
                 colunas={colunas()}
-                dados={Pedido}
+                dados={pedido}
                 modal={<CadastroPedido />}
                 functionSearch={buscarPedido}
                 loading={loading}

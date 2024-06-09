@@ -1,12 +1,10 @@
 import { Button } from "@/components/ui/button";
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
 import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { DropdownMenuItem } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
-import { useToast } from "@/components/ui/use-toast";
 import Api from "@/infra/helpers/api";
 import { Categoria } from "@/types/Categoria";
 import { Produto } from "@/types/Produto";
@@ -24,7 +22,6 @@ const EditarProduto = ({ produto }: EditarProps) => {
     const [quantidadeEstoque, setQuantidadeEstoque] = useState<number>(0);
     const [categoria, setCategoria] = useState<Categoria>();
     const [categoriaList, setCategoriaList] = useState<Categoria[]>([]);
-    const { toast } = useToast();
 
     useEffect(() => {
         recuperarCategorias();

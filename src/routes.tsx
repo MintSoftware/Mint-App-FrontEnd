@@ -5,12 +5,11 @@ import Entrar from "./view/entrar";
 import { Layout } from "./view/layout";
 import LoadingScreen from "./view/loading/Loading";
 import PaginaNaoEncontrada from "./view/paginanaoencontrada";
+import Pedido from "./view/pedido";
 import Produto from "./view/produto";
 import RecuperarSenha from "./view/recuperarsenha";
-import Pedido from "./view/pedido";
 
 function MainRoutes() {
-    const usuarioLogado = true;
     const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {

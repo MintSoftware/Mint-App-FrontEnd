@@ -40,7 +40,7 @@ export default function MenuSuperior() {
     return (
         <div className="sticky top-0 z-30 flex h-14 w-full justify-between items-center gap-4 border-b bg-background px-4 pt-2 sm:static sm:h-auto sm:border-0 sm:bg-transparent sm:px-6">
             <div className="flex items-center gap-3">
-                <img src="/src/assets/logo.png" alt="Logo" className="h-7" />
+                <img src="https://github.com/MintSoftware/MintEcommerce-FrontEnd/blob/mainhttps://github.com/MintSoftware/MintEcommerce-FrontEnd/blob/main/src/assets/logo.png" alt="Logo" className="h-7" />
                 <Label className="text-white">Mint E-commerce</Label>
             </div>
             <div className="flex">
@@ -134,7 +134,7 @@ export default function MenuSuperior() {
                                     <Card className="w-full max-w-sm p-6 grid gap-6">
                                         <div className="grid grid-cols-[100px_1fr] gap-4">
                                             <img
-                                                src="/src/assets/logo.png"
+                                                src="https://github.com/MintSoftware/MintEcommerce-FrontEnd/blob/main/src/assets/logo.png"
                                                 alt="Product Image"
                                                 width={120}
                                                 height={120}
@@ -164,7 +164,7 @@ export default function MenuSuperior() {
                                     <Card className="w-full max-w-sm p-6 grid gap-6">
                                         <div className="grid grid-cols-[100px_1fr] gap-4">
                                             <img
-                                                src="/src/assets/logo.png"
+                                                src="https://github.com/MintSoftware/MintEcommerce-FrontEnd/blob/main/src/assets/logo.png"
                                                 alt="Product Image"
                                                 width={120}
                                                 height={120}
@@ -194,7 +194,7 @@ export default function MenuSuperior() {
                                     <Card className="w-full max-w-sm p-6 grid gap-6">
                                         <div className="grid grid-cols-[100px_1fr] gap-4">
                                             <img
-                                                src="/src/assets/logo.png"
+                                                src="https://github.com/MintSoftware/MintEcommerce-FrontEnd/blob/main/src/assets/logo.png"
                                                 alt="Product Image"
                                                 width={120}
                                                 height={120}
@@ -224,7 +224,7 @@ export default function MenuSuperior() {
                                     <Card className="w-full max-w-sm p-6 grid gap-6">
                                         <div className="grid grid-cols-[100px_1fr] gap-4">
                                             <img
-                                                src="/src/assets/logo.png"
+                                                src="https://github.com/MintSoftware/MintEcommerce-FrontEnd/blob/main/src/assets/logo.png"
                                                 alt="Product Image"
                                                 width={120}
                                                 height={120}
@@ -254,7 +254,7 @@ export default function MenuSuperior() {
                                     <Card className="w-full max-w-sm p-6 grid gap-6">
                                         <div className="grid grid-cols-[100px_1fr] gap-4">
                                             <img
-                                                src="/src/assets/logo.png"
+                                                src="https://github.com/MintSoftware/MintEcommerce-FrontEnd/blob/main/src/assets/logo.png"
                                                 alt="Product Image"
                                                 width={120}
                                                 height={120}
@@ -284,7 +284,7 @@ export default function MenuSuperior() {
                                     <Card className="w-full max-w-sm p-6 grid gap-6">
                                         <div className="grid grid-cols-[100px_1fr] gap-4">
                                             <img
-                                                src="/src/assets/logo.png"
+                                                src="https://github.com/MintSoftware/MintEcommerce-FrontEnd/blob/main/src/assets/logo.png"
                                                 alt="Product Image"
                                                 width={120}
                                                 height={120}
@@ -314,7 +314,7 @@ export default function MenuSuperior() {
                                     <Card className="w-full max-w-sm p-6 grid gap-6">
                                         <div className="grid grid-cols-[100px_1fr] gap-4">
                                             <img
-                                                src="/src/assets/logo.png"
+                                                src="https://github.com/MintSoftware/MintEcommerce-FrontEnd/blob/main/src/assets/logo.png"
                                                 alt="Product Image"
                                                 width={120}
                                                 height={120}

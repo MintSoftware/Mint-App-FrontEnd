@@ -57,7 +57,7 @@ export default function Entrar() {
         <div className="fixed flex justify-center items-center w-full h-full bg-background z-50 top-0 left-0 border">
             <Link to="/">
                 <div className="fixed top-0 left-5 w-[15%] h-[10%] cursor-pointer flex  items-center">
-                    <img src="https://mintecommerce.onrender.com/src/assets/logo.png" alt="Logo" className="w-14 h-14" />
+                    <img src="logo.png" alt="Logo" className="w-14 h-14" />
                     <div className="flex flex-col justify-center items-center p-3">
                         <Label className="text-white cursor-pointer">Mint E-commerce</Label>
                         <Label className="text-white font-normal cursor-pointer">Uma empresa do grupo Mint</Label>

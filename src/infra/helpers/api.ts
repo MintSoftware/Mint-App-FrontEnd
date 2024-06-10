@@ -2,10 +2,9 @@ import axios from 'axios';
 import { applyErrorHandler } from '../interceptors/applyErrorHandler';
 import { criaLogDev } from '../interceptors/criaLogDev';
 
-const BASE_URL = process.env.BASE_URL;
 
 const Api = axios.create({
-    baseURL: `${BASE_URL}`,
+    baseURL: "https://mintecommerce-backend.onrender.com",
     headers: {
         'Content-Type': 'application/json',
         "Access-Control-Allow-Origin": "*",

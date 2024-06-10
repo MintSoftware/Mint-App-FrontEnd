@@ -8,10 +8,5 @@ export default defineConfig({
     alias: {
       "@": path.resolve(__dirname, "./src"),
     },
-  },
-  build: {
-    rollupOptions: {
-      plugins: [require('rollup-plugin-history-api-fallback')()]
-    }
   }
-})	
+})

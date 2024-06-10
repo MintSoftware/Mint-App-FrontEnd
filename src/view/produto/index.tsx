@@ -20,7 +20,6 @@ export default function Produtos() {
     const buscarProdutos = async () => {
         try {
             setLoading(true);
-            debugger
             const { data } = await Api.get('produto/listar');
             setProdutos(data);
             setLoading(false);

@@ -8,6 +8,7 @@ import PaginaNaoEncontrada from "./view/paginanaoencontrada";
 import Pedido from "./view/pedido";
 import Produto from "./view/produto";
 import RecuperarSenha from "./view/recuperarsenha";
+import { config } from 'dotenv';
 
 function MainRoutes() {
     const [isLoading, setIsLoading] = useState(true);
@@ -18,6 +19,7 @@ function MainRoutes() {
 
     async function handleLoadStorageData() {
         try {
+            config();
             setIsLoading(true)
         } catch (error) {
             console.log(error)

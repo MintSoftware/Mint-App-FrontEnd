@@ -3,11 +3,10 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { ToastAction } from "@/components/ui/toast"
-import { useToast } from "@/components/ui/use-toast"
 import Api from "@/infra/helpers/api"
 import { useState } from "react"
 import { Link } from "react-router-dom"
+import { toast } from "sonner"
 
 export default function CriarConta() {
     const [activeTab, setActiveTab] = useState("info");
@@ -24,7 +23,6 @@ export default function CriarConta() {
     const [cidade, setCidade] = useState("");
     const [estado, setEstado] = useState("");
     const [pais, setPais] = useState("");
-    const { toast } = useToast();
 
     const formatarCfpCnpj = (event: React.ChangeEvent<HTMLInputElement>) => {
         let { value } = event.target;
@@ -73,30 +71,22 @@ export default function CriarConta() {
         };
 
         try {
-            await Api.post("usuario/cadastrar", dto);
-            toast({
-                variant: "sucesso",
-                description: "Cadastro realizado com sucesso!",
-            })
-            window.location.href = "/";
-        } catch (error: any) {
-            if (error.response) {
-                toast({
-                    variant: "destructive",
-                    title: "Erro!",
-                    description: error.response.data,
-                    action: <ToastAction altText="Tentar Novamente" onClick={() => criarConta(e)}>Tentar novamente</ToastAction>,
-                })
-            } else {
-                toast({
-                    variant: "destructive",
-                    title: "Erro",
-                    description: "Erro ao realizar cadastro!",
-                    action: <ToastAction altText="Tentar Novamente" onClick={() => criarConta(e)}>Tentar novamente</ToastAction>,
-                })
+            toast.promise(await Api.post("usuario/cadastrar", dto), {
+                loading: "Cadastrando...",
+                success: "Cadastro realizado com sucesso!",
+                error: "Erro ao cadastrar"
+            });
+            try {
+                const { data } = await Api.post("usuario/entrar", dto);
+                const UsuarioLogado = JSON.stringify(data);
+                localStorage.setItem("UsuarioLogado", UsuarioLogado);
+                window.location.href = "/";
+            } catch (error) {
+                console.error(error);
             }
+        } catch (error) {
+            console.error(error);
         }
-
     };
 
     return (

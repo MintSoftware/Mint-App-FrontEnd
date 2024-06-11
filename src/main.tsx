@@ -2,7 +2,7 @@ import React from 'react'
 import ReactDOM from 'react-dom/client'
 import { BrowserRouter } from 'react-router-dom'
 import { ThemeProvider } from './components/theme-provider'
-import { Toaster } from './components/ui/toaster'
+import { Toaster } from './components/ui/sonner'
 import './global.css'
 import MainRoutes from './routes'
 

@@ -1,19 +1,28 @@
-import Cabecalho from "@/components/tabela/cabecalho"
-import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
-import { Checkbox } from "@/components/ui/checkbox"
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
-import Api from "@/infra/helpers/api"
-import { Pedido } from "@/types/Pedido"
-import { ColumnDef } from "@tanstack/react-table"
-import { EllipsisVerticalIcon } from "lucide-react"
+import Cabecalho from "@/components/tabela/cabecalho";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import Api from "@/infra/helpers/api";
+import { Pedido } from "@/types/Pedido";
+import { ColumnDef } from "@tanstack/react-table";
+import { EllipsisVerticalIcon } from "lucide-react";
 
 const inativar = (pedido: Pedido) => async () => {
-    await Api.put(`/produto/${pedido.id}/inativar`)
+    try {
+        await Api.put(`/produto/${pedido.id}/inativar`)
+    } catch (error) {
+        console.log("Erro ao inativar o pedido: ", error)
+    }
 }
 
-const ativar = (pedido: Pedido) => async () => {
-    await Api.put(`/pedido/${pedido.id}/ativar`)
+const ativar = async (pedido: Pedido) => {
+    try{
+        await Api.put(`/pedido/${pedido.id}/ativar`)
+    }
+    catch (error){
+        console.log("Erro ao ativar o pedido: ", error)
+    }
 }
 
 export const colunas = (): ColumnDef<Pedido>[] => [
@@ -71,8 +80,6 @@ export const colunas = (): ColumnDef<Pedido>[] => [
     }, {
         id: "actions",
         cell: ({ row }) => {
-            const pedido = row.original
-
             return (
                 <DropdownMenu>
                     <DropdownMenuTrigger asChild>
@@ -87,9 +94,9 @@ export const colunas = (): ColumnDef<Pedido>[] => [
                         <DropdownMenuSeparator />
                         <DropdownMenuLabel className="font-bold">Ações</DropdownMenuLabel>
                         <DropdownMenuItem className="cursor-pointer">Editar</DropdownMenuItem>
-                        {row.original.enumStatusPedido.toString() === '1' ?
-                            <DropdownMenuItem onClick={inativar(row.original)} className="cursor-pointer text-red-500">Inativar</DropdownMenuItem>
-                            : <DropdownMenuItem onClick={ativar(row.original)} className="cursor-pointer text-green-500">Ativar</DropdownMenuItem>
+                        {row.original.status === '1' ?
+                            <DropdownMenuItem onClick={() => inativar(row.original)} className="cursor-pointer text-red-500">Inativar</DropdownMenuItem>
+                            : <DropdownMenuItem onClick={() => ativar(row.original)} className="cursor-pointer text-green-500">Ativar</DropdownMenuItem>
                         }
                     </DropdownMenuContent>
                 </DropdownMenu>

@@ -7,10 +7,7 @@ import Api from "@/infra/helpers/api"
 import { Produto } from "@/types/Produto"
 import { ColumnDef } from "@tanstack/react-table"
 import { EllipsisVerticalIcon } from "lucide-react"
-import { useState } from "react"
-import CadastroProduto from "./cadastro"
 import EditarProduto from "./editar"
-import { DialogTrigger } from "@/components/ui/dialog"
 
 const inativar = (produto: Produto) => async () => {
     await Api.put(`/produto/${produto.id}/inativar`)    

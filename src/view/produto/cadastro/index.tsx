@@ -5,7 +5,6 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
-import { useToast } from "@/components/ui/use-toast";
 import Api from "@/infra/helpers/api";
 import { Categoria } from "@/types/Categoria";
 import { useEffect, useState } from "react";
@@ -18,7 +17,6 @@ const CadastroProduto = () => {
     const [quantidadeEstoque, setQuantidadeEstoque] = useState<number>(0);
     const [categoria, setCategoria] = useState<Categoria>();
     const [categoriaList, setCategoriaList] = useState<Categoria[]>([]);
-    const { toast } = useToast();
 
     useEffect(() => {
         recuperarCategorias();

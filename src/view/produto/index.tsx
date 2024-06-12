@@ -1,5 +1,4 @@
 import Tabela from "@/components/tabela/tabela";
-import { Label } from "@/components/ui/label";
 import { ToastAction } from "@/components/ui/toast";
 import { useToast } from "@/components/ui/use-toast";
 import Api from "@/infra/helpers/api";
@@ -37,7 +36,7 @@ export default function Produtos() {
 
     return (
         <div id="tabela-produtos" className="w-full px-5 pt-[50px] h-full">
-            <Label className="text-xl p-5">Produtos</Label>
+            <h1 className="text-2xl font-bold px-1">Produtos</h1>
             <Tabela
                 colunas={colunas()}
                 dados={produtos}

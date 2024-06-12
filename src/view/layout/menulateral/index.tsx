@@ -26,8 +26,8 @@ import { Link, useLocation } from 'react-router-dom';
             <Tooltip>
               <TooltipTrigger asChild>
                 <Link
-                  className={pathname === '/dashboard' ? 'flex h-9 w-9 items-center justify-center rounded-lg bg-accent text-accent-foreground transition-colors hover:text-foreground md:h-8 md:w-8' : 'flex h-9 w-9 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:text-foreground md:h-8 md:w-8'}
-                  to="/dashboard"
+                  className={pathname === '/' ? 'flex h-9 w-9 items-center justify-center rounded-lg bg-accent text-accent-foreground transition-colors hover:text-foreground md:h-8 md:w-8' : 'flex h-9 w-9 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:text-foreground md:h-8 md:w-8'}
+                  to="/"
                   style={pathname === '/' ? { color: '#fff' } : {}}
                 >
                   <StoreIcon className="h-5 w-5" />

@@ -39,7 +39,7 @@ const Tabela = <TData, TValue>({ colunas, dados, modal, exportar, functionSearch
     return (
         <Dialog>
             <div className="p-5">
-                <div className="gap-3 flex items-center pt-[20px] pb-[20px]">
+                <div className="gap-3 flex items-center pt-[15px] pb-[20px]">
                     <Input
                         value={tabela.getState().globalFilter}
                         onChange={(e) => setGlobalFilter(e.target.value)}

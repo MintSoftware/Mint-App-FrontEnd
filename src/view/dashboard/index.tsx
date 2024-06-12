@@ -1,13 +1,13 @@
-import { useState, useMemo } from "react";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuRadioGroup, DropdownMenuRadioItem } from "@/components/ui/dropdown-menu";
-import { Label } from "@/components/ui/label";
-import { Checkbox } from "@/components/ui/checkbox";
-import { FilterIcon, ListOrderedIcon, SearchIcon } from "lucide-react";
-import { Card } from "@/components/ui/card";
-import { ScrollArea } from "@/components/ui/scroll-area";
 import { PaginacaoDashBoard } from "@/components/paginacao/paginacaoDashBoard";
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
+import { Checkbox } from "@/components/ui/checkbox";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuLabel, DropdownMenuRadioGroup, DropdownMenuRadioItem, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { FilterIcon, ListOrderedIcon, SearchIcon } from "lucide-react";
+import { useMemo, useState } from "react";
 
 export default function DashBoard() {
     const [products] = useState([
@@ -207,7 +207,7 @@ export default function DashBoard() {
     };
 
     return (
-        <div className="w-full max-w-fullcontainer mx-auto px-4 md:px-6 ">
+        <div className="w-full max-w-fullcontainer mx-auto px-4 md:px-6 mt-[3rem]">
             <div className="flex items-center justify-between mb-6">
                 <h1 className="text-2xl font-bold">Produtos em Destaque</h1>
                 <div className="flex items-center gap-4">
@@ -296,7 +296,7 @@ export default function DashBoard() {
                 </div>
             </div>
             <div className="flex flex-col md:flex-row gap-6">
-                <ScrollArea className="w-full h-[47rem]">
+                <ScrollArea className="w-full h-[43.6rem]">
                     <div className="grid gap-6 grid-cols-1 md:grid-cols-2 lg:grid-cols-5">
                         {currentProducts.map((product) => (
                             <Card key={product.id} className="p-4">
@@ -307,10 +307,9 @@ export default function DashBoard() {
                                     <div className="flex items-center justify-between w-full">
                                         <span className="text-xl font-bold">
                                             R$ {product.price.toFixed(2)}
-                                            <Label className="text-green-500 ml-2">{product.desconto > 1 && `-${product.desconto}% desconto`}</Label>
                                         </span>
                                         <Label className="flex items-center">
-                                            12x de {(product.price / 12).toFixed(2)}
+                                            até 12x de {(product.price / 12).toFixed(2)}
                                         </Label>
                                     </div>
                                     <Label className="text-green-500">{!product.cobreFrete && 'Frete gratis'}</Label>

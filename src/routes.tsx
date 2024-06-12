@@ -8,6 +8,7 @@ import PaginaNaoEncontrada from "./view/paginanaoencontrada";
 import Produto from "./view/produto";
 import RecuperarSenha from "./view/recuperarsenha";
 import Pedido from "./view/pedido";
+import DashBoard from "./view/produto/dashboard";
 
 function MainRoutes() {
     const usuarioLogado = true;
@@ -36,7 +37,7 @@ function MainRoutes() {
     return (
         <Layout>
             <Routes>
-                <Route path="/" element={<PaginaNaoEncontrada />} />
+                <Route path="/" element={<DashBoard />} />
                 <Route path="/produtos" element={<Produto />} />
                 <Route path="/pedidos" element={<Pedido />} />
                 <Route path="*" element={<PaginaNaoEncontrada />} />

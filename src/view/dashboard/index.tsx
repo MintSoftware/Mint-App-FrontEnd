@@ -4,14 +4,13 @@ import { Button } from "@/components/ui/button";
 import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuRadioGroup, DropdownMenuRadioItem } from "@/components/ui/dropdown-menu";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
-import { FilterIcon, ListOrderedIcon, PlusIcon, SearchIcon, ShoppingCartIcon } from "lucide-react";
+import { FilterIcon, ListOrderedIcon, SearchIcon } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Pagination } from "@/components/ui/pagination";
 import { PaginacaoDashBoard } from "@/components/paginacao/paginacaoDashBoard";
 
 export default function DashBoard() {
-    const [products, setProducts] = useState([
+    const [products] = useState([
         {
             id: 1,
             name: "Tênis Esportivo",

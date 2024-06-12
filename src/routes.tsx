@@ -8,7 +8,7 @@ import PaginaNaoEncontrada from "./view/paginanaoencontrada";
 import Produto from "./view/produto";
 import RecuperarSenha from "./view/recuperarsenha";
 import Pedido from "./view/pedido";
-import DashBoard from "./view/produto/dashboard";
+import DashBoard from "./view/dashboard";
 
 function MainRoutes() {
     const [isLoading, setIsLoading] = useState(true);

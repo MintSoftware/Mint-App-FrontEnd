@@ -4,7 +4,6 @@ import { useToast } from "@/components/ui/use-toast";
 import Api from "@/infra/helpers/api";
 import { Produto } from "@/types/Produto";
 import { useEffect, useState } from "react";
-import CadastroPedido from "./cadastro";
 import colunas from "./colunas";
 
 
@@ -22,7 +21,7 @@ export default function Pedido() {
           setLoading(true);
           const { data } = await Api.get('pedido/listar');
           setPedido(data);
-        } catch (error) {
+        } catch (error : any) {
           setLoading(false);
           toast({
             title: "Erro!",
@@ -39,7 +38,6 @@ export default function Pedido() {
             <Tabela
                 colunas={colunas()}
                 dados={pedido}
-                modal={<CadastroPedido />}
                 functionSearch={buscarPedido}
                 loading={loading}
             />

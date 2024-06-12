@@ -3,11 +3,11 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import { toast } from "@/components/ui/use-toast";
 import Api from "@/infra/helpers/api";
 import { Pedido } from "@/types/Pedido";
 import { ColumnDef } from "@tanstack/react-table";
 import { EllipsisVerticalIcon } from "lucide-react";
-import { toast } from "@/components/ui/use-toast";
 
 const inativar = async (pedido: Pedido) => {
     if (!confirm("Tem certeza que deseja inativar este pedido?")) return;
@@ -19,7 +19,7 @@ const inativar = async (pedido: Pedido) => {
             description: "Pedido inativado com sucesso.",
             variant: "success",
         });
-    } catch (error) {
+    } catch (error: any) {
         console.log("Erro ao inativar o pedido: ", error);
         toast({
             title: "Erro!",
@@ -39,7 +39,7 @@ const ativar = async (pedido: Pedido) => {
             description: "Pedido ativado com sucesso.",
             variant: "success",
         });
-    } catch (error) {
+    } catch (error: any) {
         console.log("Erro ao ativar o pedido: ", error);
         toast({
             title: "Erro!",
@@ -96,12 +96,6 @@ export const colunas = (): ColumnDef<Pedido>[] => [
         ),
     },
     {
-        accessorKey: 'usuario',
-        header: ({ column }) => (
-            <Cabecalho column={column} title="Usuário" />
-        ),
-    },
-    {
         accessorKey: 'produto',
         header: ({ column }) => (
             <Cabecalho column={column} title="Produto" />
@@ -125,8 +119,8 @@ export const colunas = (): ColumnDef<Pedido>[] => [
                         <DropdownMenuLabel className="font-bold">Ações</DropdownMenuLabel>
                         <DropdownMenuItem className="cursor-pointer">Editar</DropdownMenuItem>
                         {row.original.status.toString() === '1' ?
-                            <DropdownMenuItem onClick={inativar(row.original)} className="cursor-pointer text-red-500">Inativar</DropdownMenuItem>
-                            : <DropdownMenuItem onClick={ativar(row.original)} className="cursor-pointer text-green-500">Ativar</DropdownMenuItem>
+                            <DropdownMenuItem onClick={() => inativar(row.original)} className="cursor-pointer text-red-500">Inativar</DropdownMenuItem>
+                            : <DropdownMenuItem onClick={() => ativar(row.original)} className="cursor-pointer text-green-500">Ativar</DropdownMenuItem>
                         }
                     </DropdownMenuContent>
                 </DropdownMenu>

@@ -44,7 +44,8 @@ const CadastroProduto = () => {
             preco,
             quantidade,
             quantidadeestoque: quantidadeEstoque,
-            categoria
+            categoria,
+            status: 1
         };
 
 

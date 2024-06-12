@@ -6,7 +6,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "@/components/ui/use-toast";
 import Api from "@/infra/helpers/api";
-import { useState, useCallback } from "react";
+import { useCallback, useState } from "react";
 
 interface CadastroPedidoProps {
     onSave: () => void;
@@ -65,7 +65,7 @@ const CadastroPedido = ({ onSave }: CadastroPedidoProps) => {
             setProdutos([]);
             setValorTotal(0);
             setObservacao("");
-        } catch (error) {
+        } catch (error : any) {
             console.error("Erro ao salvar pedido:", error);
             toast({
               title: "Erro!",

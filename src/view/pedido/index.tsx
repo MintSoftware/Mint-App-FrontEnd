@@ -37,10 +37,10 @@ export default function Pedido() {
 
     return (
         <div id="tabela-Pedido" className="w-full px-5 pt-[50px] h-full">
-            <Label className="text-xl p-5">Pedidos</Label>
+            <Label className="text-xl p-5"> Meus Pedidos</Label>
             <Tabela
                 colunas={colunas()}
-                dados={Pedido}
+                dados={pedido}
                 modal={<CadastroPedido />}
                 functionSearch={buscarPedido}
                 loading={loading}

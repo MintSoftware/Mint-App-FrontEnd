@@ -39,14 +39,14 @@ export const colunas = (): ColumnDef<Pedido>[] => [
         enableSorting: false,
         enableHiding: false,
     }, {
-        accessorKey: 'nome',
+        accessorKey: 'id',
         header: ({ column }) => (
-            <Cabecalho column={column} title="Nome" />
+            <Cabecalho column={column} title="ID" />
         ),
     }, {
-        accessorKey: 'status',
+        accessorKey: 'dataPedido',
         header: ({ column }) => (
-            <Cabecalho column={column} title="Status" />
+            <Cabecalho column={column} title="Data do Pedido" />
         ),
         cell: ({ row }) => (
             <Badge className='w-[60px] justify-center' variant={row.original.status ? "outline" : "secondary"}>
@@ -54,25 +54,23 @@ export const colunas = (): ColumnDef<Pedido>[] => [
             </Badge>
         ),
     }, {
-        accessorKey: 'descricao',
+        accessorKey: 'valorTotal',
         header: ({ column }) => (
-            <Cabecalho column={column} title="Descrição" />
+            <Cabecalho column={column} title="Valor Total" />
         ),
     }, {
-        accessorKey: 'preco',
+        accessorKey: 'usuario',
         header: ({ column }) => (
-            <Cabecalho column={column} title="Preço" />
+            <Cabecalho column={column} title="Usuário" />
         ),
     }, {
-        accessorKey: 'quantidadeestoque',
+        accessorKey: 'produto',
         header: ({ column }) => (
-            <Cabecalho column={column} title="Estoque" />
+            <Cabecalho column={column} title="Produto" />
         ),
     }, {
         id: "actions",
         cell: ({ row }) => {
-            const pedido = row.original
-
             return (
                 <DropdownMenu>
                     <DropdownMenuTrigger asChild>

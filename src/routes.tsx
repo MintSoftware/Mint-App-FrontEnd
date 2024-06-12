@@ -11,7 +11,6 @@ import Pedido from "./view/pedido";
 import DashBoard from "./view/produto/dashboard";
 
 function MainRoutes() {
-    const usuarioLogado = true;
     const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {

@@ -4,6 +4,7 @@ import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, Di
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import { toast } from "@/components/ui/use-toast";
 import Api from "@/infra/helpers/api";
 import { useState, useCallback } from "react";
 
@@ -18,7 +19,7 @@ interface FormErrors {
     valorTotal?: string;
 }
 
-const CadastroPedido = ({onSave}: CadastroPedidoProps) => {
+const CadastroPedido = ({ onSave }: CadastroPedidoProps) => {
     const [dataPedido, setDataPedido] = useState(new Date().toISOString().split('T')[0]);
     const [usuario, setUsuario] = useState("");
     const [produtos, setProdutos] = useState<string[]>([]);
@@ -38,6 +39,7 @@ const CadastroPedido = ({onSave}: CadastroPedidoProps) => {
         setErrors(newErrors);
         return Object.keys(newErrors).length === 0;
     }, [dataPedido, usuario, produtos, valorTotal]);
+    
     const salvar = useCallback(async () => {
         if (!validate()) return;
         try {
@@ -49,13 +51,28 @@ const CadastroPedido = ({onSave}: CadastroPedidoProps) => {
                 usuario,
                 produto: produtos,
                 observacao
-            }
+            };
             const { data } = await Api.post("pedido", dto);
             console.log(data);
+            toast({
+                title: "Sucesso!",
+                description: "Pedido salvo com sucesso.",
+                variant: "success",
+            });
             onSave();
+            setDataPedido(new Date().toISOString().split('T')[0]);
+            setUsuario("");
+            setProdutos([]);
+            setValorTotal(0);
+            setObservacao("");
         } catch (error) {
             console.error("Erro ao salvar pedido:", error);
-        }finally {
+            toast({
+              title: "Erro!",
+              description: `Ocorreu um erro ao salvar o pedido: ${error.message}`,
+              variant: "destructive",
+            });
+        } finally {
             setSalvando(false);
         }
     }, [validate, dataPedido, usuario, produtos, valorTotal, observacao, onSave]);
@@ -63,7 +80,7 @@ const CadastroPedido = ({onSave}: CadastroPedidoProps) => {
     const handleBlur = useCallback(() => {
         validate();
     }, [validate]);
-    
+
     return (
         <div>
             <Dialog>
@@ -124,6 +141,7 @@ const CadastroPedido = ({onSave}: CadastroPedidoProps) => {
                                 id="valorTotal"
                                 placeholder="Digite o valor total"
                                 type="number"
+                                min="0"
                             />
                             {errors.valorTotal && <p className="text-red-300">{errors.valorTotal}</p>}
                         </div>
@@ -154,5 +172,4 @@ const CadastroPedido = ({onSave}: CadastroPedidoProps) => {
         </div>
     );
 }
-
 export default CadastroPedido;

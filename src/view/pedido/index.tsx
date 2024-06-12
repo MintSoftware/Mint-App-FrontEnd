@@ -20,21 +20,20 @@ export default function Pedido() {
 
     const buscarPedido = async () => {
         try {
-            setLoading(true);
-            const { data } = await Api.get('pedido/listar');
-            setPedido(data);
+          setLoading(true);
+          const { data } = await Api.get('pedido/listar');
+          setPedido(data);
         } catch (error) {
-            toast({
-                title: "Erro!",
-                description: `Ocorreu um erro ao buscar os pedido: ${error}`,
-                variant: "destructive",
-                action: <ToastAction altText="Tentar Novamente" onClick={() => buscarPedido()}>Tentar novamente</ToastAction>,
-            });   
-        } finally {
-            setLoading(false);
+          setLoading(false);
+          toast({
+            title: "Erro!",
+            description: `Ocorreu um erro ao buscar os pedidos: ${error.message}`,
+            variant: "destructive",
+            action: <ToastAction altText="Tentar Novamente" onClick={() => buscarPedido()}>Tentar novamente</ToastAction>,
+          });
+          console.error("Erro na busca de pedidos:", error);
         }
-    };
-
+      };
     return (
         <div id="tabela-Pedido" className="w-full px-5 pt-[50px] h-full">
             <Label className="text-xl p-5"> Meus Pedidos</Label>

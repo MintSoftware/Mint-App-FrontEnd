@@ -7,21 +7,45 @@ import Api from "@/infra/helpers/api";
 import { Pedido } from "@/types/Pedido";
 import { ColumnDef } from "@tanstack/react-table";
 import { EllipsisVerticalIcon } from "lucide-react";
+import { toast } from "@/components/ui/use-toast";
 
-const inativar = (pedido: Pedido) => async () => {
+const inativar = async (pedido: Pedido) => {
+    if (!confirm("Tem certeza que deseja inativar este pedido?")) return;
+
     try {
-        await Api.put(`/produto/${pedido.id}/inativar`)
+        await Api.put(`/pedido/${pedido.id}/inativar`);
+        toast({
+            title: "Sucesso!",
+            description: "Pedido inativado com sucesso.",
+            variant: "success",
+        });
     } catch (error) {
-        console.log("Erro ao inativar o pedido: ", error)
+        console.log("Erro ao inativar o pedido: ", error);
+        toast({
+            title: "Erro!",
+            description: `Ocorreu um erro ao inativar o pedido: ${error.message}`,
+            variant: "destructive",
+        });
     }
 }
 
 const ativar = async (pedido: Pedido) => {
-    try{
-        await Api.put(`/pedido/${pedido.id}/ativar`)
-    }
-    catch (error){
-        console.log("Erro ao ativar o pedido: ", error)
+    if (!confirm("Tem certeza que deseja ativar este pedido?")) return;
+
+    try {
+        await Api.put(`/pedido/${pedido.id}/ativar`);
+        toast({
+            title: "Sucesso!",
+            description: "Pedido ativado com sucesso.",
+            variant: "success",
+        });
+    } catch (error) {
+        console.log("Erro ao ativar o pedido: ", error);
+        toast({
+            title: "Erro!",
+            description: `Ocorreu um erro ao ativar o pedido: ${error.message}`,
+            variant: "destructive",
+        });
     }
 }
 
@@ -47,12 +71,14 @@ export const colunas = (): ColumnDef<Pedido>[] => [
         ),
         enableSorting: false,
         enableHiding: false,
-    }, {
+    },
+    {
         accessorKey: 'id',
         header: ({ column }) => (
             <Cabecalho column={column} title="ID" />
         ),
-    }, {
+    },
+    {
         accessorKey: 'dataPedido',
         header: ({ column }) => (
             <Cabecalho column={column} title="Data do Pedido" />
@@ -62,22 +88,26 @@ export const colunas = (): ColumnDef<Pedido>[] => [
                 {row.original.enumStatusPedido.toString() === '1' ? "Ativo" : "Inativo"}
             </Badge>
         ),
-    }, {
+    },
+    {
         accessorKey: 'valorTotal',
         header: ({ column }) => (
             <Cabecalho column={column} title="Valor Total" />
         ),
-    }, {
+    },
+    {
         accessorKey: 'usuario',
         header: ({ column }) => (
             <Cabecalho column={column} title="Usuário" />
         ),
-    }, {
+    },
+    {
         accessorKey: 'produto',
         header: ({ column }) => (
             <Cabecalho column={column} title="Produto" />
         ),
-    }, {
+    },
+    {
         id: "actions",
         cell: ({ row }) => {
             return (
@@ -94,7 +124,7 @@ export const colunas = (): ColumnDef<Pedido>[] => [
                         <DropdownMenuSeparator />
                         <DropdownMenuLabel className="font-bold">Ações</DropdownMenuLabel>
                         <DropdownMenuItem className="cursor-pointer">Editar</DropdownMenuItem>
-                        {row.original.status === '1' ?
+                        {row.original.enumStatusPedido.toString() === '1' ?
                             <DropdownMenuItem onClick={() => inativar(row.original)} className="cursor-pointer text-red-500">Inativar</DropdownMenuItem>
                             : <DropdownMenuItem onClick={() => ativar(row.original)} className="cursor-pointer text-green-500">Ativar</DropdownMenuItem>
                         }
@@ -106,4 +136,4 @@ export const colunas = (): ColumnDef<Pedido>[] => [
     }
 ]
 
-export default colunas
+export default colunas;

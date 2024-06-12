@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 import CadastroPedido from "./cadastro";
 import colunas from "./colunas";
 
+
 export default function Pedido() {
     const [pedido, setPedido] = useState<Produto[]>([]);
     const [loading, setLoading] = useState(false);
@@ -18,22 +19,20 @@ export default function Pedido() {
 
     const buscarPedido = async () => {
         try {
-            setLoading(true);
-            const { data } = await Api.get('pedido/listar');
-            setPedido(data);
-            setLoading(false);
+          setLoading(true);
+          const { data } = await Api.get('pedido/listar');
+          setPedido(data);
         } catch (error) {
-            setLoading(false);
-            toast({
-                title: "Erro!",
-                description: `Ocorreu um erro ao buscar os pedido: ${error}`,
-                variant: "destructive",
-                action: <ToastAction altText="Tentar Novamente" onClick={() => buscarPedido()}>Tentar novamente</ToastAction>,
-            });
-            
+          setLoading(false);
+          toast({
+            title: "Erro!",
+            description: `Ocorreu um erro ao buscar os pedidos: ${error.message}`,
+            variant: "destructive",
+            action: <ToastAction altText="Tentar Novamente" onClick={() => buscarPedido()}>Tentar novamente</ToastAction>,
+          });
+          console.error("Erro na busca de pedidos:", error);
         }
-    };
-
+      };
     return (
         <div id="tabela-Pedido" className="w-full px-5 pt-[50px] h-full">
             <h1 className="text-2xl font-bold px-1">Meus Pedidos</h1>

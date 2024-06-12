@@ -1,19 +1,52 @@
-import Cabecalho from "@/components/tabela/cabecalho"
-import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
-import { Checkbox } from "@/components/ui/checkbox"
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
-import Api from "@/infra/helpers/api"
-import { Pedido } from "@/types/Pedido"
-import { ColumnDef } from "@tanstack/react-table"
-import { EllipsisVerticalIcon } from "lucide-react"
+import Cabecalho from "@/components/tabela/cabecalho";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import Api from "@/infra/helpers/api";
+import { Pedido } from "@/types/Pedido";
+import { ColumnDef } from "@tanstack/react-table";
+import { EllipsisVerticalIcon } from "lucide-react";
+import { toast } from "@/components/ui/use-toast";
 
-const inativar = (pedido: Pedido) => async () => {
-    await Api.put(`/produto/${pedido.id}/inativar`)
+const inativar = async (pedido: Pedido) => {
+    if (!confirm("Tem certeza que deseja inativar este pedido?")) return;
+
+    try {
+        await Api.put(`/pedido/${pedido.id}/inativar`);
+        toast({
+            title: "Sucesso!",
+            description: "Pedido inativado com sucesso.",
+            variant: "success",
+        });
+    } catch (error) {
+        console.log("Erro ao inativar o pedido: ", error);
+        toast({
+            title: "Erro!",
+            description: `Ocorreu um erro ao inativar o pedido: ${error.message}`,
+            variant: "destructive",
+        });
+    }
 }
 
-const ativar = (pedido: Pedido) => async () => {
-    await Api.put(`/pedido/${pedido.id}/ativar`)
+const ativar = async (pedido: Pedido) => {
+    if (!confirm("Tem certeza que deseja ativar este pedido?")) return;
+
+    try {
+        await Api.put(`/pedido/${pedido.id}/ativar`);
+        toast({
+            title: "Sucesso!",
+            description: "Pedido ativado com sucesso.",
+            variant: "success",
+        });
+    } catch (error) {
+        console.log("Erro ao ativar o pedido: ", error);
+        toast({
+            title: "Erro!",
+            description: `Ocorreu um erro ao ativar o pedido: ${error.message}`,
+            variant: "destructive",
+        });
+    }
 }
 
 export const colunas = (): ColumnDef<Pedido>[] => [
@@ -38,12 +71,14 @@ export const colunas = (): ColumnDef<Pedido>[] => [
         ),
         enableSorting: false,
         enableHiding: false,
-    }, {
+    },
+    {
         accessorKey: 'id',
         header: ({ column }) => (
             <Cabecalho column={column} title="ID" />
         ),
-    }, {
+    },
+    {
         accessorKey: 'dataPedido',
         header: ({ column }) => (
             <Cabecalho column={column} title="Data do Pedido" />
@@ -53,22 +88,26 @@ export const colunas = (): ColumnDef<Pedido>[] => [
                 {row.original.status.toString() === '1' ? "Ativo" : "Inativo"}
             </Badge>
         ),
-    }, {
+    },
+    {
         accessorKey: 'valorTotal',
         header: ({ column }) => (
             <Cabecalho column={column} title="Valor Total" />
         ),
-    }, {
+    },
+    {
         accessorKey: 'usuario',
         header: ({ column }) => (
             <Cabecalho column={column} title="Usuário" />
         ),
-    }, {
+    },
+    {
         accessorKey: 'produto',
         header: ({ column }) => (
             <Cabecalho column={column} title="Produto" />
         ),
-    }, {
+    },
+    {
         id: "actions",
         cell: ({ row }) => {
             return (
@@ -97,4 +136,4 @@ export const colunas = (): ColumnDef<Pedido>[] => [
     }
 ]
 
-export default colunas
+export default colunas;

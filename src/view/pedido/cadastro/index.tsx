@@ -4,35 +4,83 @@ import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, Di
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import { toast } from "@/components/ui/use-toast";
 import Api from "@/infra/helpers/api";
-import { useState } from "react";
+import { useState, useCallback } from "react";
 
-const CadastroPedido = () => {
-    const [nome, setNome] = useState("");
-    const [data, setData] = useState("");
-    const [telefone, setTelefone] = useState("");
-    const [endereco, setEndereco] = useState("");
-    const [dataNascimento, setDataNascimento] = useState("");
-    const [cpf, setCpf] = useState("");
+interface CadastroPedidoProps {
+    onSave: () => void;
+}
+
+interface FormErrors {
+    dataPedido?: string;
+    usuario?: string;
+    produtos?: string;
+    valorTotal?: string;
+}
+
+const CadastroPedido = ({ onSave }: CadastroPedidoProps) => {
+    const [dataPedido, setDataPedido] = useState(new Date().toISOString().split('T')[0]);
+    const [usuario, setUsuario] = useState("");
+    const [produtos, setProdutos] = useState<string[]>([]);
+    const [valorTotal, setValorTotal] = useState<number>(0);
     const [observacao, setObservacao] = useState("");
+    const [salvando, setSalvando] = useState(false);
+    const [errors, setErrors] = useState<FormErrors>({});
 
-    const dto = {
-        nome,
-        status: 1,
-        data,
-        telefone,
-        endereco,
-        dataNascimento,
-        cpf,
-        observacao
+    const validate = useCallback((): boolean => {
+        const newErrors: Record<string, string> = {};
     
-    }
+        if (!dataPedido) newErrors.dataPedido = "Data é obrigatória";
+        if (!usuario) newErrors.usuario = "Usuário é obrigatório";
+        if (produtos.length === 0) newErrors.produtos = "Selecione pelo menos um produto";
+        if (valorTotal <= 0) newErrors.valorTotal = "Valor total deve ser maior que zero";
+    
+        setErrors(newErrors);
+        return Object.keys(newErrors).length === 0;
+    }, [dataPedido, usuario, produtos, valorTotal]);
+    
+    const salvar = useCallback(async () => {
+        if (!validate()) return;
+        try {
+            setSalvando(true);
+            const dto = {
+                dataPedido,
+                enumStatusPedido: "ATIVO", 
+                valorTotal,
+                usuario,
+                produto: produtos,
+                observacao
+            };
+            const { data } = await Api.post("pedido", dto);
+            console.log(data);
+            toast({
+                title: "Sucesso!",
+                description: "Pedido salvo com sucesso.",
+                variant: "success",
+            });
+            onSave();
+            setDataPedido(new Date().toISOString().split('T')[0]);
+            setUsuario("");
+            setProdutos([]);
+            setValorTotal(0);
+            setObservacao("");
+        } catch (error) {
+            console.error("Erro ao salvar pedido:", error);
+            toast({
+              title: "Erro!",
+              description: `Ocorreu um erro ao salvar o pedido: ${error.message}`,
+              variant: "destructive",
+            });
+        } finally {
+            setSalvando(false);
+        }
+    }, [validate, dataPedido, usuario, produtos, valorTotal, observacao, onSave]);
 
-    const salvar = async () => {
-        const { data } = await Api.post("pedido", dto);
-        console.log(data);
-    }
-    
+    const handleBlur = useCallback(() => {
+        validate();
+    }, [validate]);
+
     return (
         <div>
             <Dialog>
@@ -47,37 +95,66 @@ const CadastroPedido = () => {
                     <CardContent className="space-y-4 w-[100%]">
                         <div className="grid grid-cols-2 gap-4">
                             <div className="space-y-2">
-                                <Label htmlFor="name">Nome do produto</Label>
-                                <Input onChange={(e) => setNome(e.target.value)} className="w-[300px]" id="name" placeholder="Digite o nome do produto" />
+                                <Label htmlFor="date">Data</Label>
+                                <Input
+                                    value={dataPedido}
+                                    onChange={(e) => setDataPedido(e.target.value)}
+                                    onBlur={handleBlur}
+                                    className="w-[300px]"
+                                    type="date"
+                                    id="date"
+                                />
+                                {errors.dataPedido && <p className="text-red-300">{errors.dataPedido}</p>}
                             </div>
                             <div className="space-y-2">
-                                <Label htmlFor="email">Data</Label>
-                                <Input value={new Date().toISOString().split('T')[0]} onChange={(e) => setData(e.target.value)} className="w-[300px]" type="date" id="date" />
-                            </div>
-                        </div>
-                        <div className="grid grid-cols-2 gap-4">
-                            <div className="space-y-2">
-                                <Label htmlFor="phone">Telefone</Label>
-                                <Input onChange={(e) => setTelefone(e.target.value)} className="w-[300px]" id="phone" placeholder="Digite o telefone do produto" />
-                            </div>
-                            <div className="space-y-2">
-                                <Label htmlFor="address">Endereço</Label>
-                                <Input onChange={(e) => setEndereco(e.target.value)} className="w-[300px]" id="address" placeholder="Digite o endereço do produto" />
-                            </div>
-                        </div>
-                        <div className="grid grid-cols-2 gap-4">
-                            <div className="space-y-2">
-                                <Label htmlFor="dob">Data de Nascimento</Label>
-                                <Input onChange={(e) => setDataNascimento(e.target.value)} className="w-[300px] fill-white stroke-white" id="dob" placeholder="Digite a data de nascimento do produto" type="date" />
-                            </div>
-                            <div className="space-y-2">
-                                <Label htmlFor="cnpj">CPF/CNPJ</Label>
-                                <Input onChange={(e) => setCpf(e.target.value)} className="w-[300px]" id="cnpj" placeholder="Digite o CPF/CNPJ do produto" />
+                                <Label htmlFor="usuario">Usuário</Label>
+                                <Input
+                                    value={usuario}
+                                    onChange={(e) => setUsuario(e.target.value)}
+                                    onBlur={handleBlur}
+                                    className="w-[300px]"
+                                    id="usuario"
+                                    placeholder="Digite o usuário"
+                                />
+                                {errors.usuario && <p className="text-red-300">{errors.usuario}</p>}
                             </div>
                         </div>
                         <div className="space-y-2">
+                            <Label htmlFor="produtos">Produtos</Label>
+                            <Textarea
+                                value={produtos.join(", ")}
+                                onChange={(e) => setProdutos(e.target.value.split(",").map(p => p.trim()))}
+                                onBlur={handleBlur}
+                                className="h-[100px]"
+                                id="produtos"
+                                placeholder="Digite os produtos separados por vírgula"
+                            />
+                            {errors.produtos && <p className="text-red-300">{errors.produtos}</p>}
+                        </div>
+                        <div className="space-y-2">
+                            <Label htmlFor="valorTotal">Valor Total</Label>
+                            <Input
+                                value={valorTotal}
+                                onChange={(e) => setValorTotal(parseFloat(e.target.value))}
+                                onBlur={handleBlur}
+                                className="w-[300px]"
+                                id="valorTotal"
+                                placeholder="Digite o valor total"
+                                type="number"
+                                min="0"
+                            />
+                            {errors.valorTotal && <p className="text-red-300">{errors.valorTotal}</p>}
+                        </div>
+                        <div className="space-y-2">
                             <Label htmlFor="observation">Observação</Label>
-                            <Textarea onChange={(e) => setObservacao(e.target.value)} className="h-[100px]" id="observation" placeholder="Digite uma observação sobre o produto" />
+                            <Textarea
+                                value={observacao}
+                                onChange={(e) => setObservacao(e.target.value)}
+                                onBlur={handleBlur}
+                                className="h-[100px]"
+                                id="observation"
+                                placeholder="Digite uma observação sobre o pedido"
+                            />
                         </div>
                     </CardContent>
                     <DialogFooter>
@@ -85,13 +162,14 @@ const CadastroPedido = () => {
                             <DialogClose asChild>
                                 <Button variant="outline">Fechar</Button>
                             </DialogClose>
-                            <Button onClick={salvar}>Salvar</Button>
+                            <Button onClick={salvar} disabled={salvando}>
+                                {salvando ? 'Salvando...' : 'Salvar'}
+                            </Button>
                         </div>
                     </DialogFooter>
                 </DialogContent>
             </Dialog>
         </div>
-    )
+    );
 }
-
 export default CadastroPedido;

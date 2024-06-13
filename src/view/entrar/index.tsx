@@ -2,16 +2,14 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { ToastAction } from "@/components/ui/toast";
-import { useToast } from "@/components/ui/use-toast";
 import Api from "@/infra/helpers/api";
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import { toast } from "sonner";
 
 export default function Entrar() {
     const [email, setEmail] = useState(""),
-        [senha, setSenha] = useState(""),
-        { toast } = useToast();
+        [senha, setSenha] = useState("");
 
     const logar = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -23,33 +21,11 @@ export default function Entrar() {
 
         try {
             const { data } = await Api.post("usuario/entrar", dto);
-            if (data) {
-                toast({
-                    variant: "success",
-                    description: "Login realizado com sucesso!",
-                })
-                const UsuarioLogado = JSON.stringify(data);
-                localStorage.setItem("UsuarioLogado", UsuarioLogado);
-                window.location.href = "/";
-            }
-
+            const UsuarioLogado = JSON.stringify(data);
+            localStorage.setItem("UsuarioLogado", UsuarioLogado);
+            window.location.href = "/";
         } catch (error: any) {
-            if (error.response) {
-                toast({
-                    variant: "destructive",
-                    title: "Erro!",
-                    description: error.response.data,
-                    action: <ToastAction altText="Tentar Novamente" onClick={() => logar(e)}>Tentar novamente</ToastAction>,
-                })
-
-            } else {
-                toast({
-                    variant: "destructive",
-                    title: "Erro",
-                    description: "Erro ao realizar login!",
-                    action: <ToastAction altText="Tentar Novamente">Tentar novamente</ToastAction>,
-                })
-            }
+            toast.error("Erro ao logar!");
         }
     }
 

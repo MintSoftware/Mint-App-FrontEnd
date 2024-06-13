@@ -10,6 +10,7 @@ import { Usuario } from "@/types/Usuario";
 import { ArrowLeftIcon, BaggageClaimIcon, MinusIcon, PlusIcon, ShoppingCartIcon, TrashIcon } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { toast } from "sonner";
 
 export default function MenuSuperior() {
     const [quantidadeCarrinho, setQuantidadeCarrinho] = useState(0);
@@ -28,6 +29,7 @@ export default function MenuSuperior() {
         const usuario = localStorage.getItem("UsuarioLogado");
         if (usuario) {
             setUsuarioLogado(JSON.parse(usuario));
+            toast.success("Logado com sucesso!");
         }
         return null;
     };

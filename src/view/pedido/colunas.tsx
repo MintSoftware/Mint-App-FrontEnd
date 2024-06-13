@@ -3,49 +3,32 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
-import { toast } from "@/components/ui/use-toast";
 import Api from "@/infra/helpers/api";
 import { Pedido } from "@/types/Pedido";
 import { ColumnDef } from "@tanstack/react-table";
 import { EllipsisVerticalIcon } from "lucide-react";
+import { toast } from "sonner";
 
 const inativar = async (pedido: Pedido) => {
-    if (!confirm("Tem certeza que deseja inativar este pedido?")) return;
-
     try {
-        await Api.put(`/pedido/${pedido.id}/inativar`);
-        toast({
-            title: "Sucesso!",
-            description: "Pedido inativado com sucesso.",
-            variant: "success",
+        toast.promise(await Api.put(`/pedido/${pedido.id}/inativar`), {
+            loading: "Inativando...",
+            success: "Cadastro realizado com sucesso!",
+            error: "Erro ao cadastrar"
         });
+        
     } catch (error: any) {
-        console.log("Erro ao inativar o pedido: ", error);
-        toast({
-            title: "Erro!",
-            description: `Ocorreu um erro ao inativar o pedido: ${error.message}`,
-            variant: "destructive",
-        });
+        
     }
 }
 
 const ativar = async (pedido: Pedido) => {
-    if (!confirm("Tem certeza que deseja ativar este pedido?")) return;
-
     try {
         await Api.put(`/pedido/${pedido.id}/ativar`);
-        toast({
-            title: "Sucesso!",
-            description: "Pedido ativado com sucesso.",
-            variant: "success",
-        });
+        
     } catch (error: any) {
         console.log("Erro ao ativar o pedido: ", error);
-        toast({
-            title: "Erro!",
-            description: `Ocorreu um erro ao ativar o pedido: ${error.message}`,
-            variant: "destructive",
-        });
+        
     }
 }
 

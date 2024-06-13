@@ -11,7 +11,16 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
     <BrowserRouter>
       <ThemeProvider defaultTheme="dark" storageKey='vite-ui-theme'>
         <MainRoutes />
-        <Toaster />
+        <Toaster toastOptions={
+          {
+            className: 'h-[3rem] p-3',
+            classNames: {
+              success: 'bg-green-500 text-black font-bold',
+              info: 'bg-blue-500 text-black font-bold',
+              warning: 'bg-yellow-500 text-black font-bold',
+              error: 'bg-red-500 text-black font-bold',
+          }
+        }}/>
       </ThemeProvider>
     </BrowserRouter>
   </React.StrictMode>,

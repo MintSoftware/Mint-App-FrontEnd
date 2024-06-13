@@ -8,6 +8,7 @@ import { Textarea } from "@/components/ui/textarea";
 import Api from "@/infra/helpers/api";
 import { Categoria } from "@/types/Categoria";
 import { useEffect, useState } from "react";
+import { toast } from "sonner";
 
 const CadastroProduto = () => {
     const [nome, setNome] = useState<string>("");
@@ -17,27 +18,22 @@ const CadastroProduto = () => {
     const [quantidadeEstoque, setQuantidadeEstoque] = useState<number>(0);
     const [categoria, setCategoria] = useState<Categoria>();
     const [categoriaList, setCategoriaList] = useState<Categoria[]>([]);
+    const [isDialogOpen, setIsDialogOpen] = useState(false); // Estado para controlar o diálogo
 
     useEffect(() => {
         recuperarCategorias();
     }, []);
 
     const recuperarCategorias = async () => {
-        
         try {
             const { data } = await Api.get("categoria/listar");
             setCategoriaList(data);
         } catch (error) {
-            // toast({
-            //     variant: "destructive",
-            //     title: "Erro!",
-            //     description: "Erro ao buscar categorias!",
-            // });
+            toast.error("Erro ao buscar categorias!");
         }
     };
 
     const salvar = async () => {
-
         const dto = {
             nome,
             descricao,
@@ -48,37 +44,22 @@ const CadastroProduto = () => {
             status: 1
         };
 
-
         try {
-            const { data } = await Api.post("produto/cadastrar", dto);
-            if (data) {
-                // toast({
-                //     variant: "success",
-                //     description: "Produto cadastrado com sucesso!",
-                // });
-            }
-        } catch (error: any) {
-            if (error.response) {
-                // toast({
-                //     variant: "destructive",
-                //     title: "Erro!",
-                //     description: error.response.data,
-                // });
-            } else {
-                // toast({
-                //     variant: "destructive",
-                //     title: "Erro",
-                //     description: "Erro ao cadastrar produto!",
-                // });
-            }
+            toast.promise(Api.post("produto/cadastrar", dto), {
+                loading: "Salvando...",
+                success: "Produto cadastrado com sucesso!",
+                error: "Erro ao cadastrar produto"
+            });
+            setIsDialogOpen(false);
+        } catch (error) {                
         }
     }
 
     return (
         <div>
-            <Dialog>
+            <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
                 <DialogTrigger asChild>
-                    <Button variant="default">Cadastrar Produto</Button>
+                    <Button variant="default" onClick={() => setIsDialogOpen(true)}>Cadastrar Produto</Button>
                 </DialogTrigger>
                 <DialogContent onInteractOutside={(evento) => evento.preventDefault()} className="flex flex-row items-center sm:max-w-[50%] max-h-50 h-[35rem] p-[2rem] gap-8">
                     <div className="flex justify-center w-[50%] h-full">
@@ -112,7 +93,7 @@ const CadastroProduto = () => {
                                         className="aspect-video object-cover rounded-md"
                                     />
                                 </CarouselItem>
-                            </CarouselContent>
+                                </CarouselContent>
                             <CarouselPrevious />
                         </Carousel>
                     </div>

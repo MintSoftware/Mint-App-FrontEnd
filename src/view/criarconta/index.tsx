@@ -71,7 +71,7 @@ export default function CriarConta() {
         };
 
         try {
-            toast.promise(await Api.post("usuario/cadastrar", dto), {
+            toast.promise(Api.post("usuario/cadastrar", dto), {
                 loading: "Cadastrando...",
                 success: "Cadastro realizado com sucesso!",
                 error: "Erro ao cadastrar"

@@ -14,7 +14,6 @@ const CadastroProduto = () => {
     const [nome, setNome] = useState<string>("");
     const [descricao, setDescricao] = useState<string>("");
     const [preco, setPreco] = useState<number>(0);
-    const [quantidade, setQuantidade] = useState<number>(0);
     const [quantidadeEstoque, setQuantidadeEstoque] = useState<number>(0);
     const [categoria, setCategoria] = useState<Categoria>();
     const [categoriaList, setCategoriaList] = useState<Categoria[]>([]);
@@ -38,7 +37,7 @@ const CadastroProduto = () => {
             nome,
             descricao,
             preco,
-            quantidade,
+            quantidade: 0,
             quantidadeestoque: quantidadeEstoque,
             categoria,
             status: 1

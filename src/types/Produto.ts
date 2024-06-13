@@ -10,4 +10,5 @@ export type Produto = {
     quantidade : number;
     quantidadeestoque : number;
     categoria : Categoria;
+    temFrete: boolean;
 };

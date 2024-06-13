@@ -122,10 +122,6 @@ const CadastroProduto = () => {
                                     <Label htmlFor="price">Preço</Label>
                                     <Input id="price" type="number" placeholder="Preço do produto" onChange={(e) => setPreco(Number(e.target.value))} />
                                 </div>
-                                <div className="grid gap-2">
-                                    <Label htmlFor="quantity">Quantidade</Label>
-                                    <Input id="quantity" type="number" placeholder="Quantidade do produto" onChange={(e) => setQuantidade(Number(e.target.value))} />
-                                </div>
                             </div>
                             <div className="grid grid-cols-2 gap-4">
                                 <div className="grid gap-2">

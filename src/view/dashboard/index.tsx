@@ -6,132 +6,16 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuLabel, DropdownMenuRadio
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import Api from "@/infra/helpers/api";
+import { Categoria } from "@/types/Categoria";
+import { Produto } from "@/types/Produto";
 import { FilterIcon, ListOrderedIcon, SearchIcon } from "lucide-react";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+import { toast } from "sonner";
 
 export default function DashBoard() {
-    const [products] = useState([
-        {
-            id: 1,
-            name: "Tênis Esportivo",
-            description: "Conforto e desempenho para suas atividades",
-            price: 149.99,
-            desconto: 0,
-            image: "/logo.png",
-            category: "Calçados",
-            cobreFrete: true,
-        },
-        {
-            id: 2,
-            name: "Vestido Floral",
-            description: "Elegância e estilo para qualquer ocasião",
-            price: 89.99,
-            desconto: 0,
-            image: "/logo.png",
-            category: "Roupas",
-            cobreFrete: false,
-        },
-        {
-            id: 3,
-            name: "Relógio Analógico",
-            description: "Design clássico e atemporal",
-            price: 299.99,
-            desconto: 0,
-            image: "/logo.png",
-            category: "Acessórios",
-            cobreFrete: false,
-        },
-        {
-            id: 4,
-            name: "Bolsa de Couro",
-            description: "Durabilidade e sofisticação em um só produto",
-            price: 199.99,
-            desconto: 0,
-            image: "/logo.png",
-            category: "Acessórios",
-            cobreFrete: true,
-        },
-        {
-            id: 5,
-            name: "Camiseta Básica",
-            description: "Peça versátil para o seu guarda-roupa",
-            price: 39.99,
-            desconto: 20,
-            image: "/logo.png",
-            category: "Roupas",
-            cobreFrete: false,
-        },
-        {
-            id: 6,
-            name: "Calça Jeans",
-            description: "Corte moderno e confortável",
-            price: 79.99,
-            desconto: 0,
-            image: "/logo.png",
-            category: "Roupas",
-            cobreFrete: false,
-        },
-        {
-            id: 7,
-            name: "Óculos de Sol",
-            description: "Proteção e estilo para os seus olhos",
-            price: 129.99,
-            desconto: 0,
-            image: "/logo.png",
-            category: "Acessórios",
-            cobreFrete: false,
-        },
-        {
-            id: 8,
-            name: "Sapato Social",
-            description: "Elegância e conforto para o dia a dia",
-            price: 199.99,
-            desconto: 0,
-            image: "/logo.png",
-            category: "Calçados",
-            cobreFrete: false,
-        },
-        {
-            id: 9,
-            name: "Blusa de Frio",
-            description: "Conforto e estilo para os dias mais frios",
-            price: 59.99,
-            desconto: 0,
-            image: "/logo.png",
-            category: "Roupas",
-            cobreFrete: true,
-        },
-        {
-            id: 10,
-            name: "Pulseira de Prata",
-            description: "Detalhe sofisticado para o seu visual",
-            price: 49.99,
-            desconto: 0,
-            image: "/logo.png",
-            category: "Acessórios",
-            cobreFrete: false,
-        },
-        {
-            id: 11,
-            name: "Bermuda de Praia",
-            description: "Conforto e estilo para os dias de sol",
-            price: 69.99,
-            desconto: 0,
-            image: "/logo.png",
-            category: "Roupas",
-            cobreFrete: true,
-        },
-        {
-            id: 12,
-            name: "Mochila Esportiva",
-            description: "Praticidade e conforto para os seus treinos",
-            price: 119.99,
-            desconto: 0,
-            image: "/logo.png",
-            category: "Acessórios",
-            cobreFrete: false,
-        }
-    ]);
+    const [produtos, setProdutos] = useState<Produto[]>([]);
+    const [categorias, setCategorias] = useState<Categoria[]>([]);
 
     const [selectedFilters, setSelectedFilters] = useState<{
         category: string[];
@@ -171,16 +55,39 @@ export default function DashBoard() {
         setSort(value);
     };
 
+    useEffect(() => {
+        buscarProdutos();
+        buscarCategorias();
+    }, []);
+
+    const buscarProdutos = async () => {
+        try {
+            const { data } = await Api.get('produto/listar/destaques');
+            setProdutos(data);
+        } catch (error) {
+            toast.error("Erro ao buscar produtos!");
+        }
+    };
+
+    const buscarCategorias = async () => {
+        try {
+            const { data } = await Api.get('categoria/listar');
+            setCategorias(data);
+        } catch (error) {
+            toast.error("Erro ao buscar categorias!");
+        }
+    };
+
     const filteredProducts = useMemo(() => {
-        return products
-            .filter((product) => {
-                if (selectedFilters.category.length > 0 && !selectedFilters.category.includes(product.category)) {
+        return produtos
+            .filter((product: Produto) => {
+                if (selectedFilters.category.length > 0 && !selectedFilters.category.includes(product.categoria.nome as string)) {
                     return false;
                 }
-                if (product.price < selectedFilters.price.min || product.price > selectedFilters.price.max) {
+                if (product.preco < selectedFilters.price.min || product.preco > selectedFilters.price.max) {
                     return false;
                 }
-                if (searchQuery && !product.name.toLowerCase().includes(searchQuery.toLowerCase())) {
+                if (searchQuery && !product.nome.toLowerCase().includes(searchQuery.toLowerCase())) {
                     return false;
                 }
                 return true;
@@ -188,14 +95,14 @@ export default function DashBoard() {
             .sort((a, b) => {
                 switch (sort) {
                     case "low":
-                        return a.price - b.price;
+                        return a.preco - b.preco;
                     case "high":
-                        return b.price - a.price;
+                        return b.preco - a.preco;
                     default:
                         return 0;
                 }
             });
-    }, [selectedFilters, sort, searchQuery]);
+    }, [produtos, selectedFilters, sort, searchQuery]);
 
     const indexOfLastProduct = currentPage * productsPerPage;
     const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
@@ -238,18 +145,14 @@ export default function DashBoard() {
                                 <div>
                                     <h3 className="text-sm font-medium mb-2">Categoria</h3>
                                     <div className="grid gap-2">
-                                        <Label className="flex items-center gap-2 font-normal">
-                                            <Checkbox onCheckedChange={() => handleFilterChange("category", "Roupas")} />
-                                            Roupas
-                                        </Label>
-                                        <Label className="flex items-center gap-2 font-normal">
-                                            <Checkbox onCheckedChange={() => handleFilterChange("category", "Eletrônicos")} />
-                                            Eletrônicos
-                                        </Label>
-                                        <Label className="flex items-center gap-2 font-normal">
-                                            <Checkbox onCheckedChange={() => handleFilterChange("category", "Alimentos")} />
-                                            Alimentos
-                                        </Label>
+                                        {categorias.map((categoria) => (
+                                            <Label key={categoria.id} className="flex items-center gap-2 font-normal">
+                                                <Checkbox
+                                                    onCheckedChange={() => handleFilterChange("category", categoria.nome)}
+                                                />
+                                                {categoria.nome}
+                                            </Label>
+                                        ))}
                                     </div>
                                 </div>
                                 <div>
@@ -296,23 +199,23 @@ export default function DashBoard() {
                 </div>
             </div>
             <div className="flex flex-col md:flex-row gap-6">
-                <ScrollArea className="w-full h-[43.6rem]">
+                <ScrollArea className="w-full h-[43.6rem] p-3">
                     <div className="grid gap-6 grid-cols-1 md:grid-cols-2 lg:grid-cols-5">
                         {currentProducts.map((product) => (
                             <Card key={product.id} className="p-4">
                                 <div className="flex flex-col">
-                                    <img src={product.image} alt={product.name} className="w-full h-48 object-cover mb-4" />
-                                    <h2 className="text-lg font-semibold mb-2">{product.name}</h2>
-                                    <p className="text-gray-600 mb-2">{product.category}</p>
+                                    <img src='/logo.png' className="w-full h-48 object-cover mb-4" />
+                                    <h2 className="text-lg font-semibold mb-2">{product.nome}</h2>
+                                    <p className="text-gray-600 mb-2">{product.categoria.nome}</p>
                                     <div className="flex items-center justify-between w-full">
                                         <span className="text-xl font-bold">
-                                            R$ {product.price.toFixed(2)}
+                                            R$ {product.preco.toFixed(2)}
                                         </span>
                                         <Label className="flex items-center">
-                                            até 12x de {(product.price / 12).toFixed(2)}
+                                            até 12x de {(product.preco / 12).toFixed(2)}
                                         </Label>
                                     </div>
-                                    <Label className="text-green-500">{!product.cobreFrete && 'Frete gratis'}</Label>
+                                    <Label className="text-green-500">{!product.temFrete && 'Frete grátis'}</Label>
                                 </div>
                             </Card>
                         ))}

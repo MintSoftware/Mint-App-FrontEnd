@@ -6,6 +6,7 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuLabel, DropdownMenuRadio
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { Skeleton } from "@/components/ui/skeleton";
 import Api from "@/infra/helpers/api";
 import { Categoria } from "@/types/Categoria";
 import { Produto } from "@/types/Produto";
@@ -16,6 +17,7 @@ import { toast } from "sonner";
 export default function DashBoard() {
     const [produtos, setProdutos] = useState<Produto[]>([]);
     const [categorias, setCategorias] = useState<Categoria[]>([]);
+    const [loading, setLoading] = useState(true);
 
     const [selectedFilters, setSelectedFilters] = useState<{
         category: string[];
@@ -64,6 +66,7 @@ export default function DashBoard() {
         try {
             const { data } = await Api.get('produto/listar/destaques');
             setProdutos(data);
+            setLoading(false);
         } catch (error) {
             toast.error("Erro ao buscar produtos!");
         }
@@ -126,7 +129,7 @@ export default function DashBoard() {
                             onChange={handleSearch}
                             className="w-[200px] md:w-[300px]"
                         />
-                        <Button variant="outline" className="flex items-center gap-2">
+                        <Button onClick={() => buscarProdutos()} variant="outline" className="flex items-center gap-2">
                             <SearchIcon className="w-4 h-4" />
                             Pesquisar
                         </Button>
@@ -201,7 +204,19 @@ export default function DashBoard() {
             <div className="flex flex-col md:flex-row gap-6">
                 <ScrollArea className="w-full h-[43.6rem] p-3">
                     <div className="grid gap-6 grid-cols-1 md:grid-cols-2 lg:grid-cols-5">
-                        {currentProducts.map((product) => (
+                        {loading && Array.from({ length: 10 }).map((_, index) => (
+                            <div key={index} className="p-4">
+                                <Skeleton className="w-full h-48 object-cover mb-4" />
+                                <Skeleton className="w-full h-8 mb-2" />
+                                <Skeleton className="w-32 h-5 mb-2" />
+                                <div className="flex items-center justify-between w-full">
+                                    <Skeleton className="w-24 h-8 mb-2" />
+                                    <Skeleton className="w-24 h-4" />
+                                </div>
+                                <Skeleton className="w-full h-4 p-2" />
+                            </div>
+                        ))}
+                        {!loading &&currentProducts.map((product) => (
                             <Card key={product.id} className="p-4">
                                 <div className="flex flex-col">
                                     <img src='/logo.png' className="w-full h-48 object-cover mb-4" />

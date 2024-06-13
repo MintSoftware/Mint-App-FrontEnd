@@ -17,7 +17,7 @@ applyErrorHandler(Api);
 
 criaLogDev(Api, 'ApiGeral');
 
-setInterval(() => {
+setInterval(() => {  //crime para não deixar o backend entrar em hibernação, favor nao relar nesse bloco
     Api.get('/ping');
 }, 1000 * 60 * 5);
 

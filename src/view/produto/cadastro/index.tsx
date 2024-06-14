@@ -33,6 +33,11 @@ const CadastroProduto = () => {
     };
 
     const salvar = async () => {
+        if (!nome || !descricao || !preco || !quantidadeEstoque || !categoria) {
+            toast.error("Preencha todos os campos obrigatórios!");
+            return;
+        }
+
         const dto = {
             nome,
             descricao,
@@ -40,7 +45,7 @@ const CadastroProduto = () => {
             quantidade: 0,
             quantidadeestoque: quantidadeEstoque,
             categoria,
-            status: 1
+            status: EnumStatusProduto.ATIVO
         };
 
         try {
@@ -109,7 +114,7 @@ const CadastroProduto = () => {
                                     <Input id="id" placeholder="ID do produto" disabled />
                                 </div>
                                 <div className="grid gap-2">
-                                    <Label htmlFor="name">Nome</Label>
+                                    <Label htmlFor="name">Nome*</Label>
                                     <Input id="name" placeholder="Nome do produto" onChange={(e) => setNome(e.target.value)} />
                                 </div>
                             </div>
@@ -119,17 +124,17 @@ const CadastroProduto = () => {
                             </div>
                             <div className="grid grid-cols-2 gap-4">
                                 <div className="grid gap-2">
-                                    <Label htmlFor="price">Preço</Label>
+                                    <Label htmlFor="price">Preço*</Label>
                                     <Input id="price" type="number" placeholder="Preço do produto" onChange={(e) => setPreco(Number(e.target.value))} />
                                 </div>
                             </div>
                             <div className="grid grid-cols-2 gap-4">
                                 <div className="grid gap-2">
-                                    <Label htmlFor="stock">Estoque</Label>
+                                    <Label htmlFor="stock">Estoque*</Label>
                                     <Input id="stock" type="number" placeholder="Quantidade em estoque" onChange={(e) => setQuantidadeEstoque(Number(e.target.value))} />
                                 </div>
                                 <div className="flex flex-col gap-2 ">
-                                    <Label htmlFor="category">Categoria</Label>
+                                    <Label htmlFor="category">Categoria*</Label>
                                     <Select onValueChange={(value) => setCategoria(JSON.parse(value))}>
                                         <SelectTrigger className="w-full">
                                             <SelectValue placeholder="Selecione a categoria" />

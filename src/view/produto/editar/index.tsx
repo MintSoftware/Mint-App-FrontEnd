@@ -118,8 +118,8 @@ const EditarProduto = ({ produto }: EditarProps) => {
                         </div>
                         <div>
                             <DialogHeader>
-                                <DialogTitle>Cadastrar Novo Produto</DialogTitle>
-                                <DialogDescription>Preencha os campos abaixo para adicionar um novo produto.</DialogDescription>
+                                <DialogTitle>Edite o seu produto</DialogTitle>
+                                <DialogDescription>Edite ai o seu Lindão.</DialogDescription>
                             </DialogHeader>
                             <div className="grid gap-4 py-4 pb-24">
                                 <div className="grid grid-cols-2 gap-4">

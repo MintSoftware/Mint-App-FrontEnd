@@ -44,7 +44,7 @@ export const colunas = (): ColumnDef<Produto>[] => [
             <Cabecalho column={column} title="Preço" />
         ),
     }, {
-        accessorKey: 'quantidadeestoque',
+        accessorKey: 'Estoque',
         header: ({ column }) => (
             <Cabecalho column={column} title="Estoque" />
         ),

@@ -63,6 +63,7 @@ export default function DashBoard() {
     }, []);
 
     const buscarProdutos = async () => {
+        setLoading(true);
         try {
             const { data } = await Api.get('produto/listar/destaques');
             setProdutos(data);

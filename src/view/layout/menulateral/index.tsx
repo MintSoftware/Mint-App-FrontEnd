@@ -20,22 +20,9 @@ import { Link, useLocation } from 'react-router-dom';
               className="group flex h-9 w-9 shrink-0 items-center justify-center gap-2 rounded-full bg-primary text-lg font-semibold text-primary-foreground md:h-8 md:w-8 md:text-base"
               to="/"
             >
-              <Package2Icon className="h-4 w-4 transition-all group-hover:scale-110" />
+              <StoreIcon className="h-5 w-5 transition-all group-hover:scale-110" />
               <span className="sr-only">Mint Software</span>
             </Link>
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Link
-                  className={pathname === '/' ? 'flex h-9 w-9 items-center justify-center rounded-lg bg-accent text-accent-foreground transition-colors hover:text-foreground md:h-8 md:w-8' : 'flex h-9 w-9 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:text-foreground md:h-8 md:w-8'}
-                  to="/"
-                  style={pathname === '/' ? { color: '#fff' } : {}}
-                >
-                  <StoreIcon className="h-5 w-5" />
-                  <span className="sr-only">Dashboard</span>
-                </Link>
-              </TooltipTrigger>
-              <TooltipContent side="right">Dashboard</TooltipContent>
-            </Tooltip>
             <Tooltip>
               <TooltipTrigger asChild>
                 <Link

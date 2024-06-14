@@ -8,6 +8,8 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from ".
 import { EsconderColunas } from "./esconderColunas";
 import { Paginacao } from "./paginacao";
 import "./skeletonLoader.css";
+import { Button } from "../ui/button";
+import { SearchIcon } from "lucide-react";
 
 interface TabelaProps<TData, TValue> {
     colunas: ColumnDef<TData, TValue>[];
@@ -47,6 +49,7 @@ const Tabela = <TData, TValue>({ colunas, dados, modal, exportar, functionSearch
                         placeholder="Pesquisar..."
                         className="w-[30%] bg-background"
                     />
+                    <Button onClick={functionSearch} variant="outline"><SearchIcon className="w-4 h-4"/></Button>
                     {modal}
                     <div className="ml-auto flex flex-row gap-3">
                         {exportar}

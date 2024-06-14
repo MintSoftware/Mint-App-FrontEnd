@@ -50,7 +50,8 @@ const CadastroProduto = () => {
                 error: "Erro ao cadastrar produto"
             });
             setIsDialogOpen(false);
-        } catch (error) {                
+        } catch (error) {            
+            toast.error("Erro ao cadastrar produto");    
         }
     }
 
@@ -58,7 +59,7 @@ const CadastroProduto = () => {
         <div>
             <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
                 <DialogTrigger asChild>
-                    <Button variant="default" onClick={() => setIsDialogOpen(true)}>Cadastrar Produto</Button>
+                    <Button variant="default" onClick={() => setIsDialogOpen(true)}>Novo</Button>
                 </DialogTrigger>
                 <DialogContent onInteractOutside={(evento) => evento.preventDefault()} className="flex flex-row items-center sm:max-w-[50%] max-h-50 h-[35rem] p-[2rem] gap-8">
                     <div className="flex justify-center w-[50%] h-full">

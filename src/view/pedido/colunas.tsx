@@ -1,13 +1,12 @@
 import Cabecalho from "@/components/tabela/cabecalho";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import { toast } from "@/components/ui/use-toast";
 import Api from "@/infra/helpers/api";
 import { Pedido } from "@/types/Pedido";
 import { ColumnDef } from "@tanstack/react-table";
 import { EllipsisVerticalIcon } from "lucide-react";
-import { toast } from "@/components/ui/use-toast";
 
 const inativar = async (pedido: Pedido) => {
     if (!confirm("Tem certeza que deseja inativar este pedido?")) return;
@@ -19,7 +18,7 @@ const inativar = async (pedido: Pedido) => {
             description: "Pedido inativado com sucesso.",
             variant: "success",
         });
-    } catch (error) {
+    } catch (error : any) {
         console.log("Erro ao inativar o pedido: ", error);
         toast({
             title: "Erro!",
@@ -39,7 +38,7 @@ const ativar = async (pedido: Pedido) => {
             description: "Pedido ativado com sucesso.",
             variant: "success",
         });
-    } catch (error) {
+    } catch (error : any) {
         console.log("Erro ao ativar o pedido: ", error);
         toast({
             title: "Erro!",
@@ -62,8 +61,8 @@ export const colunas = (): ColumnDef<Pedido>[] => [
             <Cabecalho column={column} title="Data do Pedido" />
         ),
         cell: ({ row }) => (
-            <Badge className='w-[60px] justify-center' variant={row.original.enumStatusPedido ? "outline" : "secondary"}>
-                {row.original.enumStatusPedido.toString() === '1' ? "Ativo" : "Inativo"}
+            <Badge className='w-[60px] justify-center' variant={row.original.status ? "outline" : "secondary"}>
+                {row.original.status.toString() === '1' ? "Ativo" : "Inativo"}
             </Badge>
         ),
     },
@@ -102,7 +101,7 @@ export const colunas = (): ColumnDef<Pedido>[] => [
                         <DropdownMenuSeparator />
                         <DropdownMenuLabel className="font-bold">Ações</DropdownMenuLabel>
                         <DropdownMenuItem className="cursor-pointer">Editar</DropdownMenuItem>
-                        {row.original.enumStatusPedido.toString() === '1' ?
+                        {row.original.status.toString() === '1' ?
                             <DropdownMenuItem onClick={() => inativar(row.original)} className="cursor-pointer text-red-500">Inativar</DropdownMenuItem>
                             : <DropdownMenuItem onClick={() => ativar(row.original)} className="cursor-pointer text-green-500">Ativar</DropdownMenuItem>
                         }

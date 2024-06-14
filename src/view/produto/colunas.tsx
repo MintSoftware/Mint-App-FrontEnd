@@ -1,7 +1,6 @@
 import Cabecalho from "@/components/tabela/cabecalho"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
-import { Checkbox } from "@/components/ui/checkbox"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import Api from "@/infra/helpers/api"
 import { Produto } from "@/types/Produto"

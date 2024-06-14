@@ -7,6 +7,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Textarea } from "@/components/ui/textarea";
 import Api from "@/infra/helpers/api";
 import { Categoria } from "@/types/Categoria";
+import { PlusIcon } from "lucide-react";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 
@@ -59,7 +60,10 @@ const CadastroProduto = () => {
         <div>
             <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
                 <DialogTrigger asChild>
-                    <Button variant="default" onClick={() => setIsDialogOpen(true)}>Novo</Button>
+                    <Button className="gap-2" variant="default" onClick={() => setIsDialogOpen(true)}>
+                        <PlusIcon size={16}/>
+                        Novo
+                        </Button>
                 </DialogTrigger>
                 <DialogContent onInteractOutside={(evento) => evento.preventDefault()} className="flex flex-row items-center sm:max-w-[50%] max-h-50 h-[35rem] p-[2rem] gap-8">
                     <div className="flex justify-center w-[50%] h-full">

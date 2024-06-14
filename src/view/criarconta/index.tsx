@@ -82,10 +82,10 @@ export default function CriarConta() {
                 localStorage.setItem("UsuarioLogado", UsuarioLogado);
                 window.location.href = "/";
             } catch (error) {
-                console.error(error);
+                toast.error("Erro ao logar");
             }
         } catch (error) {
-            console.error(error);
+            toast.error("Erro ao cadastrar");
         }
     };
 

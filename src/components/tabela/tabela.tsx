@@ -1,12 +1,13 @@
 import { ColumnDef, SortingState, flexRender, getCoreRowModel, getFilteredRowModel, getPaginationRowModel, getSortedRowModel, useReactTable } from "@tanstack/react-table";
-import { LoaderCircleIcon } from "lucide-react";
 import { useState } from "react";
 import { Dialog } from "../ui/dialog";
 import { Input } from "../ui/input";
 import { ScrollArea } from "../ui/scroll-area";
+import { Skeleton } from "../ui/skeleton";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "../ui/table";
 import { EsconderColunas } from "./esconderColunas";
 import { Paginacao } from "./paginacao";
+import "./skeletonLoader.css";
 
 interface TabelaProps<TData, TValue> {
     colunas: ColumnDef<TData, TValue>[];
@@ -95,11 +96,24 @@ const Tabela = <TData, TValue>({ colunas, dados, modal, exportar, functionSearch
                                 ) : null}
                             </TableBody>
                         </Table>
-                        {loading && (
-                            <div className="absolute inset-0 grid place-items-center">
-                                <LoaderCircleIcon className="animate-spin h-10 w-10 text-primary" />
+                        {loading && Array.from({ length: 15 }).map((_, index) => (
+                            <div key={index} className="inset-0 flex place-items-center">
+                                <div className="h-full w-full flex">
+                                    {loading && Array.from({ length: 5 }).map((_, index) => (
+                                        <div key={index} className="inset-0 flex place-items-center">
+                                            <div className="flex h-full w-full p-2">
+                                                <Skeleton
+                                                    className=" flex skeleton"
+                                                    style={{
+                                                        animation: `dynamicWidth infinite ${(Math.random() * (7 - 2) + 2)}s ease-in-out`
+                                                    }}
+                                                />
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
                             </div>
-                        )}
+                        ))}
                     </ScrollArea>
                 </div>
                 <Paginacao table={tabela} functionSearch={functionSearch} />

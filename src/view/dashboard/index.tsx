@@ -14,47 +14,52 @@ import { FilterIcon, ListOrderedIcon, SearchIcon } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
 
-export default function DashBoard() {
+export default function PainelDeControle() {
     const [produtos, setProdutos] = useState<Produto[]>([]);
     const [categorias, setCategorias] = useState<Categoria[]>([]);
-    const [loading, setLoading] = useState(true);
+    const [carregando, setCarregando] = useState(true);
 
-    const [selectedFilters, setSelectedFilters] = useState<{
-        category: string[];
-        price: { min: number; max: number };
+    const [filtrosSelecionados, setFiltrosSelecionados] = useState<{
+        categoria: string[];
+        preco: { min: number; max: number };
     }>({
-        category: [],
-        price: { min: 0, max: Infinity },
+        categoria: [],
+        preco: { min: 0, max: Infinity },
     });
 
-    const [searchQuery, setSearchQuery] = useState("");
-    const [currentPage, setCurrentPage] = useState(1);
-    const [productsPerPage, setProductsPerPage] = useState(10);
-
-    const handleFilterChange = (type: any, value: any) => {
-        if (type === "category") {
-            setSelectedFilters({
-                ...selectedFilters,
-                category: selectedFilters.category.includes(value)
-                    ? selectedFilters.category.filter((item) => item !== value)
-                    : [...selectedFilters.category, value],
+    const [consultaDePesquisa, setConsultaDePesquisa] = useState("");
+    const [paginaAtual, setPaginaAtual] = useState(1);
+    const [produtosPorPagina, setProdutosPorPagina] = useState(10);
+    
+    const alterarFiltros = (tipo: any, valor: any) => {
+        if (tipo === "preco" && valor.max === 0) {
+            setFiltrosSelecionados((filtrosAnteriores) => ({
+                ...filtrosAnteriores,
+                preco: { min: valor.min, max: Infinity },
+            }));
+        } else if (tipo === "preco" && valor.max !== 0) {
+            setFiltrosSelecionados({
+                ...filtrosSelecionados,
+                preco: valor,
             });
-        } else if (type === "price") {
-            setSelectedFilters({
-                ...selectedFilters,
-                price: value,
+        } else if (tipo === "categoria") {
+            setFiltrosSelecionados({
+                ...filtrosSelecionados,
+                categoria: filtrosSelecionados.categoria.includes(valor)
+                    ? filtrosSelecionados.categoria.filter((item) => item !== valor)
+                    : [...filtrosSelecionados.categoria, valor],
             });
         }
     };
 
-    const handleSearch = (event: any) => {
-        setSearchQuery(event.target.value);
-        setCurrentPage(1);
+    const alterarPesquisa = (evento: any) => {
+        setConsultaDePesquisa(evento.target.value);
+        setPaginaAtual(1);
     };
 
-    const [sort, setSort] = useState("featured");
-    const handleSort = (value: any) => {
-        setSort(value);
+    const [ordenacao, setOrdenacao] = useState("destaque");
+    const alterarOrdenacao = (valor: any) => {
+        setOrdenacao(valor);
     };
 
     useEffect(() => {
@@ -63,11 +68,11 @@ export default function DashBoard() {
     }, []);
 
     const buscarProdutos = async () => {
-        setLoading(true);
+        setCarregando(true);
         try {
             const { data } = await Api.get('produto/listar/destaques');
             setProdutos(data);
-            setLoading(false);
+            setCarregando(false);
         } catch (error) {
             toast.error("Erro ao buscar produtos!");
         }
@@ -82,39 +87,39 @@ export default function DashBoard() {
         }
     };
 
-    const filteredProducts = useMemo(() => {
+    const produtosFiltrados = useMemo(() => {
         return produtos
-            .filter((product: Produto) => {
-                if (selectedFilters.category.length > 0 && !selectedFilters.category.includes(product.categoria.nome as string)) {
+            .filter((produto: Produto) => {
+                if (filtrosSelecionados.categoria.length > 0 && !filtrosSelecionados.categoria.includes(produto.categoria.nome as string)) {
                     return false;
                 }
-                if (product.preco < selectedFilters.price.min || product.preco > selectedFilters.price.max) {
+                if (produto.preco < filtrosSelecionados.preco.min || produto.preco > filtrosSelecionados.preco.max) {
                     return false;
                 }
-                if (searchQuery && !product.nome.toLowerCase().includes(searchQuery.toLowerCase())) {
+                if (consultaDePesquisa && !produto.nome.toLowerCase().includes(consultaDePesquisa.toLowerCase())) {
                     return false;
                 }
                 return true;
             })
             .sort((a, b) => {
-                switch (sort) {
-                    case "low":
+                switch (ordenacao) {
+                    case "baixo":
                         return a.preco - b.preco;
-                    case "high":
+                    case "alto":
                         return b.preco - a.preco;
                     default:
                         return 0;
                 }
             });
-    }, [produtos, selectedFilters, sort, searchQuery]);
+    }, [produtos, filtrosSelecionados, ordenacao, consultaDePesquisa]);
 
-    const indexOfLastProduct = currentPage * productsPerPage;
-    const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
-    const currentProducts = filteredProducts.slice(indexOfFirstProduct, indexOfLastProduct);
-    const totalPages = Math.ceil(filteredProducts.length / productsPerPage);
+    const indiceUltimoProduto = paginaAtual * produtosPorPagina;
+    const indicePrimeiroProduto = indiceUltimoProduto - produtosPorPagina;
+    const produtosAtuais = produtosFiltrados.slice(indicePrimeiroProduto, indiceUltimoProduto);
+    const totalDePaginas = Math.ceil(produtosFiltrados.length / produtosPorPagina);
 
-    const handlePageChange = (pageNumber: number) => {
-        setCurrentPage(pageNumber);
+    const alterarPagina = (numeroDaPagina: number) => {
+        setPaginaAtual(numeroDaPagina);
     };
 
     return (
@@ -126,8 +131,8 @@ export default function DashBoard() {
                         <Input
                             type="search"
                             placeholder="Pesquisar produtos..."
-                            value={searchQuery}
-                            onChange={handleSearch}
+                            value={consultaDePesquisa}
+                            onChange={alterarPesquisa}
                             className="w-[200px] md:w-[300px]"
                         />
                         <Button onClick={() => buscarProdutos()} variant="outline" className="flex items-center gap-2">
@@ -152,7 +157,7 @@ export default function DashBoard() {
                                         {categorias.map((categoria) => (
                                             <Label key={categoria.id} className="flex items-center gap-2 font-normal">
                                                 <Checkbox
-                                                    onCheckedChange={() => handleFilterChange("category", categoria.nome)}
+                                                    onCheckedChange={() => alterarFiltros("categoria", categoria.nome)}
                                                 />
                                                 {categoria.nome}
                                             </Label>
@@ -167,7 +172,7 @@ export default function DashBoard() {
                                                 type="number"
                                                 placeholder="Min"
                                                 className="w-full"
-                                                onChange={(e) => handleFilterChange("price", { ...selectedFilters.price, min: Number(e.target.value) })}
+                                                onChange={(e) => alterarFiltros("preco", { ...filtrosSelecionados.preco, min: Number(e.target.value) })}
                                             />
                                         </Label>
                                         <Label className="flex items-center gap-2 font-normal">
@@ -175,7 +180,7 @@ export default function DashBoard() {
                                                 type="number"
                                                 placeholder="Max"
                                                 className="w-full"
-                                                onChange={(e) => handleFilterChange("price", { ...selectedFilters.price, max: Number(e.target.value) })}
+                                                onChange={(e) => alterarFiltros("preco", { ...filtrosSelecionados.preco, max: Number(e.target.value) })}
                                             />
                                         </Label>
                                     </div>
@@ -193,10 +198,10 @@ export default function DashBoard() {
                         <DropdownMenuContent className="w-[200px]">
                             <DropdownMenuLabel>Ordenar por</DropdownMenuLabel>
                             <DropdownMenuSeparator />
-                            <DropdownMenuRadioGroup value={sort} onValueChange={handleSort}>
-                                <DropdownMenuRadioItem value="featured">Em destaque</DropdownMenuRadioItem>
-                                <DropdownMenuRadioItem value="low">Preço: menor para maior</DropdownMenuRadioItem>
-                                <DropdownMenuRadioItem value="high">Preço: maior para menor</DropdownMenuRadioItem>
+                            <DropdownMenuRadioGroup value={ordenacao} onValueChange={alterarOrdenacao}>
+                                <DropdownMenuRadioItem value="destaque">Em destaque</DropdownMenuRadioItem>
+                                <DropdownMenuRadioItem value="baixo">Preço: menor para maior</DropdownMenuRadioItem>
+                                <DropdownMenuRadioItem value="alto">Preço: maior para menor</DropdownMenuRadioItem>
                             </DropdownMenuRadioGroup>
                         </DropdownMenuContent>
                     </DropdownMenu>
@@ -205,7 +210,7 @@ export default function DashBoard() {
             <div className="flex flex-col md:flex-row gap-6">
                 <ScrollArea className="w-full h-[43.6rem] p-3">
                     <div className="grid gap-6 grid-cols-1 md:grid-cols-2 lg:grid-cols-5">
-                        {loading && Array.from({ length: 10 }).map((_, index) => (
+                        {carregando && Array.from({ length: 10 }).map((_, index) => (
                             <div key={index} className="p-4">
                                 <Skeleton className="w-full h-48 object-cover mb-4" />
                                 <Skeleton className="w-full h-8 mb-2" />
@@ -217,21 +222,21 @@ export default function DashBoard() {
                                 <Skeleton className="w-full h-4 p-2" />
                             </div>
                         ))}
-                        {!loading &&currentProducts.map((product) => (
-                            <Card key={product.id} className="p-4">
+                        {!carregando && produtosAtuais.map((produto) => (
+                            <Card key={produto.id} className="p-4 cursor-pointer">
                                 <div className="flex flex-col">
                                     <img src='/logo.png' className="w-full h-48 object-cover mb-4" />
-                                    <h2 className="text-lg font-semibold mb-2">{product.nome}</h2>
-                                    <p className="text-gray-600 mb-2">{product.categoria.nome}</p>
-                                    <div className="flex items-center justify-between w-full">
-                                        <span className="text-xl font-bold">
-                                            R$ {product.preco.toFixed(2)}
+                                    <h2 className="text-lg font-semibold mb-2">{produto.nome}</h2>
+                                    <p className="text-gray-600 mb-2">{produto.categoria.nome}</p>
+                                    <div className="flex items-center justify-between w-full cursor-pointer">
+                                        <span className="text-xl font-bold cursor-pointer">
+                                            R$ {produto.preco.toFixed(2)}
                                         </span>
-                                        <Label className="flex items-center">
-                                            até 12x de {(product.preco / 12).toFixed(2)}
+                                        <Label className="flex items-center cursor-pointer">
+                                            até 12x de {(produto.preco / 12).toFixed(2)}
                                         </Label>
                                     </div>
-                                    <Label className="text-green-500">{!product.temFrete && 'Frete grátis'}</Label>
+                                    <Label className="text-green-500 cursor-pointer">{!produto.temFrete && 'Frete grátis'}</Label>
                                 </div>
                             </Card>
                         ))}
@@ -240,11 +245,11 @@ export default function DashBoard() {
             </div>
             <div>
                 <PaginacaoDashBoard
-                    currentPage={currentPage}
-                    totalPages={totalPages}
-                    onPageChange={handlePageChange}
-                    pageSize={productsPerPage}
-                    setPageSize={setProductsPerPage}
+                    currentPage={paginaAtual}
+                    totalPages={totalDePaginas}
+                    onPageChange={alterarPagina}
+                    pageSize={produtosPorPagina}
+                    setPageSize={setProdutosPorPagina}
                 />
             </div>
         </div>

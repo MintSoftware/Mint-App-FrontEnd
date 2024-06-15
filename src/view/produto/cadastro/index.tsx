@@ -119,27 +119,27 @@ const CadastroProduto = () => {
                                 </div>
                                 <div className="grid gap-2">
                                     <Label htmlFor="name">Nome*</Label>
-                                    <Input id="name" placeholder="Nome do produto" onChange={(e) => setNome(e.target.value)} />
+                                    <Input required id="name" placeholder="Nome do produto" onChange={(e) => setNome(e.target.value)} />
                                 </div>
                             </div>
                             <div className="grid gap-2">
                                 <Label htmlFor="description">Descrição</Label>
-                                <Textarea id="description" placeholder="Descrição do produto" onChange={(e) => setDescricao(e.target.value)} />
+                                <Textarea required id="description" placeholder="Descrição do produto" onChange={(e) => setDescricao(e.target.value)} />
                             </div>
                             <div className="grid grid-cols-2 gap-4">
                                 <div className="grid gap-2">
                                     <Label htmlFor="price">Preço*</Label>
-                                    <Input id="price" type="number" placeholder="Preço do produto" onChange={(e) => setPreco(Number(e.target.value))} />
+                                    <Input required id="price" type="number" placeholder="Preço do produto" onChange={(e) => setPreco(Number(e.target.value))} />
                                 </div>
                             </div>
                             <div className="grid grid-cols-2 gap-4">
                                 <div className="grid gap-2">
                                     <Label htmlFor="stock">Estoque*</Label>
-                                    <Input id="stock" type="number" placeholder="Quantidade em estoque" onChange={(e) => setQuantidadeEstoque(Number(e.target.value))} />
+                                    <Input required id="stock" type="number" placeholder="Quantidade em estoque" onChange={(e) => setQuantidadeEstoque(Number(e.target.value))} />
                                 </div>
                                 <div className="flex flex-col gap-2 ">
                                     <Label htmlFor="category">Categoria*</Label>
-                                    <Select onValueChange={(value) => setCategoria(JSON.parse(value))}>
+                                    <Select required onValueChange={(value) => setCategoria(JSON.parse(value))}>
                                         <SelectTrigger className="w-full">
                                             <SelectValue placeholder="Selecione a categoria" />
                                         </SelectTrigger>

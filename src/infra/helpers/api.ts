@@ -19,6 +19,6 @@ criaLogDev(Api, 'ApiGeral');
 
 setInterval(() => {  //crime para não deixar o backend entrar em hibernação, favor nao relar nesse bloco
     Api.get('/ping');
-}, 1000 * 60 * 5);
+}, 1000 * 60 * 3);
 
 export default Api;

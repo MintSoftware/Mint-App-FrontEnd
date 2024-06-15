@@ -46,7 +46,7 @@ const CadastroProduto = () => {
             quantidade: 0,
             quantidadeestoque: quantidadeEstoque,
             categoria,
-            status: EnumStatusProduto.ATIVO
+            status: 1
         };
 
         try {

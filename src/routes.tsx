@@ -9,6 +9,7 @@ import Produto from "./view/produto";
 import RecuperarSenha from "./view/recuperarsenha";
 import Pedido from "./view/pedido";
 import DashBoard from "./view/dashboard";
+import PainelProduto from "./view/dashboard/painel";
 
 function MainRoutes() {
     const [isLoading, setIsLoading] = useState(true);
@@ -37,6 +38,7 @@ function MainRoutes() {
         <Layout>
             <Routes>
                 <Route path="/" element={<DashBoard />} />
+                <Route path="/produtos/:id" element={<PainelProduto />} /> 
                 <Route path="/produtos" element={<Produto />} />
                 <Route path="/pedidos" element={<Pedido />} />
                 <Route path="*" element={<PaginaNaoEncontrada />} />

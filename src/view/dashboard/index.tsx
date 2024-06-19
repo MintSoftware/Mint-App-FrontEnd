@@ -12,6 +12,7 @@ import { Categoria } from "@/types/Categoria";
 import { Produto } from "@/types/Produto";
 import { FilterIcon, ListOrderedIcon, SearchIcon } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
+import { Link } from "react-router-dom";
 import { toast } from "sonner";
 
 export default function PainelDeControle() {
@@ -30,7 +31,7 @@ export default function PainelDeControle() {
     const [consultaDePesquisa, setConsultaDePesquisa] = useState("");
     const [paginaAtual, setPaginaAtual] = useState(1);
     const [produtosPorPagina, setProdutosPorPagina] = useState(10);
-    
+
     const alterarFiltros = (tipo: any, valor: any) => {
         if (tipo === "preco" && valor.max === 0) {
             setFiltrosSelecionados((filtrosAnteriores) => ({
@@ -223,22 +224,24 @@ export default function PainelDeControle() {
                             </div>
                         ))}
                         {!carregando && produtosAtuais.map((produto) => (
-                            <Card key={produto.id} className="p-4 cursor-pointer">
-                                <div className="flex flex-col">
-                                    <img src='/logo.png' className="w-full h-48 object-cover mb-4" />
-                                    <h2 className="text-lg font-semibold mb-2">{produto.nome}</h2>
-                                    <p className="text-gray-600 mb-2">{produto.categoria.nome}</p>
-                                    <div className="flex items-center justify-between w-full cursor-pointer">
-                                        <span className="text-xl font-bold cursor-pointer">
-                                            R$ {produto.preco.toFixed(2)}
-                                        </span>
-                                        <Label className="flex items-center cursor-pointer">
-                                            até 12x de {(produto.preco / 12).toFixed(2)}
-                                        </Label>
+                            <Link to={`/produtos/${produto.id}`} key={produto.id}>
+                                <Card key={produto.id} className="p-4 cursor-pointer">
+                                    <div className="flex flex-col">
+                                        <img src='/logo.png' className="w-full h-48 object-cover mb-4" />
+                                        <h2 className="text-lg font-semibold mb-2">{produto.nome}</h2>
+                                        <p className="text-gray-600 mb-2">{produto.categoria.nome}</p>
+                                        <div className="flex items-center justify-between w-full cursor-pointer">
+                                            <span className="text-xl font-bold cursor-pointer">
+                                                R$ {produto.preco.toFixed(2)}
+                                            </span>
+                                            <Label className="flex items-center cursor-pointer">
+                                                até 12x de {(produto.preco / 12).toFixed(2)}
+                                            </Label>
+                                        </div>
+                                        <Label className="text-green-500 cursor-pointer">{!produto.temFrete && 'Frete grátis'}</Label>
                                     </div>
-                                    <Label className="text-green-500 cursor-pointer">{!produto.temFrete && 'Frete grátis'}</Label>
-                                </div>
-                            </Card>
+                                </Card>
+                            </Link>
                         ))}
                     </div>
                 </ScrollArea>

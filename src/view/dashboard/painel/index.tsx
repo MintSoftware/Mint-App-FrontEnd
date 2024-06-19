@@ -1,11 +1,12 @@
-import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/ui/select"
 import { Button } from "@/components/ui/button"
-import { useEffect, useState } from "react"
-import { PlusIcon, ShoppingCartIcon, StarIcon } from "lucide-react"
-import { Produto } from "@/types/Produto"
-import Api from "@/infra/helpers/api"
-import { toast } from "sonner"
 import { ScrollArea } from "@/components/ui/scroll-area"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { Skeleton } from "@/components/ui/skeleton"
+import Api from "@/infra/helpers/api"
+import { Produto } from "@/types/Produto"
+import { PlusIcon, ShoppingCartIcon, StarIcon } from "lucide-react"
+import { useEffect, useState } from "react"
+import { toast } from "sonner"
 
 export default function PainelProduto() {
     const [loading, setIsLoading] = useState(false)
@@ -28,16 +29,51 @@ export default function PainelProduto() {
     }
 
     return (
-        <div>
+        <div className="flex flex-col">
+            {loading && <div className="flex flex-col gap-6 px-4 mx-auto py-6 bg-background w-[56.5rem] border rounded-lg h-[54rem]">
+                <div className="flex flex-col items-center justify-center w-full h-full">
+                    <div className="flex flex-row gap-6">
+                        <Skeleton className="w-[25rem] h-[33rem]" />
+                        <div className="flex flex-col gap-5">
+                            <Skeleton className="w-[27rem] h-[4rem]" />
+                            <Skeleton className="w-[20rem] h-[2rem]" />
+                            <Skeleton className="w-[15rem] mt-5 h-[2rem]" />
+                            <div className="flex justify-between mt-3">
+                                <div className="flex flex-col gap-2">
+                                    <Skeleton className="w-[5rem] h-[2rem]" />
+                                    <Skeleton className="w-[5rem] h-[2rem]" />
+                                    <Skeleton className="w-[5rem] h-[2rem]" />
+                                    <Skeleton className="w-[5rem] h-[2rem]" />
+                                    <Skeleton className="w-[5rem] h-[2rem]" />
+                                </div>
+                                <div className="flex flex-col gap-2">
+                                    <Skeleton className="w-[5rem] h-[2rem]" />
+                                    <Skeleton className="w-[5rem] h-[2rem]" />
+                                    <Skeleton className="w-[5rem] h-[2rem]" />
+                                    <Skeleton className="w-[5rem] h-[2rem]" />
+                                    <Skeleton className="w-[5rem] h-[2rem]" />
+                                </div>
+                            </div>
+                            <div className="flex mt-[3rem] gap-2 justify-between">
+                                <Skeleton className="w-full h-[3rem]" />
+                                <Skeleton className="w-full h-[3rem]" />
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <Skeleton className=" mt-5 w-[53.5rem] h-[17rem]" />
+                    </div>
+                </div>
+            </div>}
             {!loading && <div className="flex flex-col gap-6 px-4 mx-auto py-6 bg-background w-[56.5rem] border rounded-lg h-[54rem]">
-                <div className="flex w-full gap-5 h-[39.3rem] ">
+                <div className="flex w-full gap-5 h-[32.7rem] ">
                     <div className="flex w-full h-full md:gap-10 items-start">
                         <img
                             src={"logo.png"}
                             alt="Product Image"
-                            width={600}
-                            height={900}
-                            className="aspect-[2/3] object-cover border w-full rounded-lg overflow-hidden"
+                            width={400}
+                            height={500}
+                            className="object-cover border w-full rounded-lg overflow-hidden"
                         />
                     </div>
                     <div className="flex flex-col gap-5">
@@ -74,7 +110,7 @@ export default function PainelProduto() {
                             </div>
                             <div className="flex items-center justify-between">
                                 <span className="text-muted-foreground">Frete:</span>
-                                <span className="text-green-500">{produto?.temFrete ? 'Grátis' : 'Não Grátis'}</span>
+                                <span className="text-green-500">{produto?.temFrete ? 'Pago' : 'Grátis'}</span>
                             </div>
                             <div className="flex items-center justify-between">
                                 <span className="text-muted-foreground">Quantidade:</span>
@@ -105,20 +141,49 @@ export default function PainelProduto() {
                     </div>
                 </div>
                 <div>
-                    <div className="flex border rounded-lg w-full h-[10rem]">
-                        <ScrollArea className="h-[10rem]">
+                    <div className="flex border rounded-lg w-full h-[17rem]">
+                        <ScrollArea className="w-full h-[17rem]">
                             <div className="p-4">
                                 <h2 className="text-lg font-semibold">Comentários do Produto</h2>
                                 <div className="mt-5 space-y-4">
-                                    {/* Exemplo de comentário */}
                                     <div className="flex gap-4">
                                         <div className="flex-shrink-0">
                                             <img src="https://github.com/shadcn.png" alt="Avatar do Usuário" className="w-10 h-10 rounded-full" />
                                         </div>
                                         <div>
-                                            <h3 className="text-sm font-semibold">Nome do Usuário</h3>
-                                            <p className="text-sm text-gray-600">Data do Comentário</p>
-                                            <p className="mt-1">Texto do comentário do usuário sobre o produto.</p>
+                                            <h3 className="text-sm font-semibold">José, o comprador</h3>
+                                            <p className="text-sm text-gray-600">19/06/2024</p>
+                                            <p className="mt-1">{produto?.nome} de qualidade, recomendo!</p>
+                                        </div>
+                                    </div>
+                                    <div className="flex gap-4">
+                                        <div className="flex-shrink-0">
+                                            <img src="https://github.com/shadcn.png" alt="Avatar do Usuário" className="w-10 h-10 rounded-full" />
+                                        </div>
+                                        <div>
+                                            <h3 className="text-sm font-semibold">Pedro Apolinário</h3>
+                                            <p className="text-sm text-gray-600">19/04/2020</p>
+                                            <p className="mt-1">{produto?.nome} com bom custo benefício.</p>
+                                        </div>
+                                    </div>
+                                    <div className="flex gap-4">
+                                        <div className="flex-shrink-0">
+                                            <img src="https://github.com/shadcn.png" alt="Avatar do Usuário" className="w-10 h-10 rounded-full" />
+                                        </div>
+                                        <div>
+                                            <h3 className="text-sm font-semibold">Zé da manga</h3>
+                                            <p className="text-sm text-gray-600">25/12/2019</p>
+                                            <p className="mt-1">{produto?.nome} de qualidade elevada, bom acabamento e cores vibrantes.</p>
+                                        </div>
+                                    </div>
+                                    <div className="flex gap-4">
+                                        <div className="flex-shrink-0">
+                                            <img src="https://github.com/shadcn.png" alt="Avatar do Usuário" className="w-10 h-10 rounded-full" />
+                                        </div>
+                                        <div>
+                                            <h3 className="text-sm font-semibold">João do alicate</h3>
+                                            <p className="text-sm text-gray-600">01/07/2024</p>
+                                            <p className="mt-1">{produto?.nome} OK, esperava mais</p>
                                         </div>
                                     </div>
                                 </div>

@@ -41,10 +41,12 @@ export default function MenuSuperior() {
 
     return (
         <div className="sticky top-0 z-30 flex h-14 w-full justify-between items-center gap-4 border-b bg-background px-4 pt-2 sm:static sm:h-auto sm:border-0 sm:bg-transparent sm:px-6">
-            <div className="flex items-center gap-3">
-                <img src="logo.png" alt="Logo" className="h-7" />
-                <Label className="text-white">Mint E-commerce</Label>
-            </div>
+            <Link to={'/'}>
+                <div className="flex items-center gap-3 cursor-pointer">
+                    <img src="logo.png" alt="Logo" className="h-7" />
+                    <Label className="text-white cursor-pointer">Mint E-commerce</Label>
+                </div>
+            </Link>
             <div className="flex">
                 {usuarioLogado && <div className="flex justify-center items-center gap-3">
                     <AlertDialog >

@@ -24,6 +24,10 @@ export default function CriarConta() {
     const [estado, setEstado] = useState("");
     const [pais, setPais] = useState("");
 
+    const handleClickTab = (tab: any) => {
+        setActiveTab(tab)
+    }
+
     const formatarCfpCnpj = (event: React.ChangeEvent<HTMLInputElement>) => {
         let { value } = event.target;
         value = value.replace(/\D/g, '');
@@ -101,7 +105,7 @@ export default function CriarConta() {
                 </div>
             </Link>
             <form onSubmit={criarConta}>
-                <Tabs className="mx-auto max-w-sm max-w-[45rem] w-[45rem]" value={activeTab}>
+                <Tabs className="mx-auto max-w-sm max-w-[45rem] w-[45rem]" value={activeTab} onValueChange={setActiveTab}>
                     <TabsList className="grid w-full grid-cols-2">
                         <TabsTrigger value="info">Informações</TabsTrigger>
                         <TabsTrigger value="address">Endereço</TabsTrigger>
@@ -150,7 +154,7 @@ export default function CriarConta() {
                                             <Input id="telefone" placeholder="(00) 00000-0000" required onChange={(e) => setTelefone(e.target.value)} />
                                         </div>
                                     </div>
-                                    <Button className="w-full" variant="default" onClick={handleNextClick}>
+                                    <Button className="w-full" variant="default" onClick={() => handleClickTab("address")}>
                                         Próximo
                                     </Button>
                                     <Button className="w-full" variant="outline">
@@ -205,7 +209,7 @@ export default function CriarConta() {
                                         </div>
                                     </div>
                                     <div className="flex gap-2">
-                                        <Button className="w-20" variant="outline" onClick={() => setActiveTab("info")}>
+                                        <Button className="w-20" variant="outline" onClick={() => handleClickTab("info")}>
                                             Voltar
                                         </Button>
                                         <Button className="w-full" type="submit">

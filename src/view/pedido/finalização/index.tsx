@@ -6,14 +6,15 @@ import { Label } from "@/components/ui/label"
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/ui/select"
 import { Button } from "@/components/ui/button"
 import { Separator } from "@/components/ui/separator"
-import { CreditCardIcon, DollarSignIcon, WalletCardsIcon } from "lucide-react"
+import { ArrowLeftIcon, ArrowRightIcon, CreditCardIcon, DollarSignIcon, ShoppingCartIcon, WalletCardsIcon } from "lucide-react"
 import { Input } from "@/components/ui/input"
+import { Arrow } from "@radix-ui/react-popover"
 
 export default function FinalizacaoPedido() {
     const [activeTab, setActiveTab] = useState("address");
     const [clienteExistente, setClienteExistente] = useState(true);
     const [metodoPagto, setMetodoPagto] = useState("pix");
-    const handleNextClick = (tab: any) => {
+    const handleClickTab = (tab: any) => {
         setActiveTab(tab)
     }
 
@@ -42,9 +43,9 @@ export default function FinalizacaoPedido() {
                                                     <SelectTrigger className="flex w-[30rem]">
                                                         <SelectValue className="flex w-full" placeholder="Selecione um endereço" />
                                                     </SelectTrigger>
-                                                    <SelectContent>
-                                                        <SelectItem value="1">Rua A, 123 - Bairro X, Cidade Y - SP, 12345-678</SelectItem>
-                                                        <SelectItem value="2">Rua B, 456 - Bairro Z, Cidade W - SP, 98765-432</SelectItem>
+                                                    <SelectContent className="cursor-pointer">
+                                                        <SelectItem className="cursor-pointer" value="1">Rua A, 123 - Bairro X, Cidade Y - SP, 12345-678</SelectItem>
+                                                        <SelectItem className="cursor-pointer" value="2">Rua B, 456 - Bairro Z, Cidade W - SP, 98765-432</SelectItem>
                                                     </SelectContent>
                                                 </Select>
                                             </div>
@@ -89,8 +90,11 @@ export default function FinalizacaoPedido() {
                                 </div>
                             </div>
                         </CardContent>
-                        <CardFooter>
-                            <Button onClick={() => handleNextClick("payment")}>Próximo</Button>
+                        <CardFooter className="justify-end">
+                            <Button onClick={() => handleClickTab("payment")}>
+                                <ArrowRightIcon className="h-4 w-4 mr-2" />
+                                Próximo
+                            </Button>
                         </CardFooter>
                     </Card>
                 </TabsContent>
@@ -187,8 +191,15 @@ export default function FinalizacaoPedido() {
                                 </div>}
                             </div>
                         </CardContent>
-                        <CardFooter>
-                            <Button onClick={() => handleNextClick("review")}>Próximo</Button>
+                        <CardFooter className="gap-2 justify-between">
+                            <Button variant={"outline"} onClick={() => handleClickTab("address")}>
+                                <ArrowLeftIcon className="h-4 w-4 mr-2" />
+                                Voltar
+                            </Button>
+                            <Button onClick={() => handleClickTab("review")}>
+                                <ArrowRightIcon className="h-4 w-4 mr-2" />
+                                Próximo
+                            </Button>
                         </CardFooter>
                     </Card>
                 </TabsContent>
@@ -227,8 +238,15 @@ export default function FinalizacaoPedido() {
                                 </div>
                             </div>
                         </CardContent>
-                        <CardFooter>
-                            <Button>Finalizar pagamento</Button>
+                        <CardFooter className="gap-2 justify-between">
+                            <Button variant={"outline"} onClick={() => handleClickTab("payment")}>
+                                <ArrowLeftIcon className="h-4 w-4 mr-2" />
+                                Voltar
+                            </Button>
+                            <Button>
+                                <ShoppingCartIcon className="h-4 w-4 mr-2" />
+                                Finalizar pagamento
+                            </Button>
                         </CardFooter>
                     </Card>
                 </TabsContent>

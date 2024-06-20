@@ -49,7 +49,7 @@ export default function MenuSuperior() {
             }
             return item;
         });
-        if(produto.quantidade > produto.quantidadeestoque) return toast.error("Quantidade indisponível no estoque!");
+        if (produto.quantidade > produto.quantidadeestoque) return toast.error("Quantidade indisponível no estoque!");
         setCarrinho(carrinhoAtualizado);
         localStorage.setItem("Carrinho", JSON.stringify(carrinhoAtualizado));
     }
@@ -57,7 +57,7 @@ export default function MenuSuperior() {
     const removerQuantidade = (produto: Produto) => {
         const carrinhoAtualizado = carrinho.map((item) => {
             if (item.id === produto.id) {
-                if(item.quantidade <= 1) return item;
+                if (item.quantidade <= 1) return item;
                 item.quantidade--;
             }
             return item;
@@ -173,57 +173,59 @@ export default function MenuSuperior() {
                             </SheetHeader>
                             <ScrollArea className=" py-5 px-3 w-full h-[49rem]">
                                 <div className="flex flex-col gap-5 w-full h-full">
-                                {carrinho.map((produto) => (
-                                    <Card key={produto.id} className="w-full max-w-sm p-6 grid gap-6">
-                                        <div className="grid grid-cols-[100px_1fr] gap-4">
-                                            <img
-                                                src={'logo.png'}
-                                                alt="Product Image"
-                                                width={120}
-                                                height={120}
-                                                className="aspect-square object-cover rounded-md"
-                                            />
-                                            <div className="grid gap-2">
-                                                <div className="flex items-center justify-between">
-                                                    <h3 className="font-semibold">{produto.nome}</h3>
-                                                    <div className="text-2xl font-bold">{produto.preco}</div>
-                                                </div>
-                                                <p className="text-sm text-gray-500 dark:text-gray-400">
-                                                    {produto.descricao}
-                                                </p>
-                                                <div className="flex items-center gap-4">
-                                                    <Button onClick={() => removerQuantidade(produto)} variant="outline" size="icon">
-                                                        <MinusIcon className="h-4 w-4" />
-                                                    </Button>
-                                                    <div className="text-lg font-medium">{produto.quantidade}</div>
-                                                    <Button onClick={() => adicionarQuantidade(produto)} variant="outline" size="icon">
-                                                        <PlusIcon className="h-4 w-4" />
-                                                    </Button>
-                                                    <Button onClick={() => removerDoCarrinho(produto)} variant={"destructive"}>
-                                                        <TrashIcon className="h-4 w-4" />
-                                                    </Button>
+                                    {carrinho.map((produto) => (
+                                        <Card key={produto.id} className="w-full max-w-sm p-6 grid gap-6">
+                                            <div className="grid grid-cols-[100px_1fr] gap-4">
+                                                <img
+                                                    src={'logo.png'}
+                                                    alt="Product Image"
+                                                    width={120}
+                                                    height={120}
+                                                    className="aspect-square object-cover rounded-md"
+                                                />
+                                                <div className="grid gap-2">
+                                                    <div className="flex items-center justify-between">
+                                                        <h3 className="font-semibold">{produto.nome}</h3>
+                                                        <div className="text-2xl font-bold">{produto.preco}</div>
+                                                    </div>
+                                                    <p className="text-sm text-gray-500 dark:text-gray-400">
+                                                        {produto.descricao}
+                                                    </p>
+                                                    <div className="flex items-center gap-4">
+                                                        <Button onClick={() => removerQuantidade(produto)} variant="outline" size="icon">
+                                                            <MinusIcon className="h-4 w-4" />
+                                                        </Button>
+                                                        <div className="text-lg font-medium">{produto.quantidade}</div>
+                                                        <Button onClick={() => adicionarQuantidade(produto)} variant="outline" size="icon">
+                                                            <PlusIcon className="h-4 w-4" />
+                                                        </Button>
+                                                        <Button onClick={() => removerDoCarrinho(produto)} variant={"destructive"}>
+                                                            <TrashIcon className="h-4 w-4" />
+                                                        </Button>
+                                                    </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                    </Card>
-                                ))}
+                                        </Card>
+                                    ))}
                                 </div>
                             </ScrollArea>
-                            <SheetFooter className="items-end">
-                                <SheetClose asChild>
-                                    <Button variant={"outline"} className="gap-2">
-                                        <ArrowLeftIcon size={16} />
-                                        Voltar
-                                    </Button>
-                                </SheetClose>
-                                <SheetClose asChild>
-                                    <Link to="/finalizarpedido">
-                                    <Button className="w-[70%] gap-2" type="submit">
-                                        <BaggageClaimIcon size={16} />
-                                        Finalizar Pedido
-                                    </Button>
-                                    </Link>
-                                </SheetClose>
+                            <SheetFooter>
+                                <div className="w-full flex justify-between gap-2">
+                                    <SheetClose asChild>
+                                        <Button variant={"outline"} className="gap-2">
+                                            <ArrowLeftIcon size={16} />
+                                            Voltar
+                                        </Button>
+                                    </SheetClose>
+                                    <SheetClose asChild>
+                                        <Link to="/finalizarpedido">
+                                            <Button className=" gap-2" type="submit">
+                                                <BaggageClaimIcon size={16} />
+                                                Finalizar Pedido
+                                            </Button>
+                                        </Link>
+                                    </SheetClose>
+                                </div>
                             </SheetFooter>
                         </SheetContent>
                     </Sheet>

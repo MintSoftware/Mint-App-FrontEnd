@@ -6,6 +6,7 @@ import Api from "@/infra/helpers/api"
 import { Produto } from "@/types/Produto"
 import { PlusIcon, ShoppingCartIcon, StarIcon } from "lucide-react"
 import { useEffect, useState } from "react"
+import { Link } from "react-router-dom"
 import { toast } from "sonner"
 
 export default function PainelProduto() {
@@ -151,10 +152,12 @@ export default function PainelProduto() {
                                 <PlusIcon className="w-5 h-5" />
                                 Adicionar ao carrinho
                             </Button>
-                            <Button disabled={!temEstoque} size="lg" className="gap-2">
-                                <ShoppingCartIcon className="w-5 h-5" />
-                                Comprar agora
-                            </Button>
+                            <Link to="/finalizarpedido">
+                                <Button disabled={!temEstoque} size="lg" className="gap-2">
+                                    <ShoppingCartIcon className="w-5 h-5" />
+                                    Comprar agora
+                                </Button>
+                            </Link>
                         </div>
                     </div>
                 </div>

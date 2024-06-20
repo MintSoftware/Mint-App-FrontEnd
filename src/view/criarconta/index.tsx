@@ -153,9 +153,6 @@ export default function CriarConta() {
                                     <Button className="w-full" variant="default" onClick={() => handleClickTab("address")}>
                                         Próximo
                                     </Button>
-                                    <Button className="w-full" variant="outline">
-                                        Cadastrar com GitHub
-                                    </Button>
                                 </div>
                                 <div className="mt-4 text-center text-sm">
                                     Já tem uma conta?

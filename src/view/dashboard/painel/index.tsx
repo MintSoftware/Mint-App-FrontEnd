@@ -6,7 +6,6 @@ import Api from "@/infra/helpers/api"
 import { Produto } from "@/types/Produto"
 import { PlusIcon, ShoppingCartIcon, StarIcon } from "lucide-react"
 import { useEffect, useState } from "react"
-import { Link } from "react-router-dom"
 import { toast } from "sonner"
 
 export default function PainelProduto() {
@@ -109,8 +108,7 @@ export default function PainelProduto() {
                                 {Array.from({ length: 5 }, (_, index) => (
                                     <StarIcon
                                         key={index}
-                                        className={`w-5 h-5 ${(Math.random() * 10) > 5 ? 'fill-primary' : 'fill-muted stroke-muted-foreground'}
-                                        ) ? 'fill-primary' : 'fill-muted stroke-muted-foreground'}`}
+                                        className={`w-5 h-5 ${index <= Math.floor(Math.random() * 5) + 1 ? 'fill-primary' : 'fill-muted stroke-muted-foreground'}`}
                                     />
                                 ))}
                             </div>
@@ -153,12 +151,10 @@ export default function PainelProduto() {
                                 <PlusIcon className="w-5 h-5" />
                                 Adicionar ao carrinho
                             </Button>
-                            <Link to="/finalizarpedido">
-                                <Button disabled={!temEstoque} size="lg" className="gap-2">
-                                    <ShoppingCartIcon className="w-5 h-5" />
-                                    Comprar agora
-                                </Button>
-                            </Link>
+                            <Button disabled={!temEstoque} size="lg" className="gap-2">
+                                <ShoppingCartIcon className="w-5 h-5" />
+                                Comprar agora
+                            </Button>
                         </div>
                     </div>
                 </div>

@@ -70,6 +70,7 @@ export default function MenuSuperior() {
         const carrinhoAtualizado = carrinho.filter((item) => item.id !== produto.id);
         setCarrinho(carrinhoAtualizado);
         localStorage.setItem("Carrinho", JSON.stringify(carrinhoAtualizado));
+        toast.success("Produto removido do carrinho!");
     }
 
     const sair = () => {
@@ -99,20 +100,9 @@ export default function MenuSuperior() {
                                 </Button>
                             </DropdownMenuTrigger>
                             <DropdownMenuContent align="end">
-                                <DropdownMenuItem>
-                                    <Link to="/perfil">
+                                <DropdownMenuItem asChild>
+                                    <Link className="cursor-pointer" to="/perfil">
                                         Minha conta
-                                    </Link>
-                                </DropdownMenuItem>
-                                <DropdownMenuSeparator />
-                                <DropdownMenuItem>
-                                    <Link to="/configuracoes">
-                                        Configurações
-                                    </Link>
-                                </DropdownMenuItem>
-                                <DropdownMenuItem>
-                                    <Link to="/ajuda">
-                                        Ajuda
                                     </Link>
                                 </DropdownMenuItem>
                                 <DropdownMenuSeparator />

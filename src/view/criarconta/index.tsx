@@ -90,7 +90,7 @@ export default function CriarConta() {
     };
 
     return (
-        <div className="fixed flex justify-center items-center w-full h-full bg-background z-50 top-0 left-0 border">
+        <div className="fixed flex justify-center w-full h-full bg-background z-50 top-0 left-0 border">
             <Link to="/">
                 <div className="fixed top-0 left-5 w-[15%] h-[10%] cursor-pointer flex  items-center">
                     <img src="logo.png" alt="Logo" className="w-14 h-14" />
@@ -101,7 +101,7 @@ export default function CriarConta() {
                 </div>
             </Link>
             <form onSubmit={criarConta}>
-                <Tabs className="mx-auto max-w-sm max-w-[45rem] w-[45rem]" value={activeTab} onValueChange={setActiveTab}>
+                <Tabs className="mx-auto mt-[10rem] max-w-sm max-w-[40rem] w-[40rem]" value={activeTab} onValueChange={setActiveTab}>
                     <TabsList className="grid w-full grid-cols-2">
                         <TabsTrigger value="info">Informações</TabsTrigger>
                         <TabsTrigger value="address">Endereço</TabsTrigger>

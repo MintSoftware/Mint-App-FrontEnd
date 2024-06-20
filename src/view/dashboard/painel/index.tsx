@@ -11,6 +11,7 @@ import { toast } from "sonner"
 export default function PainelProduto() {
     const [loading, setIsLoading] = useState(false)
     const [produto, setProduto] = useState<Produto>()
+    const [temEstoque, setTemEstoque] = useState(true)
 
     useEffect(() => {
         recuperarProduto()
@@ -23,9 +24,27 @@ export default function PainelProduto() {
             const { data } = await Api.get(`produto/listar/${idProduto}`);
             setProduto(data);
             setIsLoading(false);
+            if (data.quantidadeestoque < 1) setTemEstoque(false)
         } catch (error) {
             toast.error("Erro ao buscar produto!")
         }
+    }
+
+    function adicionarAoCarrinho(produto: Produto) {
+        const carrinho = JSON.parse(localStorage.getItem("Carrinho") || "[]")
+        if (carrinho.find((item: Produto) => item.id === produto.id)) {
+            toast.warning("Produto já adicionado ao carrinho!")
+            return
+        }
+        if (produto.quantidade > produto.quantidadeestoque) return toast.error("Quantidade indisponível no estoque!")
+        if (produto.quantidade < 1) produto.quantidade = 1
+        carrinho.push(produto)
+        localStorage.setItem("Carrinho", JSON.stringify(carrinho))
+        toast.success("Produto adicionado ao carrinho!")
+    }
+
+    const alterarQuantItem = (value: number) => {
+        if (produto) produto.quantidade = value
     }
 
     return (
@@ -102,7 +121,7 @@ export default function PainelProduto() {
                             </div>
                             <div className="flex items-center justify-between">
                                 <span className="text-muted-foreground">Estoque:</span>
-                                <span>{produto?.quantidadeestoque} unidades</span>
+                                {temEstoque ? <span>{produto?.quantidadeestoque} unidades</span> : <span className="text-red-500">Sem Estoque</span>}
                             </div>
                             <div className="flex items-center justify-between">
                                 <span className="text-muted-foreground">Categoria:</span>
@@ -114,7 +133,7 @@ export default function PainelProduto() {
                             </div>
                             <div className="flex items-center justify-between">
                                 <span className="text-muted-foreground">Quantidade:</span>
-                                <Select defaultValue="1">
+                                <Select defaultValue="1" onValueChange={(value) => alterarQuantItem(Number(value))}>
                                     <SelectTrigger className="w-24">
                                         <SelectValue placeholder="Selecionar" />
                                     </SelectTrigger>
@@ -129,11 +148,11 @@ export default function PainelProduto() {
                             </div>
                         </div>
                         <div className="flex gap-3 w-full h-full justify-center items-end">
-                            <Button size="lg" variant="outline" className="gap-2">
+                            <Button disabled={!temEstoque} onClick={() => adicionarAoCarrinho(produto as Produto)} size="lg" variant="outline" className="gap-2">
                                 <PlusIcon className="w-5 h-5" />
                                 Adicionar ao carrinho
                             </Button>
-                            <Button size="lg" className="gap-2">
+                            <Button disabled={!temEstoque} size="lg" className="gap-2">
                                 <ShoppingCartIcon className="w-5 h-5" />
                                 Comprar agora
                             </Button>

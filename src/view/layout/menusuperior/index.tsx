@@ -6,6 +6,7 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSepara
 import { Label } from "@/components/ui/label";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Sheet, SheetClose, SheetContent, SheetDescription, SheetFooter, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
+import { Produto } from "@/types/Produto";
 import { Usuario } from "@/types/Usuario";
 import { ArrowLeftIcon, BaggageClaimIcon, MinusIcon, PlusIcon, ShoppingCartIcon, TrashIcon } from "lucide-react";
 import { useEffect, useState } from "react";
@@ -13,17 +14,23 @@ import { Link } from "react-router-dom";
 import { toast } from "sonner";
 
 export default function MenuSuperior() {
-    const [quantidadeCarrinho, setQuantidadeCarrinho] = useState(0);
+    const [carrinho, setCarrinho] = useState<Produto[]>([]);
     const [usuarioLogado, setUsuarioLogado] = useState<Usuario>();
 
     useEffect(() => {
         recuperarUsuarioLogado();
-        const carrinho = localStorage.getItem("carrinho");
-        if (carrinho) {
-            const carrinhoObj = JSON.parse(carrinho);
-            setQuantidadeCarrinho(carrinhoObj.length);
-        }
     }, []);
+
+    useEffect(() => {
+        recuperarCarrinho();
+    });
+
+    const recuperarCarrinho = () => {
+        const carrinhoJson = localStorage.getItem("Carrinho");
+        if (carrinhoJson) {
+            setCarrinho(JSON.parse(carrinhoJson));
+        }
+    }
 
     const recuperarUsuarioLogado = () => {
         const usuario = localStorage.getItem("UsuarioLogado");
@@ -33,6 +40,37 @@ export default function MenuSuperior() {
         }
         return null;
     };
+
+    const adicionarQuantidade = (produto: Produto) => {
+        const carrinhoAtualizado = carrinho.map((item) => {
+            if (item.id === produto.id) {
+                if (item.quantidade >= 5) return item;
+                item.quantidade++;
+            }
+            return item;
+        });
+        if(produto.quantidade > produto.quantidadeestoque) return toast.error("Quantidade indisponível no estoque!");
+        setCarrinho(carrinhoAtualizado);
+        localStorage.setItem("Carrinho", JSON.stringify(carrinhoAtualizado));
+    }
+
+    const removerQuantidade = (produto: Produto) => {
+        const carrinhoAtualizado = carrinho.map((item) => {
+            if (item.id === produto.id) {
+                if(item.quantidade <= 1) return item;
+                item.quantidade--;
+            }
+            return item;
+        });
+        setCarrinho(carrinhoAtualizado);
+        localStorage.setItem("Carrinho", JSON.stringify(carrinhoAtualizado));
+    }
+
+    const removerDoCarrinho = (produto: Produto) => {
+        const carrinhoAtualizado = carrinho.filter((item) => item.id !== produto.id);
+        setCarrinho(carrinhoAtualizado);
+        localStorage.setItem("Carrinho", JSON.stringify(carrinhoAtualizado));
+    }
 
     const sair = () => {
         localStorage.removeItem("UsuarioLogado");
@@ -118,7 +156,7 @@ export default function MenuSuperior() {
                         <SheetTrigger asChild>
                             <Button variant={"ghost"}>
                                 <div className="fixed left-[97.5%] top-2 bg-primary w-5 h-5 border rounded-full flex items-center justify-center cursor-pointer">
-                                    <Label className="text-black cursor-pointer">{(quantidadeCarrinho > 0) ? quantidadeCarrinho : '+'}</Label>
+                                    <Label className="text-black cursor-pointer">{(carrinho.length > 0) ? carrinho.length : '+'}</Label>
                                 </div>
                                 <ShoppingCartIcon />
                             </Button>
@@ -135,10 +173,11 @@ export default function MenuSuperior() {
                             </SheetHeader>
                             <ScrollArea className=" py-5 px-3 w-full h-[49rem]">
                                 <div className="flex flex-col gap-5 w-full h-full">
-                                    <Card className="w-full max-w-sm p-6 grid gap-6">
+                                {carrinho.map((produto) => (
+                                    <Card key={produto.id} className="w-full max-w-sm p-6 grid gap-6">
                                         <div className="grid grid-cols-[100px_1fr] gap-4">
                                             <img
-                                                src="logo.png"
+                                                src={'logo.png'}
                                                 alt="Product Image"
                                                 width={120}
                                                 height={120}
@@ -146,205 +185,28 @@ export default function MenuSuperior() {
                                             />
                                             <div className="grid gap-2">
                                                 <div className="flex items-center justify-between">
-                                                    <h3 className="font-semibold">Cozy Blanket</h3>
-                                                    <div className="text-2xl font-bold">$29.99</div>
+                                                    <h3 className="font-semibold">{produto.nome}</h3>
+                                                    <div className="text-2xl font-bold">{produto.preco}</div>
                                                 </div>
-                                                <p className="text-sm text-gray-500 dark:text-gray-400">Warm and Soft for Chilly Nights</p>
+                                                <p className="text-sm text-gray-500 dark:text-gray-400">
+                                                    {produto.descricao}
+                                                </p>
                                                 <div className="flex items-center gap-4">
-                                                    <Button variant="outline" size="icon">
+                                                    <Button onClick={() => removerQuantidade(produto)} variant="outline" size="icon">
                                                         <MinusIcon className="h-4 w-4" />
                                                     </Button>
-                                                    <div className="text-lg font-medium">2</div>
-                                                    <Button variant="outline" size="icon">
+                                                    <div className="text-lg font-medium">{produto.quantidade}</div>
+                                                    <Button onClick={() => adicionarQuantidade(produto)} variant="outline" size="icon">
                                                         <PlusIcon className="h-4 w-4" />
                                                     </Button>
-                                                    <Button variant={"destructive"} >
+                                                    <Button onClick={() => removerDoCarrinho(produto)} variant={"destructive"}>
                                                         <TrashIcon className="h-4 w-4" />
                                                     </Button>
                                                 </div>
                                             </div>
                                         </div>
                                     </Card>
-                                    <Card className="w-full max-w-sm p-6 grid gap-6">
-                                        <div className="grid grid-cols-[100px_1fr] gap-4">
-                                            <img
-                                                src="logo.png"
-                                                alt="Product Image"
-                                                width={120}
-                                                height={120}
-                                                className="aspect-square object-cover rounded-md"
-                                            />
-                                            <div className="grid gap-2">
-                                                <div className="flex items-center justify-between">
-                                                    <h3 className="font-semibold">Cozy Blanket</h3>
-                                                    <div className="text-2xl font-bold">$29.99</div>
-                                                </div>
-                                                <p className="text-sm text-gray-500 dark:text-gray-400">Warm and Soft for Chilly Nights</p>
-                                                <div className="flex items-center gap-4">
-                                                    <Button variant="outline" size="icon">
-                                                        <MinusIcon className="h-4 w-4" />
-                                                    </Button>
-                                                    <div className="text-lg font-medium">2</div>
-                                                    <Button variant="outline" size="icon">
-                                                        <PlusIcon className="h-4 w-4" />
-                                                    </Button>
-                                                    <Button variant={"destructive"} >
-                                                        <TrashIcon className="h-4 w-4" />
-                                                    </Button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </Card>
-                                    <Card className="w-full max-w-sm p-6 grid gap-6">
-                                        <div className="grid grid-cols-[100px_1fr] gap-4">
-                                            <img
-                                                src="logo.png"
-                                                alt="Product Image"
-                                                width={120}
-                                                height={120}
-                                                className="aspect-square object-cover rounded-md"
-                                            />
-                                            <div className="grid gap-2">
-                                                <div className="flex items-center justify-between">
-                                                    <h3 className="font-semibold">Cozy Blanket</h3>
-                                                    <div className="text-2xl font-bold">$29.99</div>
-                                                </div>
-                                                <p className="text-sm text-gray-500 dark:text-gray-400">Warm and Soft for Chilly Nights</p>
-                                                <div className="flex items-center gap-4">
-                                                    <Button variant="outline" size="icon">
-                                                        <MinusIcon className="h-4 w-4" />
-                                                    </Button>
-                                                    <div className="text-lg font-medium">2</div>
-                                                    <Button variant="outline" size="icon">
-                                                        <PlusIcon className="h-4 w-4" />
-                                                    </Button>
-                                                    <Button variant={"destructive"} >
-                                                        <TrashIcon className="h-4 w-4" />
-                                                    </Button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </Card>
-                                    <Card className="w-full max-w-sm p-6 grid gap-6">
-                                        <div className="grid grid-cols-[100px_1fr] gap-4">
-                                            <img
-                                                src="logo.png"
-                                                alt="Product Image"
-                                                width={120}
-                                                height={120}
-                                                className="aspect-square object-cover rounded-md"
-                                            />
-                                            <div className="grid gap-2">
-                                                <div className="flex items-center justify-between">
-                                                    <h3 className="font-semibold">Cozy Blanket</h3>
-                                                    <div className="text-2xl font-bold">$29.99</div>
-                                                </div>
-                                                <p className="text-sm text-gray-500 dark:text-gray-400">Warm and Soft for Chilly Nights</p>
-                                                <div className="flex items-center gap-4">
-                                                    <Button variant="outline" size="icon">
-                                                        <MinusIcon className="h-4 w-4" />
-                                                    </Button>
-                                                    <div className="text-lg font-medium">2</div>
-                                                    <Button variant="outline" size="icon">
-                                                        <PlusIcon className="h-4 w-4" />
-                                                    </Button>
-                                                    <Button variant={"destructive"} >
-                                                        <TrashIcon className="h-4 w-4" />
-                                                    </Button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </Card>
-                                    <Card className="w-full max-w-sm p-6 grid gap-6">
-                                        <div className="grid grid-cols-[100px_1fr] gap-4">
-                                            <img
-                                                src="logo.png"
-                                                alt="Product Image"
-                                                width={120}
-                                                height={120}
-                                                className="aspect-square object-cover rounded-md"
-                                            />
-                                            <div className="grid gap-2">
-                                                <div className="flex items-center justify-between">
-                                                    <h3 className="font-semibold">Cozy Blanket</h3>
-                                                    <div className="text-2xl font-bold">$29.99</div>
-                                                </div>
-                                                <p className="text-sm text-gray-500 dark:text-gray-400">Warm and Soft for Chilly Nights</p>
-                                                <div className="flex items-center gap-4">
-                                                    <Button variant="outline" size="icon">
-                                                        <MinusIcon className="h-4 w-4" />
-                                                    </Button>
-                                                    <div className="text-lg font-medium">2</div>
-                                                    <Button variant="outline" size="icon">
-                                                        <PlusIcon className="h-4 w-4" />
-                                                    </Button>
-                                                    <Button variant={"destructive"} >
-                                                        <TrashIcon className="h-4 w-4" />
-                                                    </Button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </Card>
-                                    <Card className="w-full max-w-sm p-6 grid gap-6">
-                                        <div className="grid grid-cols-[100px_1fr] gap-4">
-                                            <img
-                                                src="logo.png"
-                                                alt="Product Image"
-                                                width={120}
-                                                height={120}
-                                                className="aspect-square object-cover rounded-md"
-                                            />
-                                            <div className="grid gap-2">
-                                                <div className="flex items-center justify-between">
-                                                    <h3 className="font-semibold">Cozy Blanket</h3>
-                                                    <div className="text-2xl font-bold">$29.99</div>
-                                                </div>
-                                                <p className="text-sm text-gray-500 dark:text-gray-400">Warm and Soft for Chilly Nights</p>
-                                                <div className="flex items-center gap-4">
-                                                    <Button variant="outline" size="icon">
-                                                        <MinusIcon className="h-4 w-4" />
-                                                    </Button>
-                                                    <div className="text-lg font-medium">2</div>
-                                                    <Button variant="outline" size="icon">
-                                                        <PlusIcon className="h-4 w-4" />
-                                                    </Button>
-                                                    <Button variant={"destructive"} >
-                                                        <TrashIcon className="h-4 w-4" />
-                                                    </Button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </Card>
-                                    <Card className="w-full max-w-sm p-6 grid gap-6">
-                                        <div className="grid grid-cols-[100px_1fr] gap-4">
-                                            <img
-                                                src="logo.png"
-                                                alt="Product Image"
-                                                width={120}
-                                                height={120}
-                                                className="aspect-square object-cover rounded-md"
-                                            />
-                                            <div className="grid gap-2">
-                                                <div className="flex items-center justify-between">
-                                                    <h3 className="font-semibold">Cozy Blanket</h3>
-                                                    <div className="text-2xl font-bold">$29.99</div>
-                                                </div>
-                                                <p className="text-sm text-gray-500 dark:text-gray-400">Warm and Soft for Chilly Nights</p>
-                                                <div className="flex items-center gap-4">
-                                                    <Button variant="outline" size="icon">
-                                                        <MinusIcon className="h-4 w-4" />
-                                                    </Button>
-                                                    <div className="text-lg font-medium">2</div>
-                                                    <Button variant="outline" size="icon">
-                                                        <PlusIcon className="h-4 w-4" />
-                                                    </Button>
-                                                    <Button variant={"destructive"} >
-                                                        <TrashIcon className="h-4 w-4" />
-                                                    </Button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </Card>
+                                ))}
                                 </div>
                             </ScrollArea>
                             <SheetFooter className="items-end">

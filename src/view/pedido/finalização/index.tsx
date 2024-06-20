@@ -8,7 +8,6 @@ import { Button } from "@/components/ui/button"
 import { Separator } from "@/components/ui/separator"
 import { ArrowLeftIcon, ArrowRightIcon, CreditCardIcon, DollarSignIcon, ShoppingCartIcon, WalletCardsIcon } from "lucide-react"
 import { Input } from "@/components/ui/input"
-import { Arrow } from "@radix-ui/react-popover"
 
 export default function FinalizacaoPedido() {
     const [activeTab, setActiveTab] = useState("address");

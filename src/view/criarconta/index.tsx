@@ -52,10 +52,6 @@ export default function CriarConta() {
         setCpfcnpjFormatado(value);
     };
 
-    const handleNextClick = () => {
-        setActiveTab("address");
-    };
-
     const criarConta = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 

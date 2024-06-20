@@ -26,7 +26,7 @@ export default function MenuSuperior() {
     });
 
     const recuperarCarrinho = () => {
-        const carrinhoJson = localStorage.getItem("Carrinho");
+        const carrinhoJson = localStorage.getItem("Carrinho") || "[]";
         if (carrinhoJson) {
             setCarrinho(JSON.parse(carrinhoJson));
         }
@@ -217,10 +217,12 @@ export default function MenuSuperior() {
                                     </Button>
                                 </SheetClose>
                                 <SheetClose asChild>
+                                    <Link to="/finalizarpedido">
                                     <Button className="w-[70%] gap-2" type="submit">
                                         <BaggageClaimIcon size={16} />
                                         Finalizar Pedido
                                     </Button>
+                                    </Link>
                                 </SheetClose>
                             </SheetFooter>
                         </SheetContent>

@@ -10,6 +10,7 @@ import RecuperarSenha from "./view/recuperarsenha";
 import Pedido from "./view/pedido";
 import DashBoard from "./view/dashboard";
 import PainelProduto from "./view/dashboard/painel";
+import FinalizacaoPedido from "./view/pedido/finalização";
 
 function MainRoutes() {
     const [isLoading, setIsLoading] = useState(true);
@@ -45,6 +46,7 @@ function MainRoutes() {
                 <Route path="/entrar" element={<Entrar />} />
                 <Route path="/criarconta" element={<CriarConta />} />
                 <Route path="/recuperarsenha" element={<RecuperarSenha />} />
+                <Route path="/finalizarpedido" element={<FinalizacaoPedido />} />
             </Routes>
         </Layout>
     )

@@ -24,6 +24,10 @@ export default function CriarConta() {
     const [estado, setEstado] = useState("");
     const [pais, setPais] = useState("");
 
+    const handleClickTab = (tab: any) => {
+        setActiveTab(tab)
+    }
+
     const formatarCfpCnpj = (event: React.ChangeEvent<HTMLInputElement>) => {
         let { value } = event.target;
         value = value.replace(/\D/g, '');
@@ -48,10 +52,6 @@ export default function CriarConta() {
         setCpfcnpjFormatado(value);
     };
 
-    const handleNextClick = () => {
-        setActiveTab("address");
-    };
-
     const criarConta = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
@@ -71,7 +71,7 @@ export default function CriarConta() {
         };
 
         try {
-            toast.promise(await Api.post("usuario/cadastrar", dto), {
+            toast.promise(Api.post("usuario/cadastrar", dto), {
                 loading: "Cadastrando...",
                 success: "Cadastro realizado com sucesso!",
                 error: "Erro ao cadastrar"
@@ -82,15 +82,15 @@ export default function CriarConta() {
                 localStorage.setItem("UsuarioLogado", UsuarioLogado);
                 window.location.href = "/";
             } catch (error) {
-                console.error(error);
+                toast.error("Erro ao logar");
             }
         } catch (error) {
-            console.error(error);
+            toast.error("Erro ao cadastrar");
         }
     };
 
     return (
-        <div className="fixed flex justify-center items-center w-full h-full bg-background z-50 top-0 left-0 border">
+        <div className="fixed flex justify-center w-full h-full bg-background z-50 top-0 left-0 border">
             <Link to="/">
                 <div className="fixed top-0 left-5 w-[15%] h-[10%] cursor-pointer flex  items-center">
                     <img src="logo.png" alt="Logo" className="w-14 h-14" />
@@ -101,7 +101,7 @@ export default function CriarConta() {
                 </div>
             </Link>
             <form onSubmit={criarConta}>
-                <Tabs className="mx-auto max-w-sm max-w-[45rem] w-[45rem]" value={activeTab}>
+                <Tabs className="mx-auto mt-[10rem] max-w-sm max-w-[40rem] w-[40rem]" value={activeTab} onValueChange={setActiveTab}>
                     <TabsList className="grid w-full grid-cols-2">
                         <TabsTrigger value="info">Informações</TabsTrigger>
                         <TabsTrigger value="address">Endereço</TabsTrigger>
@@ -150,11 +150,8 @@ export default function CriarConta() {
                                             <Input id="telefone" placeholder="(00) 00000-0000" required onChange={(e) => setTelefone(e.target.value)} />
                                         </div>
                                     </div>
-                                    <Button className="w-full" variant="default" onClick={handleNextClick}>
+                                    <Button className="w-full" variant="default" onClick={() => handleClickTab("address")}>
                                         Próximo
-                                    </Button>
-                                    <Button className="w-full" variant="outline">
-                                        Cadastrar com GitHub
                                     </Button>
                                 </div>
                                 <div className="mt-4 text-center text-sm">
@@ -205,7 +202,7 @@ export default function CriarConta() {
                                         </div>
                                     </div>
                                     <div className="flex gap-2">
-                                        <Button className="w-20" variant="outline" onClick={() => setActiveTab("info")}>
+                                        <Button className="w-20" variant="outline" onClick={() => handleClickTab("info")}>
                                             Voltar
                                         </Button>
                                         <Button className="w-full" type="submit">

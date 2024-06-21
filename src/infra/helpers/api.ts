@@ -5,6 +5,7 @@ import { criaLogDev } from '../interceptors/criaLogDev';
 
 const Api = axios.create({
     baseURL: "https://mintecommerce-backend.onrender.com",
+    //baseURL: "http://localhost:8080",
     headers: {
         'Content-Type': 'application/json',
         "Access-Control-Allow-Origin": "*",
@@ -17,6 +18,3 @@ applyErrorHandler(Api);
 criaLogDev(Api, 'ApiGeral');
 
 export default Api;
-
-
-

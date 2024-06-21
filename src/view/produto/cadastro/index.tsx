@@ -7,77 +7,68 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Textarea } from "@/components/ui/textarea";
 import Api from "@/infra/helpers/api";
 import { Categoria } from "@/types/Categoria";
+import { PlusIcon } from "lucide-react";
 import { useEffect, useState } from "react";
+import { toast } from "sonner";
 
 const CadastroProduto = () => {
     const [nome, setNome] = useState<string>("");
     const [descricao, setDescricao] = useState<string>("");
     const [preco, setPreco] = useState<number>(0);
-    const [quantidade, setQuantidade] = useState<number>(0);
     const [quantidadeEstoque, setQuantidadeEstoque] = useState<number>(0);
     const [categoria, setCategoria] = useState<Categoria>();
     const [categoriaList, setCategoriaList] = useState<Categoria[]>([]);
+    const [isDialogOpen, setIsDialogOpen] = useState(false); // Estado para controlar o diálogo
 
     useEffect(() => {
         recuperarCategorias();
     }, []);
 
     const recuperarCategorias = async () => {
-        
         try {
             const { data } = await Api.get("categoria/listar");
             setCategoriaList(data);
         } catch (error) {
-            // toast({
-            //     variant: "destructive",
-            //     title: "Erro!",
-            //     description: "Erro ao buscar categorias!",
-            // });
+            toast.error("Erro ao buscar categorias!");
         }
     };
 
     const salvar = async () => {
+        if (!nome || !descricao || !preco || !quantidadeEstoque || !categoria) {
+            toast.error("Preencha todos os campos obrigatórios!");
+            return;
+        }
 
         const dto = {
             nome,
             descricao,
             preco,
-            quantidade,
+            quantidade: 0,
             quantidadeestoque: quantidadeEstoque,
-            categoria
+            categoria,
+            status: 1
         };
 
-
         try {
-            const { data } = await Api.post("produto/cadastrar", dto);
-            if (data) {
-                // toast({
-                //     variant: "success",
-                //     description: "Produto cadastrado com sucesso!",
-                // });
-            }
-        } catch (error: any) {
-            if (error.response) {
-                // toast({
-                //     variant: "destructive",
-                //     title: "Erro!",
-                //     description: error.response.data,
-                // });
-            } else {
-                // toast({
-                //     variant: "destructive",
-                //     title: "Erro",
-                //     description: "Erro ao cadastrar produto!",
-                // });
-            }
+            toast.promise(Api.post("produto/cadastrar", dto), {
+                loading: "Salvando...",
+                success: "Produto cadastrado com sucesso!",
+                error: "Erro ao cadastrar produto"
+            });
+            setIsDialogOpen(false);
+        } catch (error) {            
+            toast.error("Erro ao cadastrar produto");    
         }
     }
 
     return (
         <div>
-            <Dialog>
+            <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
                 <DialogTrigger asChild>
-                    <Button variant="default">Cadastrar Produto</Button>
+                    <Button className="gap-2" variant="default" onClick={() => setIsDialogOpen(true)}>
+                        <PlusIcon size={16}/>
+                        Novo
+                        </Button>
                 </DialogTrigger>
                 <DialogContent onInteractOutside={(evento) => evento.preventDefault()} className="flex flex-row items-center sm:max-w-[50%] max-h-50 h-[35rem] p-[2rem] gap-8">
                     <div className="flex justify-center w-[50%] h-full">
@@ -111,7 +102,7 @@ const CadastroProduto = () => {
                                         className="aspect-video object-cover rounded-md"
                                     />
                                 </CarouselItem>
-                            </CarouselContent>
+                                </CarouselContent>
                             <CarouselPrevious />
                         </Carousel>
                     </div>
@@ -127,32 +118,28 @@ const CadastroProduto = () => {
                                     <Input id="id" placeholder="ID do produto" disabled />
                                 </div>
                                 <div className="grid gap-2">
-                                    <Label htmlFor="name">Nome</Label>
-                                    <Input id="name" placeholder="Nome do produto" onChange={(e) => setNome(e.target.value)} />
+                                    <Label htmlFor="name">Nome*</Label>
+                                    <Input required id="name" placeholder="Nome do produto" onChange={(e) => setNome(e.target.value)} />
                                 </div>
                             </div>
                             <div className="grid gap-2">
                                 <Label htmlFor="description">Descrição</Label>
-                                <Textarea id="description" placeholder="Descrição do produto" onChange={(e) => setDescricao(e.target.value)} />
+                                <Textarea required id="description" placeholder="Descrição do produto" onChange={(e) => setDescricao(e.target.value)} />
                             </div>
                             <div className="grid grid-cols-2 gap-4">
                                 <div className="grid gap-2">
-                                    <Label htmlFor="price">Preço</Label>
-                                    <Input id="price" type="number" placeholder="Preço do produto" onChange={(e) => setPreco(Number(e.target.value))} />
-                                </div>
-                                <div className="grid gap-2">
-                                    <Label htmlFor="quantity">Quantidade</Label>
-                                    <Input id="quantity" type="number" placeholder="Quantidade do produto" onChange={(e) => setQuantidade(Number(e.target.value))} />
+                                    <Label htmlFor="price">Preço*</Label>
+                                    <Input required id="price" type="number" placeholder="Preço do produto" onChange={(e) => setPreco(Number(e.target.value))} />
                                 </div>
                             </div>
                             <div className="grid grid-cols-2 gap-4">
                                 <div className="grid gap-2">
-                                    <Label htmlFor="stock">Estoque</Label>
-                                    <Input id="stock" type="number" placeholder="Quantidade em estoque" onChange={(e) => setQuantidadeEstoque(Number(e.target.value))} />
+                                    <Label htmlFor="stock">Estoque*</Label>
+                                    <Input required id="stock" type="number" placeholder="Quantidade em estoque" onChange={(e) => setQuantidadeEstoque(Number(e.target.value))} />
                                 </div>
                                 <div className="flex flex-col gap-2 ">
-                                    <Label htmlFor="category">Categoria</Label>
-                                    <Select onValueChange={(value) => setCategoria(JSON.parse(value))}>
+                                    <Label htmlFor="category">Categoria*</Label>
+                                    <Select required onValueChange={(value) => setCategoria(JSON.parse(value))}>
                                         <SelectTrigger className="w-full">
                                             <SelectValue placeholder="Selecione a categoria" />
                                         </SelectTrigger>

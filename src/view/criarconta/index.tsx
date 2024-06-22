@@ -57,7 +57,7 @@ export default function CriarConta() {
     const criarConta = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
-        const endereco = {
+        const enderecos = [{
             nome: nomeEndereco,
             cep,
             rua,
@@ -66,7 +66,7 @@ export default function CriarConta() {
             bairro,
             cidade,
             estado,
-        };
+        }];
 
         const dto = {
             nome,
@@ -75,26 +75,22 @@ export default function CriarConta() {
             senha,
             dataNascimento,
             telefone,
-            endereco,
+            enderecos,
+            cpfcnpj: cpfcnpjFormatado.replace(/\D/g, ''),
         };
 
-        try {
-            toast.promise(Api.post("usuario/cadastrar", dto), {
-                loading: "Cadastrando...",
-                success: "Cadastro realizado com sucesso!",
-                error: "Erro ao cadastrar"
-            });
-            try {
-                const { data } = await Api.post("usuario/entrar", dto);
-                const UsuarioLogado = JSON.stringify(data);
-                localStorage.setItem("UsuarioLogado", UsuarioLogado);
-                window.location.href = "/";
-            } catch (error) {
-                toast.error("Erro ao logar");
-            }
-        } catch (error) {
+        toast.promise(Api.post("usuario/cadastrar", dto, {}).then(async () => {
+            const { data } = await Api.post("usuario/entrar", dto);
+            const UsuarioLogado = JSON.stringify(data);
+            localStorage.setItem("UsuarioLogado", UsuarioLogado);
+            window.location.href = "/";
+        }).catch(() => {
             toast.error("Erro ao cadastrar");
-        }
+        }), {
+            loading: "Cadastrando...",
+            success: "Cadastro realizado com sucesso!",
+            error: "Erro ao cadastrar"
+        });
     };
 
     return (
@@ -109,13 +105,13 @@ export default function CriarConta() {
                 </div>
             </Link>
             <form onSubmit={criarConta}>
-                <Tabs className="mx-auto mt-[10rem] max-w-sm max-w-[40rem] w-[40rem]" value={activeTab} onValueChange={setActiveTab}>
+                <Tabs className="mx-auto mt-[10rem] max-w-[40rem] w-[40rem]" value={activeTab} onValueChange={setActiveTab}>
                     <TabsList className="grid w-full grid-cols-2">
                         <TabsTrigger value="info">Informações</TabsTrigger>
                         <TabsTrigger value="address">Endereço</TabsTrigger>
                     </TabsList>
                     <TabsContent value="info">
-                        <Card className="h-[35rem]">
+                        <Card className="w-[40rem] h-[35rem]">
                             <CardHeader>
                                 <CardTitle className="text-xl">Cadastre-se</CardTitle>
                                 <CardDescription>Insira suas informações para criar uma conta</CardDescription>
@@ -158,30 +154,32 @@ export default function CriarConta() {
                                             <Input value={telefone} id="telefone" placeholder="(00) 00000-0000" required onChange={(e) => setTelefone(e.target.value)} />
                                         </div>
                                     </div>
+                                </div>
+                                <div className="mt-10">
                                     <Button className="w-full" variant="default" onClick={() => handleClickTab("address")}>
                                         Próximo
                                     </Button>
-                                </div>
-                                <div className="mt-4 text-center text-sm">
-                                    Já tem uma conta?
-                                    <Link className="underline" to="/entrar">
-                                        Entrar
-                                    </Link>
+                                    <div className="mt-4 text-center text-sm">
+                                        Já tem uma conta?
+                                        <Link className="underline" to="/entrar">
+                                            Entrar
+                                        </Link>
+                                    </div>
                                 </div>
                             </CardContent>
                         </Card>
                     </TabsContent>
                     <TabsContent value="address">
-                        <Card className="h-[25rem]">
+                        <Card className="h-[30rem]">
                             <CardHeader>
                                 <CardTitle className="text-xl">Endereço</CardTitle>
                                 <CardDescription>Insira seu endereço para concluir o cadastro</CardDescription>
                             </CardHeader>
                             <CardContent>
-                                <div className="grid gap-4">
+                                <div className="grid grid-cols-2 gap-4">
                                     <div className="grid gap-2">
                                         <Label htmlFor="nome">Nome</Label>
-                                        <Input value={nomeEndereco} id="nome" placeholder="Seu nome" required onChange={(e) => setNomeEndereco(e.target.value)} />
+                                        <Input value={nomeEndereco} id="nome" placeholder="Casa, trabalho..." required onChange={(e) => setNomeEndereco(e.target.value)} />
                                     </div>
                                     <div className="grid gap-2">
                                         <Label htmlFor="cep">CEP</Label>
@@ -212,7 +210,7 @@ export default function CriarConta() {
                                         <Input value={estado} id="estado" placeholder="Seu estado" required onChange={(e) => setEstado(e.target.value)} />
                                     </div>
                                 </div>
-                                <div className="flex gap-2">
+                                <div className="flex gap-2 mt-10">
                                     <Button className="w-20" variant="outline" onClick={() => handleClickTab("info")}>
                                         Voltar
                                     </Button>

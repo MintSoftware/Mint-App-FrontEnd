@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs"
 import { Card, CardHeader, CardTitle, CardContent, CardFooter } from "@/components/ui/card"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
@@ -6,16 +6,105 @@ import { Label } from "@/components/ui/label"
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/ui/select"
 import { Button } from "@/components/ui/button"
 import { Separator } from "@/components/ui/separator"
-import { ArrowLeftIcon, ArrowRightIcon, CreditCardIcon, DollarSignIcon, ShoppingCartIcon, WalletCardsIcon } from "lucide-react"
+import { ArrowLeftIcon, ArrowRightIcon, CreditCardIcon, DollarSignIcon, PlusIcon, ShoppingCartIcon, WalletCardsIcon } from "lucide-react"
 import { Input } from "@/components/ui/input"
+import { Usuario } from "@/types/Usuario"
+import { toast } from "sonner"
+import Api from "@/infra/helpers/api"
 
 export default function FinalizacaoPedido() {
     const [activeTab, setActiveTab] = useState("address");
     const [clienteExistente, setClienteExistente] = useState(true);
     const [metodoPagto, setMetodoPagto] = useState("pix");
+    const [usuario, setUsuario] = useState<Usuario>();
+    const [nomeEndereco, setNomeEndereco] = useState<string>("");
+    const [cep, setCep] = useState<string>("");
+    const [rua, setRua] = useState<string>("");
+    const [numero, setNumero] = useState<string>("");
+    const [complemento, setComplemento] = useState<string>("");
+    const [bairro, setBairro] = useState<string>("");
+    const [cidade, setCidade] = useState<string>("");
+    const [estado, setEstado] = useState<string>("");
     const handleClickTab = (tab: any) => {
         setActiveTab(tab)
     }
+
+    const handleCLickRadio = () => {
+        if (clienteExistente === true) {
+            return "existente"
+        }
+        else {
+            return "novo"
+        }
+    }
+
+    useEffect(() => {
+        recuperarUsuarioLogado();
+    }, []);
+
+    useEffect(() => {
+        limpaDadosEndereco();
+    }, [clienteExistente]);
+
+    const recuperarUsuarioLogado = async () => {
+        const usuarioJson = localStorage.getItem("UsuarioLogado");
+        (usuarioJson) ? setUsuario(JSON.parse(usuarioJson)) : toast.error("Erro ao recuperar usuário logado");
+    };
+
+    const cadastrarNovoEndereco = async () => {
+        if (!nomeEndereco || !cep || !rua || !numero || !bairro || !cidade || !estado) {
+            toast.error("Preencha todos os campos obrigatórios!");
+            return;
+        }
+
+        const endereco = {
+            nome: nomeEndereco,
+            cep,
+            rua,
+            numero,
+            complemento,
+            bairro,
+            cidade,
+            estado,
+            usuario
+        }
+
+        toast.promise(Api.post("endereco/cadastrar", endereco).then(() => {
+            atualizarUsuario();
+        }).catch(() => {
+            toast.error("Erro ao recuperar usuario após cadastrar o endereco");
+        }), {
+            loading: "Salvando...",
+            success: "Endereço cadastrado com sucesso!",
+            error: "Erro ao cadastrar endereço"
+        });
+    }
+
+    const atualizarUsuario = async () => {
+        const dto = {
+            email: usuario?.email,
+            senha: usuario?.senha
+        }
+
+        const { data } = await Api.post("usuario/entrar", dto);
+        const UsuarioLogado = JSON.stringify(data);
+        localStorage.setItem("UsuarioLogado", UsuarioLogado);
+        recuperarUsuarioLogado();
+        setClienteExistente(true);
+    }
+
+    const limpaDadosEndereco = () => {
+        setNomeEndereco("");
+        setCep("");
+        setRua("");
+        setNumero("");
+        setComplemento("");
+        setBairro("");
+        setCidade("");
+        setEstado("");
+    }
+
+    const radioValue = handleCLickRadio();
 
     return (
         <div className="container mx-auto max-w-4xl px-4 py-8">
@@ -34,7 +123,7 @@ export default function FinalizacaoPedido() {
                             <div className="grid gap-4">
                                 <div className="flex items-center justify-between">
                                     <div className="flex items-center gap-2 w-full">
-                                        <RadioGroup defaultValue="existente" className="flex flex-col w-full gap-3">
+                                        <RadioGroup defaultValue="existente" value={radioValue} className="flex flex-col w-full gap-3">
                                             <div className="flex items-center gap-3">
                                                 <RadioGroupItem onClick={() => setClienteExistente(true)} id="existente" value="existente" />
                                                 <Label className="flex">Endereço existente</Label>
@@ -43,8 +132,11 @@ export default function FinalizacaoPedido() {
                                                         <SelectValue className="flex w-full" placeholder="Selecione um endereço" />
                                                     </SelectTrigger>
                                                     <SelectContent className="cursor-pointer">
-                                                        <SelectItem className="cursor-pointer" value="1">Rua A, 123 - Bairro X, Cidade Y - SP, 12345-678</SelectItem>
-                                                        <SelectItem className="cursor-pointer" value="2">Rua B, 456 - Bairro Z, Cidade W - SP, 98765-432</SelectItem>
+                                                        {usuario?.enderecos.map((endereco) => (
+                                                            <SelectItem key={endereco.id} value={JSON.stringify(endereco)}>
+                                                                {endereco.nome} - {endereco.rua}, {endereco.numero} - {endereco.bairro}, {endereco.cidade} - {endereco.estado}, {endereco.cep}
+                                                            </SelectItem>
+                                                        ))}
                                                     </SelectContent>
                                                 </Select>
                                             </div>
@@ -52,36 +144,43 @@ export default function FinalizacaoPedido() {
                                                 <RadioGroupItem onClick={() => setClienteExistente(false)} id="novo" value="novo" />
                                                 <Label>Novo endereço</Label>
                                             </div>
-                                            {!clienteExistente && <div>
+                                            {!clienteExistente && <div className="border p-5 rounded-lg mt-5">
                                                 <div className="grid grid-cols-2 gap-4">
-                                                    <div>
-                                                        <Label>CEP</Label>
-                                                        <Input type="text" className="input" />
+                                                    <div className="grid gap-2">
+                                                        <Label htmlFor="nome">Nome</Label>
+                                                        <Input value={nomeEndereco} id="nome" placeholder="Casa, trabalho..." required onChange={(e) => setNomeEndereco(e.target.value)} />
                                                     </div>
-                                                    <div>
-                                                        <Label>Rua</Label>
-                                                        <Input type="text" className="Input" />
+                                                    <div className="grid gap-2">
+                                                        <Label htmlFor="cep">CEP</Label>
+                                                        <Input value={cep} id="cep" placeholder="00000-000" required onChange={(e) => setCep(e.target.value)} />
                                                     </div>
-                                                    <div>
-                                                        <Label>Número</Label>
-                                                        <Input type="text" className="Input" />
+                                                    <div className="grid gap-2">
+                                                        <Label htmlFor="rua">Rua</Label>
+                                                        <Input value={rua} id="rua" placeholder="Rua" required onChange={(e) => setRua(e.target.value)} />
                                                     </div>
-                                                    <div>
-                                                        <Label>Complemento</Label>
-                                                        <Input type="text" className="Input" />
+                                                    <div className="grid gap-2">
+                                                        <Label htmlFor="numero">Número</Label>
+                                                        <Input value={numero} id="numero" placeholder="Número" required onChange={(e) => setNumero(e.target.value)} />
                                                     </div>
-                                                    <div>
-                                                        <Label>Bairro</Label>
-                                                        <Input type="text" className="Input" />
+                                                    <div className="grid gap-2">
+                                                        <Label htmlFor="complemento">Complemento</Label>
+                                                        <Input value={complemento} id="complemento" placeholder="Apartamento, Casa, etc." onChange={(e) => setComplemento(e.target.value)} />
                                                     </div>
-                                                    <div>
-                                                        <Label>Cidade</Label>
-                                                        <Input type="text" className="Input" />
+                                                    <div className="grid gap-2">
+                                                        <Label htmlFor="bairro">Bairro</Label>
+                                                        <Input value={bairro} id="bairro" placeholder="Seu bairro" required onChange={(e) => setBairro(e.target.value)} />
                                                     </div>
-                                                    <div>
-                                                        <Label>Estado</Label>
-                                                        <Input type="text" className="Input" />
+                                                    <div className="grid gap-2">
+                                                        <Label htmlFor="cidade">Cidade</Label>
+                                                        <Input value={cidade} id="cidade" placeholder="Sua cidade" required onChange={(e) => setCidade(e.target.value)} />
                                                     </div>
+                                                    <div className="grid gap-2">
+                                                        <Label htmlFor="estado">Estado</Label>
+                                                        <Input value={estado} id="estado" placeholder="Seu estado" required onChange={(e) => setEstado(e.target.value)} />
+                                                    </div>
+                                                </div>
+                                                <div className="flex justify-end mt-3">
+                                                    <Button onClick={() => cadastrarNovoEndereco()}><PlusIcon /></Button>
                                                 </div>
                                             </div>}
                                         </RadioGroup>

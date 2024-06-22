@@ -1,4 +1,5 @@
 import { UUID } from "crypto"
+import { Endereco } from "./Endereco"
 
 export type Usuario = {
     id: UUID,
@@ -8,10 +9,5 @@ export type Usuario = {
     dataNascimento: Date,
     cpf: string,
     telefone: string,
-    endereco: string,
-    complemento: string,
-    cep: string,
-    cidade: string,
-    estado: string,
-    pais: string
+    enderecos: Endereco[],
 }

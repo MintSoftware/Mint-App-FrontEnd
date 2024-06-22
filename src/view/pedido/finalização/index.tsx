@@ -11,8 +11,13 @@ import { Input } from "@/components/ui/input"
 import { Usuario } from "@/types/Usuario"
 import { toast } from "sonner"
 import Api from "@/infra/helpers/api"
+import { Endereco } from "@/types/Endereco"
+import { Produto } from "@/types/Produto"
+import { useLocation } from "react-router-dom"
 
 export default function FinalizacaoPedido() {
+    const location = useLocation();
+    const produtos: Produto[] = location.state?.produtos || [];
     const [activeTab, setActiveTab] = useState("address");
     const [clienteExistente, setClienteExistente] = useState(true);
     const [metodoPagto, setMetodoPagto] = useState("pix");
@@ -25,8 +30,9 @@ export default function FinalizacaoPedido() {
     const [bairro, setBairro] = useState<string>("");
     const [cidade, setCidade] = useState<string>("");
     const [estado, setEstado] = useState<string>("");
+    const [enderecoPedido, setEnderecoPedido] = useState<Endereco>();
     const handleClickTab = (tab: any) => {
-        setActiveTab(tab)
+        (enderecoPedido) ? setActiveTab(tab) : toast.error("Selecione um endereço para continuar");
     }
 
     const handleCLickRadio = () => {
@@ -127,9 +133,9 @@ export default function FinalizacaoPedido() {
                                             <div className="flex items-center gap-3">
                                                 <RadioGroupItem onClick={() => setClienteExistente(true)} id="existente" value="existente" />
                                                 <Label className="flex">Endereço existente</Label>
-                                                <Select disabled={!clienteExistente}>
+                                                <Select disabled={!clienteExistente} onValueChange={(value) => setEnderecoPedido(JSON.parse(value))}>
                                                     <SelectTrigger className="flex w-[30rem]">
-                                                        <SelectValue className="flex w-full" placeholder="Selecione um endereço" />
+                                                        <SelectValue className="flex w-full" placeholder="Selecione um endereço"/>
                                                     </SelectTrigger>
                                                     <SelectContent className="cursor-pointer">
                                                         {usuario?.enderecos.map((endereco) => (
@@ -311,28 +317,30 @@ export default function FinalizacaoPedido() {
                                 <div>
                                     <h3 className="text-lg font-medium">Resumo do pedido</h3>
                                     <div className="grid gap-2 py-4">
-                                        <div className="flex items-center justify-between">
-                                            <span>Subtotal</span>
-                                            <span>R$ 100,00</span>
-                                        </div>
+                                        {produtos.map((produto) => (
+                                            <div key={produto.id} className="flex items-center justify-between">
+                                                <span>{produto.quantidade} - {produto.nome}</span>
+                                                <span>{(produto.preco * produto.quantidade).toLocaleString("pt-BR", { style: "currency", currency: "BRL" })}</span>
+                                            </div>
+                                        ))}
                                         <div className="flex items-center justify-between">
                                             <span>Frete</span>
-                                            <span>R$ 10,00</span>
+                                            <span className="text-green-500">Grátis</span>
                                         </div>
                                         <Separator />
                                         <div className="flex items-center justify-between font-medium">
                                             <span>Total</span>
-                                            <span>R$ 110,00</span>
+                                            <span>{produtos.reduce((acc, item) => acc + item.preco * item.quantidade, 0).toLocaleString("pt-BR", { style: "currency", currency: "BRL" })}</span>
                                         </div>
                                     </div>
                                 </div>
                                 <div>
                                     <h3 className="text-lg font-medium">Endereço de entrega</h3>
-                                    <div className="py-4">Rua A, 123 - Bairro X, Cidade Y - SP, 12345-678</div>
+                                    <div className="py-4">{enderecoPedido?.nome} - {enderecoPedido?.rua}, {enderecoPedido?.numero} - {enderecoPedido?.bairro}, {enderecoPedido?.cidade} - {enderecoPedido?.estado}, {enderecoPedido?.cep}</div>
                                 </div>
                                 <div>
                                     <h3 className="text-lg font-medium">Forma de pagamento</h3>
-                                    <div className="py-4">Cartão de crédito</div>
+                                    <div className="py-4">{metodoPagto === "card" ? "Cartão de crédito" : metodoPagto === "pix" ? "PIX" : "Boleto"}</div>
                                 </div>
                             </div>
                         </CardContent>

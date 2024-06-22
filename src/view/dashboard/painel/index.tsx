@@ -6,13 +6,14 @@ import Api from "@/infra/helpers/api"
 import { Produto } from "@/types/Produto"
 import { PlusIcon, ShoppingCartIcon, StarIcon } from "lucide-react"
 import { useEffect, useState } from "react"
-import { Link } from "react-router-dom"
+import { useNavigate } from "react-router-dom"
 import { toast } from "sonner"
 
 export default function PainelProduto() {
     const [loading, setIsLoading] = useState(false)
     const [produto, setProduto] = useState<Produto>()
     const [temEstoque, setTemEstoque] = useState(true)
+    const navigate = useNavigate()
 
     useEffect(() => {
         recuperarProduto()
@@ -22,9 +23,9 @@ export default function PainelProduto() {
         try {
             setIsLoading(true)
             const idProduto = window.location.pathname.split("/").pop()
-            const { data } = await Api.get(`produto/listar/${idProduto}`);
-            setProduto(data);
-            setIsLoading(false);
+            const { data } = await Api.get(`produto/listar/${idProduto}`)
+            setProduto(data)
+            setIsLoading(false)
             if (data.quantidadeestoque < 1) setTemEstoque(false)
         } catch (error) {
             toast.error("Erro ao buscar produto!")
@@ -46,6 +47,10 @@ export default function PainelProduto() {
 
     const alterarQuantItem = (value: number) => {
         if (produto) produto.quantidade = value
+    }
+
+    const comprarAgora = (produto: Produto) => {
+        navigate("/finalizarpedido", { state: { produtos: [produto] } })
     }
 
     return (
@@ -100,9 +105,7 @@ export default function PainelProduto() {
                         <div className="flex flex-col gap-4">
                             <h1 className="font-bold text-3xl lg:text-4xl">{produto?.nome}</h1>
                             <div>
-                                <p>
-                                    {produto?.descricao}
-                                </p>
+                                <p>{produto?.descricao}</p>
                             </div>
                             <div className="flex items-center gap-4"></div>
                             <div className="flex items-center gap-0.5">
@@ -152,12 +155,10 @@ export default function PainelProduto() {
                                 <PlusIcon className="w-5 h-5" />
                                 Adicionar ao carrinho
                             </Button>
-                            <Link to="/finalizarpedido">
-                                <Button disabled={!temEstoque} size="lg" className="gap-2">
-                                    <ShoppingCartIcon className="w-5 h-5" />
-                                    Comprar agora
-                                </Button>
-                            </Link>
+                            <Button disabled={!temEstoque} onClick={() => comprarAgora(produto as Produto)} size="lg" className="gap-2">
+                                <ShoppingCartIcon className="w-5 h-5" />
+                                Comprar agora
+                            </Button>
                         </div>
                     </div>
                 </div>

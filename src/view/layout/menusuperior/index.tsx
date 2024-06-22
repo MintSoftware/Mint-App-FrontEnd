@@ -10,10 +10,11 @@ import { Produto } from "@/types/Produto";
 import { Usuario } from "@/types/Usuario";
 import { ArrowLeftIcon, BaggageClaimIcon, MinusIcon, PlusIcon, ShoppingCartIcon, TrashIcon } from "lucide-react";
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 
 export default function MenuSuperior() {
+    const navigate = useNavigate()
     const [carrinho, setCarrinho] = useState<Produto[]>([]);
     const [usuarioLogado, setUsuarioLogado] = useState<Usuario>();
 
@@ -76,6 +77,10 @@ export default function MenuSuperior() {
     const sair = () => {
         localStorage.removeItem("UsuarioLogado");
         setUsuarioLogado(undefined);
+    }
+
+    const finalizarPedido = () => {
+        navigate("/finalizarpedido", { state: { produtos: carrinho } })
     }
 
     return (
@@ -208,12 +213,10 @@ export default function MenuSuperior() {
                                         </Button>
                                     </SheetClose>
                                     <SheetClose asChild>
-                                        <Link to="/finalizarpedido">
-                                            <Button className=" gap-2" type="submit">
+                                            <Button onClick={finalizarPedido} className=" gap-2" type="submit">
                                                 <BaggageClaimIcon size={16} />
                                                 Finalizar Pedido
                                             </Button>
-                                        </Link>
                                     </SheetClose>
                                 </div>
                             </SheetFooter>

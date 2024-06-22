@@ -17,12 +17,14 @@ export default function CriarConta() {
     const [senha, setSenha] = useState("");
     const [dataNascimento, setDataNascimento] = useState("");
     const [telefone, setTelefone] = useState("");
-    const [endereco, setEndereco] = useState("");
+    const [nomeEndereco, setNomeEndereco] = useState("");
     const [complemento, setComplemento] = useState("");
     const [cep, setCep] = useState("");
     const [cidade, setCidade] = useState("");
     const [estado, setEstado] = useState("");
-    const [pais, setPais] = useState("");
+    const [numero, setNumero] = useState("");
+    const [rua, setRua] = useState("");
+    const [bairro, setBairro] = useState("");
 
     const handleClickTab = (tab: any) => {
         setActiveTab(tab)
@@ -55,6 +57,17 @@ export default function CriarConta() {
     const criarConta = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
+        const endereco = {
+            nome: nomeEndereco,
+            cep,
+            rua,
+            numero,
+            complemento,
+            bairro,
+            cidade,
+            estado,
+        };
+
         const dto = {
             nome,
             sobrenome,
@@ -63,11 +76,6 @@ export default function CriarConta() {
             dataNascimento,
             telefone,
             endereco,
-            complemento,
-            cep,
-            cidade,
-            estado,
-            pais
         };
 
         try {
@@ -117,27 +125,27 @@ export default function CriarConta() {
                                     <div className="grid grid-cols-2 gap-4">
                                         <div className="grid gap-2">
                                             <Label htmlFor="nome">Nome</Label>
-                                            <Input id="nome" placeholder="José" required onChange={(e) => setNome(e.target.value)} />
+                                            <Input value={nome} id="nome" placeholder="José" required onChange={(e) => setNome(e.target.value)} />
                                         </div>
                                         <div className="grid gap-2">
                                             <Label htmlFor="sobrenome">Sobrenome</Label>
-                                            <Input id="sobrenome" placeholder="Silva" required onChange={(e) => setSobrenome(e.target.value)} />
+                                            <Input value={sobrenome} id="sobrenome" placeholder="Silva" required onChange={(e) => setSobrenome(e.target.value)} />
                                         </div>
                                     </div>
                                     <div className="grid grid-cols-2 gap-4">
                                         <div className="grid gap-2">
                                             <Label htmlFor="email">Email</Label>
-                                            <Input id="email" placeholder="jose.silva@mintecommerce.com.br" required type="email" onChange={(e) => setEmail(e.target.value)} />
+                                            <Input value={email} id="email" placeholder="jose.silva@mintecommerce.com.br" required type="email" onChange={(e) => setEmail(e.target.value)} />
                                         </div>
                                         <div className="grid gap-2">
                                             <Label htmlFor="senha">Senha</Label>
-                                            <Input id="senha" required type="password" onChange={(e) => setSenha(e.target.value)} />
+                                            <Input value={senha} id="senha" required type="password" onChange={(e) => setSenha(e.target.value)} />
                                         </div>
                                     </div>
                                     <div className="grid grid-cols-2 gap-4">
                                         <div className="grid gap-2">
                                             <Label htmlFor="data-nascimento">Data de Nascimento</Label>
-                                            <Input id="data-nascimento" placeholder="dd/mm/aaaa" required type="date" onChange={(e) => setDataNascimento(e.target.value)} />
+                                            <Input value={dataNascimento} id="data-nascimento" placeholder="dd/mm/aaaa" required type="date" onChange={(e) => setDataNascimento(e.target.value)} />
                                         </div>
                                         <div className="grid gap-2">
                                             <Label htmlFor="cpf">CPF/CNPJ</Label>
@@ -147,7 +155,7 @@ export default function CriarConta() {
                                     <div className="grid grid-cols-2 gap-4">
                                         <div className="grid gap-2">
                                             <Label htmlFor="telefone">Telefone</Label>
-                                            <Input id="telefone" placeholder="(00) 00000-0000" required onChange={(e) => setTelefone(e.target.value)} />
+                                            <Input value={telefone} id="telefone" placeholder="(00) 00000-0000" required onChange={(e) => setTelefone(e.target.value)} />
                                         </div>
                                     </div>
                                     <Button className="w-full" variant="default" onClick={() => handleClickTab("address")}>
@@ -171,50 +179,52 @@ export default function CriarConta() {
                             </CardHeader>
                             <CardContent>
                                 <div className="grid gap-4">
-                                    <div className="grid grid-cols-2 gap-4">
-                                        <div className="grid gap-2">
-                                            <Label htmlFor="endereco">Endereço</Label>
-                                            <Input id="endereco" placeholder="Rua, Número" required onChange={(e) => setEndereco(e.target.value)} />
-                                        </div>
-                                        <div className="grid gap-2">
-                                            <Label htmlFor="complemento">Complemento</Label>
-                                            <Input id="complemento" placeholder="Apartamento, Casa, etc." onChange={(e) => setComplemento(e.target.value)} />
-                                        </div>
+                                    <div className="grid gap-2">
+                                        <Label htmlFor="nome">Nome</Label>
+                                        <Input value={nomeEndereco} id="nome" placeholder="Seu nome" required onChange={(e) => setNomeEndereco(e.target.value)} />
                                     </div>
-                                    <div className="grid grid-cols-2 gap-4">
-                                        <div className="grid gap-2">
-                                            <Label htmlFor="cep">CEP</Label>
-                                            <Input id="cep" placeholder="00000-000" required onChange={(e) => setCep(e.target.value)} />
-                                        </div>
-                                        <div className="grid gap-2">
-                                            <Label htmlFor="cidade">Cidade</Label>
-                                            <Input id="cidade" placeholder="Sua cidade" required onChange={(e) => setCidade(e.target.value)} />
-                                        </div>
+                                    <div className="grid gap-2">
+                                        <Label htmlFor="cep">CEP</Label>
+                                        <Input value={cep} id="cep" placeholder="00000-000" required onChange={(e) => setCep(e.target.value)} />
                                     </div>
-                                    <div className="grid grid-cols-2 gap-4">
-                                        <div className="grid gap-2">
-                                            <Label htmlFor="estado">Estado</Label>
-                                            <Input id="estado" placeholder="Seu estado" required onChange={(e) => setEstado(e.target.value)} />
-                                        </div>
-                                        <div className="grid gap-2">
-                                            <Label htmlFor="pais">País</Label>
-                                            <Input id="pais" placeholder="Seu país" required onChange={(e) => setPais(e.target.value)} />
-                                        </div>
+                                    <div className="grid gap-2">
+                                        <Label htmlFor="rua">Rua</Label>
+                                        <Input value={rua} id="rua" placeholder="Rua" required onChange={(e) => setRua(e.target.value)} />
                                     </div>
-                                    <div className="flex gap-2">
-                                        <Button className="w-20" variant="outline" onClick={() => handleClickTab("info")}>
-                                            Voltar
-                                        </Button>
-                                        <Button className="w-full" type="submit">
-                                            Concluir cadastro
-                                        </Button>
+                                    <div className="grid gap-2">
+                                        <Label htmlFor="numero">Número</Label>
+                                        <Input value={numero} id="numero" placeholder="Número" required onChange={(e) => setNumero(e.target.value)} />
                                     </div>
+                                    <div className="grid gap-2">
+                                        <Label htmlFor="complemento">Complemento</Label>
+                                        <Input value={complemento} id="complemento" placeholder="Apartamento, Casa, etc." onChange={(e) => setComplemento(e.target.value)} />
+                                    </div>
+                                    <div className="grid gap-2">
+                                        <Label htmlFor="bairro">Bairro</Label>
+                                        <Input value={bairro} id="bairro" placeholder="Seu bairro" required onChange={(e) => setBairro(e.target.value)} />
+                                    </div>
+                                    <div className="grid gap-2">
+                                        <Label htmlFor="cidade">Cidade</Label>
+                                        <Input value={cidade} id="cidade" placeholder="Sua cidade" required onChange={(e) => setCidade(e.target.value)} />
+                                    </div>
+                                    <div className="grid gap-2">
+                                        <Label htmlFor="estado">Estado</Label>
+                                        <Input value={estado} id="estado" placeholder="Seu estado" required onChange={(e) => setEstado(e.target.value)} />
+                                    </div>
+                                </div>
+                                <div className="flex gap-2">
+                                    <Button className="w-20" variant="outline" onClick={() => handleClickTab("info")}>
+                                        Voltar
+                                    </Button>
+                                    <Button className="w-full" type="submit">
+                                        Concluir cadastro
+                                    </Button>
                                 </div>
                             </CardContent>
                         </Card>
                     </TabsContent>
                 </Tabs>
             </form>
-        </div>
+        </div >
     )
 }

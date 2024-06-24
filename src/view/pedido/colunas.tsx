@@ -50,13 +50,13 @@ const ativar = async (pedido: Pedido) => {
 
 export const colunas = (): ColumnDef<Pedido>[] => [
     {
-        accessorKey: 'id',
+        accessorKey: 'Id',
         header: ({ column }) => (
-            <Cabecalho column={column} title="ID" />
+            <Cabecalho column={column} title="Id" />
         ),
     },
     {
-        accessorKey: 'dataPedido',
+        accessorKey: 'Data do Pedido',
         header: ({ column }) => (
             <Cabecalho column={column} title="Data do Pedido" />
         ),
@@ -67,21 +67,9 @@ export const colunas = (): ColumnDef<Pedido>[] => [
         ),
     },
     {
-        accessorKey: 'valorTotal',
+        accessorKey: 'Valor Total',
         header: ({ column }) => (
             <Cabecalho column={column} title="Valor Total" />
-        ),
-    },
-    {
-        accessorKey: 'usuario',
-        header: ({ column }) => (
-            <Cabecalho column={column} title="Usuário" />
-        ),
-    },
-    {
-        accessorKey: 'produto',
-        header: ({ column }) => (
-            <Cabecalho column={column} title="Produto" />
         ),
     },
     {

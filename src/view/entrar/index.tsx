@@ -3,13 +3,19 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import Api from "@/infra/helpers/api";
-import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Produto } from "@/types/Produto";
+import { useEffect, useState } from "react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 
 export default function Entrar() {
-    const [email, setEmail] = useState(""),
-        [senha, setSenha] = useState("");
+    const location = useLocation();
+    const navigate = useNavigate();
+    const [produtos, setProdutos] = useState<Produto>();
+    const [email, setEmail] = useState("");
+    const [senha, setSenha] = useState("");
+
+    const [continuarParaVenda, setContinuarParaVenda] = useState(false);
 
     const logar = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -23,10 +29,21 @@ export default function Entrar() {
             const { data } = await Api.post("usuario/entrar", dto);
             const UsuarioLogado = JSON.stringify(data);
             localStorage.setItem("UsuarioLogado", UsuarioLogado);
-            window.location.href = "/";
+            (continuarParaVenda) ? navigate("/finalizarpedido", { state: { produtos: produtos } }) : window.location.href = "/";
         } catch (error: any) {
             toast.error("Erro ao logar!");
         }
+    }
+
+    useEffect(() => {
+        verificaSeContinuaParaVenda();
+    }, [])
+
+    function verificaSeContinuaParaVenda() {
+        const listProduto = location.state?.produtos || [];
+        if (listProduto.length === 0) return setContinuarParaVenda(false);
+        setContinuarParaVenda(true);
+        setProdutos(listProduto);
     }
 
     return (

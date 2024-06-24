@@ -52,7 +52,8 @@ export default function PainelProduto() {
     const comprarAgora = (produto: Produto) => {
         if (produto.quantidade < 1) produto.quantidade = 1;
         if (produto.quantidade > produto.quantidadeestoque) return toast.error("Quantidade indisponível no estoque!");
-        navigate("/finalizarpedido", { state: { produtos: [produto] } });
+        const usuarioJson = localStorage.getItem("UsuarioLogado");
+        (usuarioJson) ? navigate("/finalizarpedido", { state: { produtos: [produto] } }) : navigate("/entrar", { state: { produtos: [produto] }});
     }
 
     return (

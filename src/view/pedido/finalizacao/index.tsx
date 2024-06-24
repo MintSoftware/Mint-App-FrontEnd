@@ -1,26 +1,26 @@
-import { useEffect, useState } from "react"
-import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs"
-import { Card, CardHeader, CardTitle, CardContent, CardFooter } from "@/components/ui/card"
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
-import { Label } from "@/components/ui/label"
-import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/ui/select"
 import { Button } from "@/components/ui/button"
-import { Separator } from "@/components/ui/separator"
-import { ArrowLeftIcon, ArrowRightIcon, CreditCardIcon, DollarSignIcon, PlusIcon, ShoppingCartIcon, WalletCardsIcon } from "lucide-react"
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
-import { Usuario } from "@/types/Usuario"
-import { toast } from "sonner"
+import { Label } from "@/components/ui/label"
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { Separator } from "@/components/ui/separator"
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import Api from "@/infra/helpers/api"
 import { Endereco } from "@/types/Endereco"
 import { Produto } from "@/types/Produto"
+import { Usuario } from "@/types/Usuario"
+import { ArrowLeftIcon, ArrowRightIcon, CreditCardIcon, DollarSignIcon, PlusIcon, ShoppingCartIcon, WalletCardsIcon } from "lucide-react"
+import { useEffect, useState } from "react"
 import { useLocation } from "react-router-dom"
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
+import { toast } from "sonner"
 
 export default function FinalizacaoPedido() {
     const location = useLocation();
     const produtos: Produto[] = location.state?.produtos || [];
     const [activeTab, setActiveTab] = useState("address");
-    const [clienteExistente, setClienteExistente] = useState(true);
+    const [enderecoExistente, setEnderecoExistente] = useState(true);
     const [metodoPagto, setMetodoPagto] = useState("pix");
     const [usuario, setUsuario] = useState<Usuario>();
     const [nomeEndereco, setNomeEndereco] = useState<string>("");
@@ -37,7 +37,7 @@ export default function FinalizacaoPedido() {
     }
 
     const handleCLickRadio = () => {
-        if (clienteExistente === true) {
+        if (enderecoExistente === true) {
             return "existente"
         }
         else {
@@ -51,11 +51,11 @@ export default function FinalizacaoPedido() {
 
     useEffect(() => {
         limpaDadosEndereco();
-    }, [clienteExistente]);
+    }, [enderecoExistente]);
 
     const recuperarUsuarioLogado = async () => {
         const usuarioJson = localStorage.getItem("UsuarioLogado");
-        (usuarioJson) ? setUsuario(JSON.parse(usuarioJson)) : toast.error("Erro ao recuperar usuário logado");
+        if (usuarioJson) setUsuario(JSON.parse(usuarioJson));
     };
 
     const cadastrarNovoEndereco = async () => {
@@ -97,7 +97,7 @@ export default function FinalizacaoPedido() {
         const UsuarioLogado = JSON.stringify(data);
         localStorage.setItem("UsuarioLogado", UsuarioLogado);
         recuperarUsuarioLogado();
-        setClienteExistente(true);
+        setEnderecoExistente(true);
     }
 
     const limpaDadosEndereco = () => {
@@ -132,9 +132,9 @@ export default function FinalizacaoPedido() {
                                     <div className="flex items-center gap-2 w-full">
                                         <RadioGroup defaultValue="existente" value={radioValue} className="flex flex-col w-full gap-3">
                                             <div className="flex items-center gap-3">
-                                                <RadioGroupItem onClick={() => setClienteExistente(true)} id="existente" value="existente" />
+                                                <RadioGroupItem onClick={() => setEnderecoExistente(true)} id="existente" value="existente" />
                                                 <Label className="flex">Endereço existente</Label>
-                                                <Select disabled={!clienteExistente} onValueChange={(value) => setEnderecoPedido(JSON.parse(value))}>
+                                                <Select disabled={!enderecoExistente} onValueChange={(value) => setEnderecoPedido(JSON.parse(value))}>
                                                     <SelectTrigger className="flex w-[30rem]">
                                                         <SelectValue className="flex w-full" placeholder="Selecione um endereço" />
                                                     </SelectTrigger>
@@ -148,10 +148,10 @@ export default function FinalizacaoPedido() {
                                                 </Select>
                                             </div>
                                             <div className="flex items-center gap-3">
-                                                <RadioGroupItem onClick={() => setClienteExistente(false)} id="novo" value="novo" />
+                                                <RadioGroupItem onClick={() => setEnderecoExistente(false)} id="novo" value="novo" />
                                                 <Label>Novo endereço</Label>
                                             </div>
-                                            {!clienteExistente && <div className="border p-5 rounded-lg mt-5">
+                                            {!enderecoExistente && <div className="border p-5 rounded-lg mt-5">
                                                 <div className="grid grid-cols-2 gap-4">
                                                     <div className="grid gap-2">
                                                         <Label htmlFor="nome">Nome</Label>

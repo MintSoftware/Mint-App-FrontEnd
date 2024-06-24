@@ -21,6 +21,8 @@ export default function Pedido() {
           setLoading(true);
           const { data } = await Api.get('pedido/listar');
           setPedido(data);
+          debugger
+          setLoading(false);
         } catch (error : any) {
           setLoading(false);
           toast({

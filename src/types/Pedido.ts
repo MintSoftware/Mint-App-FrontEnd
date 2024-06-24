@@ -1,11 +1,13 @@
+import { UUID } from "crypto";
 import { Produto } from "./Produto";
 import { Usuario } from "./Usuario";
 
 export type Pedido = {
     status: any;
-    id: string;
+    id: UUID;
     dataPedido: Date;
     valorTotal: number;
     usuario: Usuario;
-    produto: Produto[];
+    produtos: Produto[];
+    metodoPagamento: string;
 };

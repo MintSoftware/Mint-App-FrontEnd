@@ -111,6 +111,36 @@ export default function FinalizacaoPedido() {
         setEstado("");
     }
 
+    const finalizarPedido = async () => {
+        if (!enderecoPedido || !metodoPagto) {
+            toast.error("Selecione um endereço e um método de pagamento para continuar");
+            return;
+        }
+
+
+        const dto = {
+            usuarioId: usuario?.id,
+            metodoPagamento: "cartao",
+            itens: produtos.map(item => ({
+                produtoId: item.id,
+                quantidade: item.quantidade,
+                preco: item.preco
+            }))
+        }
+
+        toast.promise(Api.post("pedido/cadastrar", dto).then(() => {
+            toast.success("Pedido finalizado com sucesso!");
+            localStorage.setItem("Carrinho", JSON.stringify([]));
+            window.location.href = "/";
+        }).catch(() => {
+            toast.error("Erro ao finalizar pedido");
+        }), {
+            loading: "Finalizando pedido...",
+            success: "Pedido finalizado com sucesso!",
+            error: "Erro ao finalizar pedido"
+        });
+    }
+
     const radioValue = handleCLickRadio();
 
     return (
@@ -314,36 +344,6 @@ export default function FinalizacaoPedido() {
                             <CardTitle>Finalizar pagamento</CardTitle>
                         </CardHeader>
                         <CardContent>
-                            {/* <div className="grid gap-4">
-                                <div>
-                                    <h3 className="text-lg font-medium">Resumo do pedido</h3>
-                                    <div className="grid gap-2 py-4">
-                                        {produtos.map((produto) => (
-                                            <div key={produto.id} className="flex items-center justify-between">
-                                                <span>{produto.quantidade} - {produto.nome}</span>
-                                                <span>{(produto.preco * produto.quantidade).toLocaleString("pt-BR", { style: "currency", currency: "BRL" })}</span>
-                                            </div>
-                                        ))}
-                                        <div className="flex items-center justify-between">
-                                            <span>Frete</span>
-                                            <span className="text-green-500">Grátis</span>
-                                        </div>
-                                        <Separator />
-                                        <div className="flex items-center justify-between font-medium">
-                                            <span>Total</span>
-                                            <span>{produtos.reduce((acc, item) => acc + item.preco * item.quantidade, 0).toLocaleString("pt-BR", { style: "currency", currency: "BRL" })}</span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div>
-                                    <h3 className="text-lg font-medium">Endereço de entrega</h3>
-                                    <div className="py-4">{enderecoPedido?.nome} - {enderecoPedido?.rua}, {enderecoPedido?.numero} - {enderecoPedido?.bairro}, {enderecoPedido?.cidade} - {enderecoPedido?.estado}, {enderecoPedido?.cep}</div>
-                                </div>
-                                <div>
-                                    <h3 className="text-lg font-medium">Forma de pagamento</h3>
-                                    <div className="py-4">{metodoPagto === "card" ? "Cartão de crédito" : metodoPagto === "pix" ? "PIX" : "Boleto"}</div>
-                                </div>
-                            </div> */}
                             <div className="grid gap-2 mt-10">
                                 <Label className="text-lg">Metodo de pagamento</Label>
                                 <div className="flex items-center gap-2">
@@ -389,7 +389,7 @@ export default function FinalizacaoPedido() {
                                 <ArrowLeftIcon className="h-4 w-4 mr-2" />
                                 Voltar
                             </Button>
-                            <Button>
+                            <Button onClick={finalizarPedido}>
                                 <ShoppingCartIcon className="h-4 w-4 mr-2" />
                                 Finalizar pagamento
                             </Button>

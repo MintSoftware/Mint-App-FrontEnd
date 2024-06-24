@@ -18,7 +18,7 @@ const inativar = async (pedido: Pedido) => {
             description: "Pedido inativado com sucesso.",
             variant: "success",
         });
-    } catch (error : any) {
+    } catch (error: any) {
         console.log("Erro ao inativar o pedido: ", error);
         toast({
             title: "Erro!",
@@ -38,7 +38,7 @@ const ativar = async (pedido: Pedido) => {
             description: "Pedido ativado com sucesso.",
             variant: "success",
         });
-    } catch (error : any) {
+    } catch (error: any) {
         console.log("Erro ao ativar o pedido: ", error);
         toast({
             title: "Erro!",
@@ -50,24 +50,24 @@ const ativar = async (pedido: Pedido) => {
 
 export const colunas = (): ColumnDef<Pedido>[] => [
     {
-        accessorKey: 'Id',
+        accessorKey: 'id',
         header: ({ column }) => (
             <Cabecalho column={column} title="Id" />
         ),
     },
     {
-        accessorKey: 'Data do Pedido',
+        accessorKey: 'status',
         header: ({ column }) => (
-            <Cabecalho column={column} title="Data do Pedido" />
+            <Cabecalho column={column} title="Status" />
         ),
         cell: ({ row }) => (
             <Badge className='w-[60px] justify-center' variant={row.original.status ? "outline" : "secondary"}>
-                {row.original.status.toString() === '1' ? "Ativo" : "Inativo"}
+                {row.original.status.toString() === '0' ? "Digitado" : row.original.status.toString() === '1' ? "Pendente" : row.original.status.toString() === '2' ? "Em Andamento" : row.original.status.toString() === '3' ? "Finalizado" : "Cancelado"}
             </Badge>
         ),
     },
     {
-        accessorKey: 'Valor Total',
+        accessorKey: 'valorTotal',
         header: ({ column }) => (
             <Cabecalho column={column} title="Valor Total" />
         ),

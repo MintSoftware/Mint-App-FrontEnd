@@ -14,6 +14,7 @@ import Api from "@/infra/helpers/api"
 import { Endereco } from "@/types/Endereco"
 import { Produto } from "@/types/Produto"
 import { useLocation } from "react-router-dom"
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 
 export default function FinalizacaoPedido() {
     const location = useLocation();
@@ -135,7 +136,7 @@ export default function FinalizacaoPedido() {
                                                 <Label className="flex">Endereço existente</Label>
                                                 <Select disabled={!clienteExistente} onValueChange={(value) => setEnderecoPedido(JSON.parse(value))}>
                                                     <SelectTrigger className="flex w-[30rem]">
-                                                        <SelectValue className="flex w-full" placeholder="Selecione um endereço"/>
+                                                        <SelectValue className="flex w-full" placeholder="Selecione um endereço" />
                                                     </SelectTrigger>
                                                     <SelectContent className="cursor-pointer">
                                                         {usuario?.enderecos.map((endereco) => (
@@ -313,7 +314,7 @@ export default function FinalizacaoPedido() {
                             <CardTitle>Finalizar pagamento</CardTitle>
                         </CardHeader>
                         <CardContent>
-                            <div className="grid gap-4">
+                            {/* <div className="grid gap-4">
                                 <div>
                                     <h3 className="text-lg font-medium">Resumo do pedido</h3>
                                     <div className="grid gap-2 py-4">
@@ -342,9 +343,48 @@ export default function FinalizacaoPedido() {
                                     <h3 className="text-lg font-medium">Forma de pagamento</h3>
                                     <div className="py-4">{metodoPagto === "card" ? "Cartão de crédito" : metodoPagto === "pix" ? "PIX" : "Boleto"}</div>
                                 </div>
+                            </div> */}
+                            <div className="grid gap-2 mt-10">
+                                <Label className="text-lg">Metodo de pagamento</Label>
+                                <div className="flex items-center gap-2">
+                                    {metodoPagto === "card" ? <CreditCardIcon className="h-6 w-6"/> : metodoPagto === "pix" ? <WalletCardsIcon className="h-6 w-6"/> : <DollarSignIcon className="h-6 w-6"/>}
+                                    {metodoPagto === "card" ? "Cartão de crédito" : metodoPagto === "pix" ? "PIX" : "Boleto"}
+                                </div>
+                            </div>
+                            <div className="grid gap-2 mt-10">
+                                <Label className="text-lg">Endereço de entrega</Label>
+                                <div className="flex items-center gap-2">
+                                    <span>{enderecoPedido?.nome} - {enderecoPedido?.rua}, {enderecoPedido?.numero} - {enderecoPedido?.bairro}, {enderecoPedido?.cidade} - {enderecoPedido?.estado}, {enderecoPedido?.cep}</span>
+                                </div>
+                            </div>
+                            <div className="grid gap-4 mt-10">
+                                <Label className="text-lg">Itens</Label>
+                                <Table>
+                                    <TableHeader>
+                                        <TableRow>
+                                            <TableHead className="w-[40rem]">Item</TableHead>
+                                            <TableHead className="items-center flex justify-center w-[5rem]">Qtd</TableHead>
+                                            <TableHead >Valor Un</TableHead>
+                                        </TableRow>
+                                    </TableHeader>
+                                    <TableBody>
+                                        {produtos.map((produto) => (
+                                            <TableRow key={produto.id}>
+                                                <TableCell>{produto.nome}</TableCell>
+                                                <TableCell className="flex justify-center" >{produto.quantidade}</TableCell>
+                                                <TableCell>{produto.preco.toLocaleString("pt-BR", { style: "currency", currency: "BRL" })}</TableCell>
+                                            </TableRow>
+                                        ))}
+                                    </TableBody>
+                                </Table>
+                            </div>
+                            <Separator />
+                            <div className="mt-3 flex items-center justify-between font-medium">
+                                <Label className="text-lg">Total</Label>
+                                <span>{produtos.reduce((acc, item) => acc + item.preco * item.quantidade, 0).toLocaleString("pt-BR", { style: "currency", currency: "BRL" })}</span>
                             </div>
                         </CardContent>
-                        <CardFooter className="gap-2 justify-between">
+                        <CardFooter className="gap-2 justify-between mt-10">
                             <Button variant={"outline"} onClick={() => handleClickTab("payment")}>
                                 <ArrowLeftIcon className="h-4 w-4 mr-2" />
                                 Voltar

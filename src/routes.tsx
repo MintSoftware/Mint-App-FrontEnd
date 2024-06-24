@@ -8,7 +8,7 @@ import { Layout } from "./view/layout";
 import LoadingScreen from "./view/loading/Loading";
 import PaginaNaoEncontrada from "./view/paginanaoencontrada";
 import Pedido from "./view/pedido";
-import FinalizacaoPedido from "./view/pedido/finalização";
+import FinalizacaoPedido from "./view/pedido/finalizacao";
 import Perfil from "./view/perfil";
 import Produto from "./view/produto";
 import RecuperarSenha from "./view/recuperarsenha";

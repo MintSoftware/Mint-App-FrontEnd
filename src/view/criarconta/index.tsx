@@ -30,6 +30,38 @@ export default function CriarConta() {
         setActiveTab(tab)
     }
 
+    function verificarCamposInfo() {
+        if (!nome || !sobrenome || !email || !senha || !dataNascimento || !telefone || !cpfcnpjFormatado) {
+            toast.error("Por favor, preencha todos os campos obrigatórios da aba 'Informações'");
+            return false; 
+        }
+        return true;
+    }
+
+    const handleClickProximo = () => {
+        if (verificarCamposInfo()) {
+            handleClickTab("address"); 
+        }
+    };
+
+  
+    const formatarTelefone = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const telefone = event.target.value;
+        let telefoneFormatado = telefone.replace(/\D/g, ""); 
+        if (telefoneFormatado.length <= 11) {
+            telefoneFormatado = telefoneFormatado.replace(
+                /^(\d{2})(\d{5})(\d{4})$/,
+                "($1) $2-$3"
+            );
+        } else if (telefoneFormatado.length <= 10) {
+            telefoneFormatado = telefoneFormatado.replace(
+                /^(\d{2})(\d{4})(\d{4})$/,
+                "($1) $2-$3"
+            ); 
+        }
+        setTelefone(telefoneFormatado);
+    };
+
     const formatarCfpCnpj = (event: React.ChangeEvent<HTMLInputElement>) => {
         let { value } = event.target;
         value = value.replace(/\D/g, '');
@@ -53,9 +85,14 @@ export default function CriarConta() {
 
         setCpfcnpjFormatado(value);
     };
-
+    
     const criarConta = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
+
+        if (!nome || !sobrenome || !email || !senha || !dataNascimento || !telefone || !cpfcnpjFormatado || !nomeEndereco || !cep || !rua || !numero || !complemento || !bairro || !cidade || !estado) {
+            toast.error("Por favor, preencha todos os campos obrigatórios");
+            return;
+        }
 
         const enderecos = [{
             nome: nomeEndereco,
@@ -151,14 +188,14 @@ export default function CriarConta() {
                                     <div className="grid grid-cols-2 gap-4">
                                         <div className="grid gap-2">
                                             <Label htmlFor="telefone">Telefone</Label>
-                                            <Input value={telefone} id="telefone" placeholder="(00) 00000-0000" required onChange={(e) => setTelefone(e.target.value)} />
+                                            <Input value={telefone} id="telefone" placeholder="(00) 00000-0000" required onChange={formatarTelefone} />
                                         </div>
                                     </div>
                                 </div>
                                 <div className="mt-10">
-                                    <Button className="w-full" variant="default" onClick={() => handleClickTab("address")}>
+                                    <Button className="w-full" variant="default" onClick={handleClickProximo}>
                                         Próximo
-                                    </Button>
+                                    </Button>   
                                     <div className="mt-4 text-center text-sm">
                                         Já tem uma conta?
                                         <Link className="underline" to="/entrar">

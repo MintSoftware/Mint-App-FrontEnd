@@ -1,6 +1,6 @@
 import { UUID } from "crypto";
-import { Produto } from "./Produto";
 import { Usuario } from "./Usuario";
+import { Itens } from "./Itens";
 
 export type Pedido = {
     status: any;
@@ -8,7 +8,7 @@ export type Pedido = {
     dataPedido: Date;
     valorTotal: number;
     usuario: Usuario;
-    produtos: Produto[];
+    itens: Itens[];
     metodoPagamento: string;
     mumeroPedido: number;
 };

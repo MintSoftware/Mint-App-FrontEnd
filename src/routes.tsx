@@ -12,6 +12,7 @@ import FinalizacaoPedido from "./view/pedido/finalizacao";
 import Perfil from "./view/perfil";
 import Produto from "./view/produto";
 import RecuperarSenha from "./view/recuperarsenha";
+import EditarPedido from "./view/pedido/editar";
 
 function MainRoutes() {
     const [isLoading, setIsLoading] = useState(true);
@@ -48,6 +49,7 @@ function MainRoutes() {
                 <Route path="/criarconta" element={<CriarConta />} />
                 <Route path="/recuperarsenha" element={<RecuperarSenha />} />
                 <Route path="/finalizarpedido" element={<FinalizacaoPedido />} />
+                <Route path="/pedido/:id" element={<EditarPedido />} /> 
                 <Route path="/perfil" element={<Perfil />} />
             </Routes>
         </Layout>

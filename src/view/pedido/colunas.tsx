@@ -6,8 +6,8 @@ import { toast } from "@/components/ui/use-toast";
 import Api from "@/infra/helpers/api";
 import { Pedido } from "@/types/Pedido";
 import { ColumnDef } from "@tanstack/react-table";
-import { EllipsisVerticalIcon } from "lucide-react";
-import { EditarPedido } from "./editar";
+import { EllipsisVerticalIcon, SearchIcon } from "lucide-react";
+import { Link } from "react-router-dom";
 
 const inativar = async (pedido: Pedido) => {
     if (!confirm("Tem certeza que deseja inativar este pedido?")) return;
@@ -54,7 +54,11 @@ export const colunas = (): ColumnDef<Pedido>[] => [
         id: 'verPedido',
         size: 1,
         cell: ({ row }) => (
-            <EditarPedido pedido={row.original} />
+            <Link to={`/pedido/${row.original.id}`}>
+                <Button variant="ghost" className="h-8 w-8 p-0">
+                    <SearchIcon className="h-4 w-4" />
+                </Button>
+            </Link>
         ),
     },
     {

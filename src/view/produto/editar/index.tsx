@@ -16,19 +16,18 @@ interface EditarProps {
 }
 
 const EditarProduto = ({ produto }: EditarProps) => {
-    const [nome, setNome] = useState<string>(produto.nome as string);
-    const [descricao, setDescricao] = useState<string>(produto.descricao as string);
-    const [preco, setPreco] = useState<number>(produto.preco);
-    const [quantidade, setQuantidade] = useState<number>(produto.quantidade);
-    const [quantidadeEstoque, setQuantidadeEstoque] = useState<number>(produto.quantidadeestoque);
-    const [categoria, setCategoria] = useState<Categoria>(produto.categoria);
+    const [nome, setNome] = useState<string>();
+    const [descricao, setDescricao] = useState<string>();
+    const [preco, setPreco] = useState<number>();
+    const [quantidadeEstoque, setQuantidadeEstoque] = useState<number>();
+    const [categoria, setCategoria] = useState<Categoria>();
     const [categoriaList, setCategoriaList] = useState<Categoria[]>([]);
+    const [isDialogOpen, setIsDialogOpen] = useState(false);
 
     useEffect(() => {
         setNome(produto.nome as string);
         setDescricao(produto.descricao as string);
         setPreco(produto.preco);
-        setQuantidade(produto.quantidade);
         setQuantidadeEstoque(produto.quantidadeestoque);
         setCategoria(produto.categoria);
         recuperarCategorias();
@@ -44,27 +43,37 @@ const EditarProduto = ({ produto }: EditarProps) => {
     };
 
     const salvar = async () => {
+        if (!nome || !descricao || !preco || !quantidadeEstoque || !categoria) {
+            toast.error("Preencha todos os campos obrigatórios!");
+            return;
+        }
         const produtoAtualizado = {
             nome,
             descricao,
             preco,
-            quantidade,
             quantidadeestoque: quantidadeEstoque,
-            categoria
+            categoria, 
+            status: produto.status,
         };
 
         try {
-            await Api.put(`/produto/${produto.id}/atualizar`, produtoAtualizado);
-            toast.success("Produto atualizado com sucesso!");
+            await toast.promise(
+                Api.put(`/produto/${produto.id}/editar`, produtoAtualizado),
+                {
+                    loading: "Atualizando...",
+                    success: "Produto atualizado com sucesso!",
+                    error: "Erro ao atualizar produto"
+                }
+            );
+            setIsDialogOpen(false); 
         } catch (error) {
-            toast.error("Erro ao atualizar produto!");
             console.error("Erro ao atualizar produto: ", error);
         }
     };
 
     return (
         <div>
-            <Dialog>
+            <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
                 <DialogTrigger asChild className="relative flex cursor-pointer select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none transition-colors focus:bg-accent focus:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50">
                     <div>Editar</div>
                 </DialogTrigger>
@@ -120,18 +129,14 @@ const EditarProduto = ({ produto }: EditarProps) => {
                                         <Input id="price" type="number" placeholder="Preço do produto" value={preco} onChange={(e) => setPreco(Number(e.target.value))} />
                                     </div>
                                     <div className="grid gap-2">
-                                        <Label htmlFor="quantity">Quantidade</Label>
-                                        <Input id="quantity" type="number" placeholder="Quantidade do produto" value={quantidade} onChange={(e) => setQuantidade(Number(e.target.value))} />
+                                        <Label htmlFor="quantity">Estoque</Label>
+                                        <Input id="quantity" type="number" placeholder="Quantidade estoque" value={quantidadeEstoque} onChange={(e) => setQuantidadeEstoque(Number(e.target.value))} />
                                     </div>
                                 </div>
                                 <div className="grid grid-cols-2 gap-4">
-                                    <div className="grid gap-2">
-                                        <Label htmlFor="stock">Estoque</Label>
-                                        <Input id="stock" type="number" placeholder="Quantidade em estoque" value={quantidadeEstoque} onChange={(e) => setQuantidadeEstoque(Number(e.target.value))} />
-                                    </div>
                                     <div className="flex flex-col gap-2 ">
                                         <Label htmlFor="category">Categoria</Label>
-                                        <Select onValueChange={(value) => setCategoria(JSON.parse(value))}>
+                                        <Select defaultValue={produto.categoria.nome} onValueChange={(value) => setCategoria(JSON.parse(value))}>
                                             <SelectTrigger className="w-full">
                                                 <SelectValue placeholder="Selecione a categoria" />
                                             </SelectTrigger>
@@ -160,3 +165,4 @@ const EditarProduto = ({ produto }: EditarProps) => {
 };
 
 export default EditarProduto;
+

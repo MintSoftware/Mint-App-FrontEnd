@@ -3,9 +3,9 @@ import { Categoria } from "./Categoria";
 
 export type Produto = {
     id : UUID;
-    nome : String;
+    nome : string;
     status : boolean;
-    descricao : String;
+    descricao : string;
     preco : number;
     quantidade : number;
     quantidadeestoque : number;

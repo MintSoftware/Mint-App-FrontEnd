@@ -1,6 +1,7 @@
 import { UUID } from "crypto";
-import { Usuario } from "./Usuario";
+import { Endereco } from "./Endereco";
 import { Itens } from "./Itens";
+import { Usuario } from "./Usuario";
 
 export type Pedido = {
     status: any;
@@ -11,4 +12,5 @@ export type Pedido = {
     itens: Itens[];
     metodoPagamento: string;
     mumeroPedido: number;
+    enderecoEntrega: Endereco;
 };

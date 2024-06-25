@@ -7,6 +7,7 @@ import Api from "@/infra/helpers/api";
 import { Pedido } from "@/types/Pedido";
 import { ColumnDef } from "@tanstack/react-table";
 import { EllipsisVerticalIcon } from "lucide-react";
+import { EditarPedido } from "./editar";
 
 const inativar = async (pedido: Pedido) => {
     if (!confirm("Tem certeza que deseja inativar este pedido?")) return;
@@ -49,6 +50,13 @@ const ativar = async (pedido: Pedido) => {
 }
 
 export const colunas = (): ColumnDef<Pedido>[] => [
+    {
+        id: 'verPedido',
+        size: 1,
+        cell: ({ row }) => (
+            <EditarPedido pedido={row.original} />
+        ),
+    },
     {
         accessorKey: 'mumeroPedido',
         header: ({ column }) => (

@@ -84,7 +84,8 @@ export default function MenuSuperior() {
     }
 
     const finalizarPedido = () => {
-        navigate("/finalizarpedido", { state: { produtos: carrinho } })
+        const usuarioJson = localStorage.getItem("UsuarioLogado");
+        (usuarioJson) ? navigate("/finalizarpedido", { state: { produtos: carrinho } }) : navigate("/entrar", { state: { produtos: carrinho } });
     }
 
     return (
@@ -217,10 +218,10 @@ export default function MenuSuperior() {
                                         </Button>
                                     </SheetClose>
                                     <SheetClose asChild>
-                                            <Button onClick={finalizarPedido} className=" gap-2" type="submit">
-                                                <BaggageClaimIcon size={16} />
-                                                Finalizar Pedido
-                                            </Button>
+                                        <Button onClick={finalizarPedido} className=" gap-2" type="submit">
+                                            <BaggageClaimIcon size={16} />
+                                            Finalizar Pedido
+                                        </Button>
                                     </SheetClose>
                                 </div>
                             </SheetFooter>

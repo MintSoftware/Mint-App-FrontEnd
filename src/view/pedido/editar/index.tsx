@@ -1,6 +1,5 @@
 import { Button } from "@/components/ui/button"
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog"
-import { Pedido } from "@/types/Pedido"
 import { SearchIcon } from "lucide-react"
 
 export const EditarPedido = (pedido: any) => {

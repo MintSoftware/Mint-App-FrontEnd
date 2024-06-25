@@ -50,9 +50,9 @@ const ativar = async (pedido: Pedido) => {
 
 export const colunas = (): ColumnDef<Pedido>[] => [
     {
-        accessorKey: 'id',
+        accessorKey: 'mumeroPedido',
         header: ({ column }) => (
-            <Cabecalho column={column} title="Id" />
+            <Cabecalho column={column} title="Numero Pedido" />
         ),
     },
     {
@@ -70,6 +70,17 @@ export const colunas = (): ColumnDef<Pedido>[] => [
         accessorKey: 'valorTotal',
         header: ({ column }) => (
             <Cabecalho column={column} title="Valor Total" />
+        ),
+        cell: ({ row }) => (
+            <span>R$ {row.original.valorTotal.toFixed(2)}</span>
+        ),
+    }, {
+        accessorKey: 'dataPedido',
+        header: ({ column }) => (
+            <Cabecalho column={column} title="Data Pedido" />
+        ),
+        cell: ({ row }) => (
+            <span>{new Date(row.original.dataPedido).toLocaleDateString()}</span>
         ),
     },
     {

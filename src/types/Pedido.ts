@@ -10,4 +10,5 @@ export type Pedido = {
     usuario: Usuario;
     produtos: Produto[];
     metodoPagamento: string;
+    mumeroPedido: number;
 };

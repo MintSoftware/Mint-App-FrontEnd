@@ -3,6 +3,7 @@ import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/componen
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
+import { ScrollArea } from "@/components/ui/scroll-area"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Separator } from "@/components/ui/separator"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
@@ -121,6 +122,8 @@ export default function FinalizacaoPedido() {
         const dto = {
             usuarioId: usuario?.id,
             metodoPagamento: "cartao",
+            dataPedido: new Date(),
+            enderecoEntrega: enderecoPedido,
             itens: produtos.map(item => ({
                 produtoId: item.id,
                 quantidade: item.quantidade,
@@ -347,7 +350,7 @@ export default function FinalizacaoPedido() {
                             <div className="grid gap-2 mt-10">
                                 <Label className="text-lg">Metodo de pagamento</Label>
                                 <div className="flex items-center gap-2">
-                                    {metodoPagto === "card" ? <CreditCardIcon className="h-6 w-6"/> : metodoPagto === "pix" ? <WalletCardsIcon className="h-6 w-6"/> : <DollarSignIcon className="h-6 w-6"/>}
+                                    {metodoPagto === "card" ? <CreditCardIcon className="h-6 w-6" /> : metodoPagto === "pix" ? <WalletCardsIcon className="h-6 w-6" /> : <DollarSignIcon className="h-6 w-6" />}
                                     {metodoPagto === "card" ? "Cartão de crédito" : metodoPagto === "pix" ? "PIX" : "Boleto"}
                                 </div>
                             </div>
@@ -360,22 +363,24 @@ export default function FinalizacaoPedido() {
                             <div className="grid gap-4 mt-10">
                                 <Label className="text-lg">Itens</Label>
                                 <Table>
-                                    <TableHeader>
-                                        <TableRow>
-                                            <TableHead className="w-[40rem]">Item</TableHead>
-                                            <TableHead className="items-center flex justify-center w-[5rem]">Qtd</TableHead>
-                                            <TableHead >Valor Un</TableHead>
-                                        </TableRow>
-                                    </TableHeader>
-                                    <TableBody>
-                                        {produtos.map((produto) => (
-                                            <TableRow key={produto.id}>
-                                                <TableCell>{produto.nome}</TableCell>
-                                                <TableCell className="flex justify-center" >{produto.quantidade}</TableCell>
-                                                <TableCell>{produto.preco.toLocaleString("pt-BR", { style: "currency", currency: "BRL" })}</TableCell>
+                                    <ScrollArea className="flex w-full h-[13rem]">
+                                        <TableHeader>
+                                            <TableRow>
+                                                <TableHead className="w-[40rem]">Item</TableHead>
+                                                <TableHead className="items-center flex justify-center w-[5rem]">Qtd</TableHead>
+                                                <TableHead >Valor Un</TableHead>
                                             </TableRow>
-                                        ))}
-                                    </TableBody>
+                                        </TableHeader>
+                                        <TableBody>
+                                            {produtos.map((produto) => (
+                                                <TableRow key={produto.id}>
+                                                    <TableCell>{produto.nome}</TableCell>
+                                                    <TableCell className="flex justify-center" >{produto.quantidade}</TableCell>
+                                                    <TableCell>{produto.preco.toLocaleString("pt-BR", { style: "currency", currency: "BRL" })}</TableCell>
+                                                </TableRow>
+                                            ))}
+                                        </TableBody>
+                                    </ScrollArea>
                                 </Table>
                             </div>
                             <Separator />

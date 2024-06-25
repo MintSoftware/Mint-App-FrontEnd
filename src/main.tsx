@@ -11,8 +11,9 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
     <BrowserRouter>
       <ThemeProvider defaultTheme="dark" storageKey='vite-ui-theme'>
         <MainRoutes />
-        <Toaster toastOptions={
+        <Toaster closeButton toastOptions={
           {
+            closeButton: true,
             className: 'h-[3rem] p-3',
             classNames: {
               success: 'bg-green-500 text-black font-bold',

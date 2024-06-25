@@ -42,6 +42,9 @@ export const colunas = (): ColumnDef<Produto>[] => [
         header: ({ column }) => (
             <Cabecalho column={column} title="Preço" />
         ),
+        cell: ({ row }) => (
+            <span>R$ {row.original.preco.toFixed(2)}</span>
+        ),
     }, {
         accessorKey: 'Estoque',
         header: ({ column }) => (

@@ -17,12 +17,18 @@ export default function CriarConta() {
     const [senha, setSenha] = useState("");
     const [dataNascimento, setDataNascimento] = useState("");
     const [telefone, setTelefone] = useState("");
-    const [endereco, setEndereco] = useState("");
+    const [nomeEndereco, setNomeEndereco] = useState("");
     const [complemento, setComplemento] = useState("");
     const [cep, setCep] = useState("");
     const [cidade, setCidade] = useState("");
     const [estado, setEstado] = useState("");
-    const [pais, setPais] = useState("");
+    const [numero, setNumero] = useState("");
+    const [rua, setRua] = useState("");
+    const [bairro, setBairro] = useState("");
+
+    const handleClickTab = (tab: any) => {
+        setActiveTab(tab)
+    }
 
     const formatarCfpCnpj = (event: React.ChangeEvent<HTMLInputElement>) => {
         let { value } = event.target;
@@ -48,12 +54,19 @@ export default function CriarConta() {
         setCpfcnpjFormatado(value);
     };
 
-    const handleNextClick = () => {
-        setActiveTab("address");
-    };
-
     const criarConta = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
+
+        const enderecos = [{
+            nome: nomeEndereco,
+            cep,
+            rua,
+            numero,
+            complemento,
+            bairro,
+            cidade,
+            estado,
+        }];
 
         const dto = {
             nome,
@@ -62,35 +75,26 @@ export default function CriarConta() {
             senha,
             dataNascimento,
             telefone,
-            endereco,
-            complemento,
-            cep,
-            cidade,
-            estado,
-            pais
+            enderecos,
+            cpfcnpj: cpfcnpjFormatado.replace(/\D/g, ''),
         };
 
-        try {
-            toast.promise(Api.post("usuario/cadastrar", dto), {
-                loading: "Cadastrando...",
-                success: "Cadastro realizado com sucesso!",
-                error: "Erro ao cadastrar"
-            });
-            try {
-                const { data } = await Api.post("usuario/entrar", dto);
-                const UsuarioLogado = JSON.stringify(data);
-                localStorage.setItem("UsuarioLogado", UsuarioLogado);
-                window.location.href = "/";
-            } catch (error) {
-                toast.error("Erro ao logar");
-            }
-        } catch (error) {
+        toast.promise(Api.post("usuario/cadastrar", dto, {}).then(async () => {
+            const { data } = await Api.post("usuario/entrar", dto);
+            const UsuarioLogado = JSON.stringify(data);
+            localStorage.setItem("UsuarioLogado", UsuarioLogado);
+            window.location.href = "/";
+        }).catch(() => {
             toast.error("Erro ao cadastrar");
-        }
+        }), {
+            loading: "Cadastrando...",
+            success: "Cadastro realizado com sucesso!",
+            error: "Erro ao cadastrar"
+        });
     };
 
     return (
-        <div className="fixed flex justify-center items-center w-full h-full bg-background z-50 top-0 left-0 border">
+        <div className="fixed flex justify-center w-full h-full bg-background z-50 top-0 left-0 border">
             <Link to="/">
                 <div className="fixed top-0 left-5 w-[15%] h-[10%] cursor-pointer flex  items-center">
                     <img src="logo.png" alt="Logo" className="w-14 h-14" />
@@ -101,13 +105,13 @@ export default function CriarConta() {
                 </div>
             </Link>
             <form onSubmit={criarConta}>
-                <Tabs className="mx-auto max-w-sm max-w-[45rem] w-[45rem]" value={activeTab}>
+                <Tabs className="mx-auto mt-[10rem] max-w-[40rem] w-[40rem]" value={activeTab} onValueChange={setActiveTab}>
                     <TabsList className="grid w-full grid-cols-2">
                         <TabsTrigger value="info">Informações</TabsTrigger>
                         <TabsTrigger value="address">Endereço</TabsTrigger>
                     </TabsList>
                     <TabsContent value="info">
-                        <Card className="h-[35rem]">
+                        <Card className="w-[40rem] h-[35rem]">
                             <CardHeader>
                                 <CardTitle className="text-xl">Cadastre-se</CardTitle>
                                 <CardDescription>Insira suas informações para criar uma conta</CardDescription>
@@ -117,27 +121,27 @@ export default function CriarConta() {
                                     <div className="grid grid-cols-2 gap-4">
                                         <div className="grid gap-2">
                                             <Label htmlFor="nome">Nome</Label>
-                                            <Input id="nome" placeholder="José" required onChange={(e) => setNome(e.target.value)} />
+                                            <Input value={nome} id="nome" placeholder="José" required onChange={(e) => setNome(e.target.value)} />
                                         </div>
                                         <div className="grid gap-2">
                                             <Label htmlFor="sobrenome">Sobrenome</Label>
-                                            <Input id="sobrenome" placeholder="Silva" required onChange={(e) => setSobrenome(e.target.value)} />
+                                            <Input value={sobrenome} id="sobrenome" placeholder="Silva" required onChange={(e) => setSobrenome(e.target.value)} />
                                         </div>
                                     </div>
                                     <div className="grid grid-cols-2 gap-4">
                                         <div className="grid gap-2">
                                             <Label htmlFor="email">Email</Label>
-                                            <Input id="email" placeholder="jose.silva@mintecommerce.com.br" required type="email" onChange={(e) => setEmail(e.target.value)} />
+                                            <Input value={email} id="email" placeholder="jose.silva@mintecommerce.com.br" required type="email" onChange={(e) => setEmail(e.target.value)} />
                                         </div>
                                         <div className="grid gap-2">
                                             <Label htmlFor="senha">Senha</Label>
-                                            <Input id="senha" required type="password" onChange={(e) => setSenha(e.target.value)} />
+                                            <Input value={senha} id="senha" required type="password" onChange={(e) => setSenha(e.target.value)} />
                                         </div>
                                     </div>
                                     <div className="grid grid-cols-2 gap-4">
                                         <div className="grid gap-2">
                                             <Label htmlFor="data-nascimento">Data de Nascimento</Label>
-                                            <Input id="data-nascimento" placeholder="dd/mm/aaaa" required type="date" onChange={(e) => setDataNascimento(e.target.value)} />
+                                            <Input value={dataNascimento} id="data-nascimento" placeholder="dd/mm/aaaa" required type="date" onChange={(e) => setDataNascimento(e.target.value)} />
                                         </div>
                                         <div className="grid gap-2">
                                             <Label htmlFor="cpf">CPF/CNPJ</Label>
@@ -147,77 +151,78 @@ export default function CriarConta() {
                                     <div className="grid grid-cols-2 gap-4">
                                         <div className="grid gap-2">
                                             <Label htmlFor="telefone">Telefone</Label>
-                                            <Input id="telefone" placeholder="(00) 00000-0000" required onChange={(e) => setTelefone(e.target.value)} />
+                                            <Input value={telefone} id="telefone" placeholder="(00) 00000-0000" required onChange={(e) => setTelefone(e.target.value)} />
                                         </div>
                                     </div>
-                                    <Button className="w-full" variant="default" onClick={handleNextClick}>
+                                </div>
+                                <div className="mt-10">
+                                    <Button className="w-full" variant="default" onClick={() => handleClickTab("address")}>
                                         Próximo
                                     </Button>
-                                    <Button className="w-full" variant="outline">
-                                        Cadastrar com GitHub
-                                    </Button>
-                                </div>
-                                <div className="mt-4 text-center text-sm">
-                                    Já tem uma conta?
-                                    <Link className="underline" to="/entrar">
-                                        Entrar
-                                    </Link>
+                                    <div className="mt-4 text-center text-sm">
+                                        Já tem uma conta?
+                                        <Link className="underline" to="/entrar">
+                                            Entrar
+                                        </Link>
+                                    </div>
                                 </div>
                             </CardContent>
                         </Card>
                     </TabsContent>
                     <TabsContent value="address">
-                        <Card className="h-[25rem]">
+                        <Card className="h-[30rem]">
                             <CardHeader>
                                 <CardTitle className="text-xl">Endereço</CardTitle>
                                 <CardDescription>Insira seu endereço para concluir o cadastro</CardDescription>
                             </CardHeader>
                             <CardContent>
-                                <div className="grid gap-4">
-                                    <div className="grid grid-cols-2 gap-4">
-                                        <div className="grid gap-2">
-                                            <Label htmlFor="endereco">Endereço</Label>
-                                            <Input id="endereco" placeholder="Rua, Número" required onChange={(e) => setEndereco(e.target.value)} />
-                                        </div>
-                                        <div className="grid gap-2">
-                                            <Label htmlFor="complemento">Complemento</Label>
-                                            <Input id="complemento" placeholder="Apartamento, Casa, etc." onChange={(e) => setComplemento(e.target.value)} />
-                                        </div>
+                                <div className="grid grid-cols-2 gap-4">
+                                    <div className="grid gap-2">
+                                        <Label htmlFor="nome">Nome</Label>
+                                        <Input value={nomeEndereco} id="nome" placeholder="Casa, trabalho..." required onChange={(e) => setNomeEndereco(e.target.value)} />
                                     </div>
-                                    <div className="grid grid-cols-2 gap-4">
-                                        <div className="grid gap-2">
-                                            <Label htmlFor="cep">CEP</Label>
-                                            <Input id="cep" placeholder="00000-000" required onChange={(e) => setCep(e.target.value)} />
-                                        </div>
-                                        <div className="grid gap-2">
-                                            <Label htmlFor="cidade">Cidade</Label>
-                                            <Input id="cidade" placeholder="Sua cidade" required onChange={(e) => setCidade(e.target.value)} />
-                                        </div>
+                                    <div className="grid gap-2">
+                                        <Label htmlFor="cep">CEP</Label>
+                                        <Input value={cep} id="cep" placeholder="00000-000" required onChange={(e) => setCep(e.target.value)} />
                                     </div>
-                                    <div className="grid grid-cols-2 gap-4">
-                                        <div className="grid gap-2">
-                                            <Label htmlFor="estado">Estado</Label>
-                                            <Input id="estado" placeholder="Seu estado" required onChange={(e) => setEstado(e.target.value)} />
-                                        </div>
-                                        <div className="grid gap-2">
-                                            <Label htmlFor="pais">País</Label>
-                                            <Input id="pais" placeholder="Seu país" required onChange={(e) => setPais(e.target.value)} />
-                                        </div>
+                                    <div className="grid gap-2">
+                                        <Label htmlFor="rua">Rua</Label>
+                                        <Input value={rua} id="rua" placeholder="Rua" required onChange={(e) => setRua(e.target.value)} />
                                     </div>
-                                    <div className="flex gap-2">
-                                        <Button className="w-20" variant="outline" onClick={() => setActiveTab("info")}>
-                                            Voltar
-                                        </Button>
-                                        <Button className="w-full" type="submit">
-                                            Concluir cadastro
-                                        </Button>
+                                    <div className="grid gap-2">
+                                        <Label htmlFor="numero">Número</Label>
+                                        <Input value={numero} id="numero" placeholder="Número" required onChange={(e) => setNumero(e.target.value)} />
                                     </div>
+                                    <div className="grid gap-2">
+                                        <Label htmlFor="complemento">Complemento</Label>
+                                        <Input value={complemento} id="complemento" placeholder="Apartamento, Casa, etc." onChange={(e) => setComplemento(e.target.value)} />
+                                    </div>
+                                    <div className="grid gap-2">
+                                        <Label htmlFor="bairro">Bairro</Label>
+                                        <Input value={bairro} id="bairro" placeholder="Seu bairro" required onChange={(e) => setBairro(e.target.value)} />
+                                    </div>
+                                    <div className="grid gap-2">
+                                        <Label htmlFor="cidade">Cidade</Label>
+                                        <Input value={cidade} id="cidade" placeholder="Sua cidade" required onChange={(e) => setCidade(e.target.value)} />
+                                    </div>
+                                    <div className="grid gap-2">
+                                        <Label htmlFor="estado">Estado</Label>
+                                        <Input value={estado} id="estado" placeholder="Seu estado" required onChange={(e) => setEstado(e.target.value)} />
+                                    </div>
+                                </div>
+                                <div className="flex gap-2 mt-10">
+                                    <Button className="w-20" variant="outline" onClick={() => handleClickTab("info")}>
+                                        Voltar
+                                    </Button>
+                                    <Button className="w-full" type="submit">
+                                        Concluir cadastro
+                                    </Button>
                                 </div>
                             </CardContent>
                         </Card>
                     </TabsContent>
                 </Tabs>
             </form>
-        </div>
+        </div >
     )
 }

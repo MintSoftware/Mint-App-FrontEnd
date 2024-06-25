@@ -6,12 +6,14 @@ import Api from "@/infra/helpers/api"
 import { Produto } from "@/types/Produto"
 import { PlusIcon, ShoppingCartIcon, StarIcon } from "lucide-react"
 import { useEffect, useState } from "react"
+import { useNavigate } from "react-router-dom"
 import { toast } from "sonner"
 
 export default function PainelProduto() {
     const [loading, setIsLoading] = useState(false)
     const [produto, setProduto] = useState<Produto>()
     const [temEstoque, setTemEstoque] = useState(true)
+    const navigate = useNavigate()
 
     useEffect(() => {
         recuperarProduto()
@@ -21,9 +23,9 @@ export default function PainelProduto() {
         try {
             setIsLoading(true)
             const idProduto = window.location.pathname.split("/").pop()
-            const { data } = await Api.get(`produto/listar/${idProduto}`);
-            setProduto(data);
-            setIsLoading(false);
+            const { data } = await Api.get(`produto/listar/${idProduto}`)
+            setProduto(data)
+            setIsLoading(false)
             if (data.quantidadeestoque < 1) setTemEstoque(false)
         } catch (error) {
             toast.error("Erro ao buscar produto!")
@@ -45,6 +47,13 @@ export default function PainelProduto() {
 
     const alterarQuantItem = (value: number) => {
         if (produto) produto.quantidade = value
+    }
+
+    const comprarAgora = (produto: Produto) => {
+        if (produto.quantidade < 1) produto.quantidade = 1;
+        if (produto.quantidade > produto.quantidadeestoque) return toast.error("Quantidade indisponível no estoque!");
+        const usuarioJson = localStorage.getItem("UsuarioLogado");
+        (usuarioJson) ? navigate("/finalizarpedido", { state: { produtos: [produto] } }) : navigate("/entrar", { state: { produtos: [produto] }});
     }
 
     return (
@@ -99,17 +108,14 @@ export default function PainelProduto() {
                         <div className="flex flex-col gap-4">
                             <h1 className="font-bold text-3xl lg:text-4xl">{produto?.nome}</h1>
                             <div>
-                                <p>
-                                    {produto?.descricao}
-                                </p>
+                                <p>{produto?.descricao}</p>
                             </div>
                             <div className="flex items-center gap-4"></div>
                             <div className="flex items-center gap-0.5">
                                 {Array.from({ length: 5 }, (_, index) => (
                                     <StarIcon
                                         key={index}
-                                        className={`w-5 h-5 ${(Math.random() * 10) > 5 ? 'fill-primary' : 'fill-muted stroke-muted-foreground'}
-                                        ) ? 'fill-primary' : 'fill-muted stroke-muted-foreground'}`}
+                                        className={`w-5 h-5 ${index <= Math.floor(Math.random() * 5) + 1 ? 'fill-primary' : 'fill-muted stroke-muted-foreground'}`}
                                     />
                                 ))}
                             </div>
@@ -152,7 +158,7 @@ export default function PainelProduto() {
                                 <PlusIcon className="w-5 h-5" />
                                 Adicionar ao carrinho
                             </Button>
-                            <Button disabled={!temEstoque} size="lg" className="gap-2">
+                            <Button disabled={!temEstoque} onClick={() => comprarAgora(produto as Produto)} size="lg" className="gap-2">
                                 <ShoppingCartIcon className="w-5 h-5" />
                                 Comprar agora
                             </Button>

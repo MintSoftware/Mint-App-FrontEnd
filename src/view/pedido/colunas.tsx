@@ -6,7 +6,8 @@ import { toast } from "@/components/ui/use-toast";
 import Api from "@/infra/helpers/api";
 import { Pedido } from "@/types/Pedido";
 import { ColumnDef } from "@tanstack/react-table";
-import { EllipsisVerticalIcon } from "lucide-react";
+import { EllipsisVerticalIcon, SearchIcon } from "lucide-react";
+import { Link } from "react-router-dom";
 
 const inativar = async (pedido: Pedido) => {
     if (!confirm("Tem certeza que deseja inativar este pedido?")) return;
@@ -18,7 +19,7 @@ const inativar = async (pedido: Pedido) => {
             description: "Pedido inativado com sucesso.",
             variant: "success",
         });
-    } catch (error : any) {
+    } catch (error: any) {
         console.log("Erro ao inativar o pedido: ", error);
         toast({
             title: "Erro!",
@@ -38,7 +39,7 @@ const ativar = async (pedido: Pedido) => {
             description: "Pedido ativado com sucesso.",
             variant: "success",
         });
-    } catch (error : any) {
+    } catch (error: any) {
         console.log("Erro ao ativar o pedido: ", error);
         toast({
             title: "Erro!",
@@ -50,19 +51,30 @@ const ativar = async (pedido: Pedido) => {
 
 export const colunas = (): ColumnDef<Pedido>[] => [
     {
-        accessorKey: 'id',
-        header: ({ column }) => (
-            <Cabecalho column={column} title="ID" />
+        id: 'verPedido',
+        size: 1,
+        cell: ({ row }) => (
+            <Link to={`/pedido/${row.original.id}`}>
+                <Button variant="ghost" className="h-8 w-8 p-0">
+                    <SearchIcon className="h-4 w-4" />
+                </Button>
+            </Link>
         ),
     },
     {
-        accessorKey: 'dataPedido',
+        accessorKey: 'mumeroPedido',
         header: ({ column }) => (
-            <Cabecalho column={column} title="Data do Pedido" />
+            <Cabecalho column={column} title="Numero Pedido" />
+        ),
+    },
+    {
+        accessorKey: 'status',
+        header: ({ column }) => (
+            <Cabecalho column={column} title="Status" />
         ),
         cell: ({ row }) => (
             <Badge className='w-[60px] justify-center' variant={row.original.status ? "outline" : "secondary"}>
-                {row.original.status.toString() === '1' ? "Ativo" : "Inativo"}
+                {row.original.status.toString() === '0' ? "Digitado" : row.original.status.toString() === '1' ? "Pendente" : row.original.status.toString() === '2' ? "Em Andamento" : row.original.status.toString() === '3' ? "Finalizado" : "Cancelado"}
             </Badge>
         ),
     },
@@ -71,17 +83,16 @@ export const colunas = (): ColumnDef<Pedido>[] => [
         header: ({ column }) => (
             <Cabecalho column={column} title="Valor Total" />
         ),
-    },
-    {
-        accessorKey: 'usuario',
-        header: ({ column }) => (
-            <Cabecalho column={column} title="Usuário" />
+        cell: ({ row }) => (
+            <span>R$ {row.original.valorTotal.toFixed(2)}</span>
         ),
-    },
-    {
-        accessorKey: 'produto',
+    }, {
+        accessorKey: 'dataPedido',
         header: ({ column }) => (
-            <Cabecalho column={column} title="Produto" />
+            <Cabecalho column={column} title="Data Pedido" />
+        ),
+        cell: ({ row }) => (
+            <span>{new Date(row.original.dataPedido).toLocaleDateString()}</span>
         ),
     },
     {

@@ -6,6 +6,7 @@ import { criaLogDev } from '../interceptors/criaLogDev';
 const Api = axios.create({
     baseURL: "https://mintecommerce-backend.onrender.com",
     //baseURL: "http://localhost:8080",
+    //baseURL: "https://mintecommerce-backend.onrender.com",
     headers: {
         'Content-Type': 'application/json',
         "Access-Control-Allow-Origin": "*",
@@ -16,9 +17,5 @@ const Api = axios.create({
 applyErrorHandler(Api);
 
 criaLogDev(Api, 'ApiGeral');
-
-setInterval(() => {  //crime para não deixar o backend entrar em hibernação, favor nao relar nesse bloco
-    Api.get('/ping');
-}, 1000 * 60 * 3);
 
 export default Api;

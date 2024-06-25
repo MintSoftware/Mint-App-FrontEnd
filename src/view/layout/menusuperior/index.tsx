@@ -10,10 +10,11 @@ import { Produto } from "@/types/Produto";
 import { Usuario } from "@/types/Usuario";
 import { ArrowLeftIcon, BaggageClaimIcon, MinusIcon, PlusIcon, ShoppingCartIcon, TrashIcon } from "lucide-react";
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 
 export default function MenuSuperior() {
+    const navigate = useNavigate()
     const [carrinho, setCarrinho] = useState<Produto[]>([]);
     const [usuarioLogado, setUsuarioLogado] = useState<Usuario>();
 
@@ -26,7 +27,7 @@ export default function MenuSuperior() {
     });
 
     const recuperarCarrinho = () => {
-        const carrinhoJson = localStorage.getItem("Carrinho");
+        const carrinhoJson = localStorage.getItem("Carrinho") || "[]";
         if (carrinhoJson) {
             setCarrinho(JSON.parse(carrinhoJson));
         }
@@ -49,7 +50,7 @@ export default function MenuSuperior() {
             }
             return item;
         });
-        if(produto.quantidade > produto.quantidadeestoque) return toast.error("Quantidade indisponível no estoque!");
+        if (produto.quantidade > produto.quantidadeestoque) return toast.error("Quantidade indisponível no estoque!");
         setCarrinho(carrinhoAtualizado);
         localStorage.setItem("Carrinho", JSON.stringify(carrinhoAtualizado));
     }
@@ -57,7 +58,7 @@ export default function MenuSuperior() {
     const removerQuantidade = (produto: Produto) => {
         const carrinhoAtualizado = carrinho.map((item) => {
             if (item.id === produto.id) {
-                if(item.quantidade <= 1) return item;
+                if (item.quantidade <= 1) return item;
                 item.quantidade--;
             }
             return item;
@@ -70,11 +71,16 @@ export default function MenuSuperior() {
         const carrinhoAtualizado = carrinho.filter((item) => item.id !== produto.id);
         setCarrinho(carrinhoAtualizado);
         localStorage.setItem("Carrinho", JSON.stringify(carrinhoAtualizado));
+        toast.success("Produto removido do carrinho!");
     }
 
     const sair = () => {
         localStorage.removeItem("UsuarioLogado");
         setUsuarioLogado(undefined);
+    }
+
+    const finalizarPedido = () => {
+        navigate("/finalizarpedido", { state: { produtos: carrinho } })
     }
 
     return (
@@ -99,20 +105,9 @@ export default function MenuSuperior() {
                                 </Button>
                             </DropdownMenuTrigger>
                             <DropdownMenuContent align="end">
-                                <DropdownMenuItem>
-                                    <Link to="/perfil">
+                                <DropdownMenuItem asChild>
+                                    <Link className="cursor-pointer" to="/perfil">
                                         Minha conta
-                                    </Link>
-                                </DropdownMenuItem>
-                                <DropdownMenuSeparator />
-                                <DropdownMenuItem>
-                                    <Link to="/configuracoes">
-                                        Configurações
-                                    </Link>
-                                </DropdownMenuItem>
-                                <DropdownMenuItem>
-                                    <Link to="/ajuda">
-                                        Ajuda
                                     </Link>
                                 </DropdownMenuItem>
                                 <DropdownMenuSeparator />
@@ -173,55 +168,57 @@ export default function MenuSuperior() {
                             </SheetHeader>
                             <ScrollArea className=" py-5 px-3 w-full h-[49rem]">
                                 <div className="flex flex-col gap-5 w-full h-full">
-                                {carrinho.map((produto) => (
-                                    <Card key={produto.id} className="w-full max-w-sm p-6 grid gap-6">
-                                        <div className="grid grid-cols-[100px_1fr] gap-4">
-                                            <img
-                                                src={'logo.png'}
-                                                alt="Product Image"
-                                                width={120}
-                                                height={120}
-                                                className="aspect-square object-cover rounded-md"
-                                            />
-                                            <div className="grid gap-2">
-                                                <div className="flex items-center justify-between">
-                                                    <h3 className="font-semibold">{produto.nome}</h3>
-                                                    <div className="text-2xl font-bold">{produto.preco}</div>
-                                                </div>
-                                                <p className="text-sm text-gray-500 dark:text-gray-400">
-                                                    {produto.descricao}
-                                                </p>
-                                                <div className="flex items-center gap-4">
-                                                    <Button onClick={() => removerQuantidade(produto)} variant="outline" size="icon">
-                                                        <MinusIcon className="h-4 w-4" />
-                                                    </Button>
-                                                    <div className="text-lg font-medium">{produto.quantidade}</div>
-                                                    <Button onClick={() => adicionarQuantidade(produto)} variant="outline" size="icon">
-                                                        <PlusIcon className="h-4 w-4" />
-                                                    </Button>
-                                                    <Button onClick={() => removerDoCarrinho(produto)} variant={"destructive"}>
-                                                        <TrashIcon className="h-4 w-4" />
-                                                    </Button>
+                                    {carrinho.map((produto) => (
+                                        <Card key={produto.id} className="w-full max-w-sm p-6 grid gap-6">
+                                            <div className="grid grid-cols-[100px_1fr] gap-4">
+                                                <img
+                                                    src={'logo.png'}
+                                                    alt="Product Image"
+                                                    width={120}
+                                                    height={120}
+                                                    className="aspect-square object-cover rounded-md"
+                                                />
+                                                <div className="grid gap-2">
+                                                    <div className="flex items-center justify-between">
+                                                        <h3 className="font-semibold">{produto.nome}</h3>
+                                                        <div className="text-2xl font-bold">{produto.preco}</div>
+                                                    </div>
+                                                    <p className="text-sm text-gray-500 dark:text-gray-400">
+                                                        {produto.descricao}
+                                                    </p>
+                                                    <div className="flex items-center gap-4">
+                                                        <Button onClick={() => removerQuantidade(produto)} variant="outline" size="icon">
+                                                            <MinusIcon className="h-4 w-4" />
+                                                        </Button>
+                                                        <div className="text-lg font-medium">{produto.quantidade}</div>
+                                                        <Button onClick={() => adicionarQuantidade(produto)} variant="outline" size="icon">
+                                                            <PlusIcon className="h-4 w-4" />
+                                                        </Button>
+                                                        <Button onClick={() => removerDoCarrinho(produto)} variant={"destructive"}>
+                                                            <TrashIcon className="h-4 w-4" />
+                                                        </Button>
+                                                    </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                    </Card>
-                                ))}
+                                        </Card>
+                                    ))}
                                 </div>
                             </ScrollArea>
-                            <SheetFooter className="items-end">
-                                <SheetClose asChild>
-                                    <Button variant={"outline"} className="gap-2">
-                                        <ArrowLeftIcon size={16} />
-                                        Voltar
-                                    </Button>
-                                </SheetClose>
-                                <SheetClose asChild>
-                                    <Button className="w-[70%] gap-2" type="submit">
-                                        <BaggageClaimIcon size={16} />
-                                        Finalizar Pedido
-                                    </Button>
-                                </SheetClose>
+                            <SheetFooter>
+                                <div className="w-full flex justify-between gap-2">
+                                    <SheetClose asChild>
+                                        <Button variant={"outline"} className="gap-2">
+                                            <ArrowLeftIcon size={16} />
+                                            Voltar
+                                        </Button>
+                                    </SheetClose>
+                                    <SheetClose asChild>
+                                            <Button onClick={finalizarPedido} className=" gap-2" type="submit">
+                                                <BaggageClaimIcon size={16} />
+                                                Finalizar Pedido
+                                            </Button>
+                                    </SheetClose>
+                                </div>
                             </SheetFooter>
                         </SheetContent>
                     </Sheet>
@@ -229,4 +226,4 @@ export default function MenuSuperior() {
             </div >
         </div >
     );
-};
+}

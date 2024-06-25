@@ -10,13 +10,18 @@ import { Produto } from "@/types/Produto";
 import { Usuario } from "@/types/Usuario";
 import { ArrowLeftIcon, BaggageClaimIcon, MinusIcon, PlusIcon, ShoppingCartIcon, TrashIcon } from "lucide-react";
 import { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 
 export default function MenuSuperior() {
     const navigate = useNavigate()
     const [carrinho, setCarrinho] = useState<Produto[]>([]);
     const [usuarioLogado, setUsuarioLogado] = useState<Usuario>();
+    const location = useLocation();
+
+    useEffect(() => {
+        recuperarUsuarioLogado();
+    }, [location.state]);
 
     useEffect(() => {
         recuperarUsuarioLogado();
@@ -37,7 +42,6 @@ export default function MenuSuperior() {
         const usuario = localStorage.getItem("UsuarioLogado");
         if (usuario) {
             setUsuarioLogado(JSON.parse(usuario));
-            toast.success("Logado com sucesso!");
         }
         return null;
     };

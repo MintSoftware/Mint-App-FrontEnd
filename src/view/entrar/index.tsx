@@ -29,7 +29,8 @@ export default function Entrar() {
             const { data } = await Api.post("usuario/entrar", dto);
             const UsuarioLogado = JSON.stringify(data);
             localStorage.setItem("UsuarioLogado", UsuarioLogado);
-            (continuarParaVenda) ? navigate("/finalizarpedido", { state: { produtos: produtos } }) : window.location.href = "/";
+            toast.success("Logado com sucesso!");
+            (continuarParaVenda) ? navigate("/finalizarpedido", { state: { produtos: produtos } }) : navigate("/", { state: true });
         } catch (error: any) {
             toast.error("Erro ao logar!");
         }

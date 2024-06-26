@@ -5,11 +5,117 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { useState } from "react"
+import Api from "@/infra/helpers/api"
+import { Endereco } from "@/types/Endereco"
+import { Usuario } from "@/types/Usuario"
+import { set } from "date-fns"
+import { PlusIcon, TrashIcon } from "lucide-react"
+import { useEffect, useState } from "react"
 import { Link } from "react-router-dom"
+import { toast } from "sonner"
 
 export default function Perfil() {
     const [activeTab, setActiveTab] = useState("general")
+    const [usuario, setUsuario] = useState<Usuario>();
+    const [listaEnderecos, setListaEnderecos] = useState<Endereco[]>();
+    const [expandirDadosEndereco, setExpandirDadosEndereco] = useState(false);
+    const [nomeEndereco, setNomeEndereco] = useState("");
+    const [cep, setCep] = useState("");
+    const [rua, setRua] = useState("");
+    const [numero, setNumero] = useState("");
+    const [complemento, setComplemento] = useState("");
+    const [bairro, setBairro] = useState("");
+    const [cidade, setCidade] = useState("");
+    const [estado, setEstado] = useState("");
+    const [enderecoSelecionado, setEnderecoSelecionado] = useState<Endereco>();
+    const [nome, setNome] = useState("");
+    const [senha, setSenha] = useState("");
+    const [email, setEmail] = useState("");
+    const [cpfCnpj, setCpfCnpj] = useState("");
+
+    useEffect(() => {
+        recuperarUsuarioLogado();
+    }, [])
+
+    const recuperarUsuarioLogado = async () => {
+        const usuarioJson = localStorage.getItem("UsuarioLogado");
+        if (usuarioJson) {
+            setUsuario(JSON.parse(usuarioJson));
+            setListaEnderecos(JSON.parse(usuarioJson).enderecos);
+            setNome(usuario?.nome ?? "");
+            setSenha(usuario?.senha ?? "");
+            setEmail(usuario?.email ?? "");
+            setCpfCnpj(usuario?.cpf ?? "");
+        }
+    }
+
+    useEffect(() => {
+        if (enderecoSelecionado) {
+            setNomeEndereco(enderecoSelecionado.nome);
+            setCep(enderecoSelecionado.cep);
+            setRua(enderecoSelecionado.rua);
+            setNumero(enderecoSelecionado.numero);
+            setComplemento(enderecoSelecionado.complemento);
+            setBairro(enderecoSelecionado.bairro);
+            setCidade(enderecoSelecionado.cidade);
+            setEstado(enderecoSelecionado.estado);
+        }
+    }, [enderecoSelecionado])
+
+    const cadastrarNovoEndereco = async () => {
+        if (!nomeEndereco || !cep || !rua || !numero || !bairro || !cidade || !estado) {
+            toast.error("Preencha todos os campos obrigatórios!");
+            return;
+        }
+
+        const endereco = {
+            nome: nomeEndereco,
+            cep,
+            rua,
+            numero,
+            complemento,
+            bairro,
+            cidade,
+            estado,
+            usuario
+        }
+
+        toast.promise(Api.put(`endereco/editar/${enderecoSelecionado?.id}`, endereco).then(() => {
+            atualizarUsuario();
+        }).catch(() => {
+            toast.error("Erro ao recuperar usuario após cadastrar o endereco");
+        }), {
+            loading: "Salvando...",
+            success: "Endereço cadastrado com sucesso!",
+            error: "Erro ao cadastrar endereço"
+        });
+    }
+
+    const atualizarUsuario = async () => {
+        const dto = {
+            email: usuario?.email,
+            senha: usuario?.senha
+        }
+
+        const { data } = await Api.post("usuario/entrar", dto);
+        const UsuarioLogado = JSON.stringify(data);
+        localStorage.setItem("UsuarioLogado", UsuarioLogado);
+        recuperarUsuarioLogado();
+        limparDadosEndereco();
+        setExpandirDadosEndereco(false);
+    }
+
+    const limparDadosEndereco = () => {
+        setNomeEndereco("");
+        setCep("");
+        setRua("");
+        setNumero("");
+        setComplemento("");
+        setBairro("");
+        setCidade("");
+        setEstado("");
+    }
+
     return (
         <Card className="w-full max-w-lg mt-[10rem]">
             <CardHeader>
@@ -30,49 +136,100 @@ export default function Perfil() {
                                 <div className="grid grid-cols-2 gap-6">
                                     <div className="space-y-2">
                                         <Label htmlFor="cpf-cnpj">CPF/CNPJ</Label>
-                                        <Input id="cpf-cnpj" placeholder="Digite seu CPF ou CNPJ" />
+                                        <Input value={cpfCnpj} id="cpf-cnpj" placeholder="Digite seu CPF ou CNPJ" onChange={(e) => setCpfCnpj(e.target.value)} />
                                     </div>
                                     <div className="space-y-2">
                                         <Label htmlFor="name">Nome</Label>
-                                        <Input id="name" placeholder="Digite seu nome" />
+                                        <Input value={nome} id="name" placeholder="Digite seu nome" onChange={(e) => setNome(e.target.value)}/>
                                     </div>
                                 </div>
                                 <div className="grid grid-cols-2 gap-6">
                                     <div className="space-y-2">
                                         <Label htmlFor="surname">Sobrenome</Label>
-                                        <Input id="surname" placeholder="Digite seu sobrenome" />
+                                        <Input type="password" value={senha} id="surname" placeholder="Digite seu sobrenome" onChange={(e) => setSenha(e.target.value)}/>
                                     </div>
                                     <div className="space-y-2">
                                         <Label htmlFor="email">E-mail</Label>
-                                        <Input id="email" type="email" placeholder="Digite seu e-mail" />
+                                        <Input value={email} id="email" type="email" placeholder="Digite seu e-mail" onChange={(e) => setEmail(e.target.value)}/>
                                     </div>
                                 </div>
                             </CardContent>
                         </div>
                     </TabsContent>
                     <TabsContent value="address">
-                        <CardContent className="grid gap-6">
-                            <div className="grid grid-cols-2 gap-6">
-                                <div className="space-y-2">
-                                    <Label htmlFor="phone">Telefone</Label>
-                                    <Input id="phone" placeholder="Digite seu telefone" />
+                        <CardContent className="flex flex-col justify-center">
+                            <div className="flex gap-6 mt-5">
+                                <div className="flex max-w-[18rem] justify-center">
+                                    <Select onValueChange={(value) => setEnderecoSelecionado(JSON.parse(value))}>
+                                        <SelectTrigger className="flex w-[20rem]">
+                                            <SelectValue className="flex w-full" placeholder="Selecione um endereço" />
+                                        </SelectTrigger>
+                                        <SelectContent className="cursor-pointer">
+                                            {listaEnderecos?.map((endereco) => (
+                                                <SelectItem key={endereco.id} value={JSON.stringify(endereco)}>
+                                                    {endereco.nome} - {endereco.rua}, {endereco.numero} - {endereco.bairro}, {endereco.cidade} - {endereco.estado}, {endereco.cep}
+                                                </SelectItem>
+                                            ))}
+                                        </SelectContent>
+                                    </Select>
                                 </div>
-                                <div className="space-y-2">
-                                    <Label htmlFor="address">Endereço</Label>
-                                    <Input id="address" placeholder="Digite seu endereço" />
+                                <div className="flex gap-2">
+                                    <Button variant={"destructive"}>
+                                        <TrashIcon className="w-4 h-4" />
+                                    </Button>
+                                    <Button variant={"outline"} onClick={() => setExpandirDadosEndereco(true)} >Editar</Button>
                                 </div>
                             </div>
-                            <div className="grid grid-cols-2 gap-6">
-                                <div className="space-y-2">
-                                    <Label htmlFor="complement">Complemento</Label>
-                                    <Input id="complement" placeholder="Digite o complemento" />
+                            {expandirDadosEndereco && <div className="border p-5 rounded-lg mt-5">
+                                <div className="grid grid-cols-2 gap-4">
+                                    <div className="grid gap-2">
+                                        <Label htmlFor="nome">Nome</Label>
+                                        <Input value={nomeEndereco} id="nome" placeholder="Casa, trabalho..." required onChange={(e) => setNomeEndereco(e.target.value)} />
+                                    </div>
+                                    <div className="grid gap-2">
+                                        <Label htmlFor="cep">CEP</Label>
+                                        <Input value={cep} id="cep" placeholder="00000-000" required onChange={(e) => setCep(e.target.value)} />
+                                    </div>
+                                    <div className="grid gap-2">
+                                        <Label htmlFor="rua">Rua</Label>
+                                        <Input value={rua} id="rua" placeholder="Rua" required onChange={(e) => setRua(e.target.value)} />
+                                    </div>
+                                    <div className="grid gap-2">
+                                        <Label htmlFor="numero">Número</Label>
+                                        <Input value={numero} id="numero" placeholder="Número" required onChange={(e) => setNumero(e.target.value)} />
+                                    </div>
+                                    <div className="grid gap-2">
+                                        <Label htmlFor="complemento">Complemento</Label>
+                                        <Input value={complemento} id="complemento" placeholder="Apartamento, Casa, etc." onChange={(e) => setComplemento(e.target.value)} />
+                                    </div>
+                                    <div className="grid gap-2">
+                                        <Label htmlFor="bairro">Bairro</Label>
+                                        <Input value={bairro} id="bairro" placeholder="Seu bairro" required onChange={(e) => setBairro(e.target.value)} />
+                                    </div>
+                                    <div className="grid gap-2">
+                                        <Label htmlFor="cidade">Cidade</Label>
+                                        <Input value={cidade} id="cidade" placeholder="Sua cidade" required onChange={(e) => setCidade(e.target.value)} />
+                                    </div>
+                                    <div className="grid gap-2">
+                                        <Label htmlFor="estado">Estado</Label>
+                                        <Input value={estado} id="estado" placeholder="Seu estado" required onChange={(e) => setEstado(e.target.value)} />
+                                    </div>
                                 </div>
-                                <div className="space-y-2">
-                                    <Label htmlFor="zip-code">CEP</Label>
-                                    <Input id="zip-code" placeholder="Digite seu CEP" />
+                                <div className="flex justify-end mt-3 gap-3">
+                                    <Button variant={"outline"} onClick={() => setExpandirDadosEndereco(false)}>Cancelar</Button>
+                                    <Button onClick={() => cadastrarNovoEndereco()}><PlusIcon /></Button>
                                 </div>
-                            </div>
-                            <div className="grid grid-cols-2 gap-6">
+                            </div>}
+                        </CardContent>
+                    </TabsContent>
+                </Tabs>
+            </CardHeader>
+            <CardFooter className="flex justify-end">
+                <Link to={"/"}>
+                    <Button>Salvar</Button>
+                </Link>
+            </CardFooter>
+            {/* <div className="grid grid-cols-2 gap-6">
                                 <div className="space-y-2">
                                     <Label htmlFor="city">Cidade</Label>
                                     <Input id="city" placeholder="Digite sua cidade" />
@@ -132,16 +289,7 @@ export default function Perfil() {
                                         <SelectItem value="VE">Venezuela</SelectItem>
                                     </SelectContent>
                                 </Select>
-                            </div>
-                        </CardContent>
-                    </TabsContent>
-                </Tabs>
-            </CardHeader>
-            <CardFooter className="flex justify-end">
-                <Link to={"/"}>
-                    <Button>Salvar</Button>
-                </Link>
-            </CardFooter>
+                            </div> */}
         </Card>
     )
 }

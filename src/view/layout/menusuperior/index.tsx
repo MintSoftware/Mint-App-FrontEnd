@@ -84,6 +84,7 @@ export default function MenuSuperior() {
     }
 
     const finalizarPedido = () => {
+        if(carrinho.length === 0) return toast.error("Adicione produtos ao carrinho para finalizar o pedido!");
         const usuarioJson = localStorage.getItem("UsuarioLogado");
         (usuarioJson) ? navigate("/finalizarpedido", { state: { produtos: carrinho } }) : navigate("/entrar", { state: { produtos: carrinho } });
     }

@@ -121,7 +121,7 @@ export default function FinalizacaoPedido() {
 
         const dto = {
             usuarioId: usuario?.id,
-            metodoPagamento: "cartao",
+            metodoPagamento: metodoPagto,
             dataPedido: new Date(),
             enderecoEntrega: enderecoPedido,
             itens: produtos.map(item => ({

@@ -7,7 +7,7 @@ export type Usuario = {
     email: string,
     senha: string,
     dataNascimento: Date,
-    cpf: string,
+    cpfcnpj: string,
     telefone: string,
     enderecos: Endereco[],
 }

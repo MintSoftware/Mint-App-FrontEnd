@@ -8,10 +8,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import Api from "@/infra/helpers/api"
 import { Endereco } from "@/types/Endereco"
 import { Usuario } from "@/types/Usuario"
-import { set } from "date-fns"
 import { PlusIcon, TrashIcon } from "lucide-react"
 import { useEffect, useState } from "react"
-import { Link } from "react-router-dom"
 import { toast } from "sonner"
 
 export default function Perfil() {
@@ -31,7 +29,6 @@ export default function Perfil() {
     const [nome, setNome] = useState("");
     const [senha, setSenha] = useState("");
     const [email, setEmail] = useState("");
-    const [cpfCnpj, setCpfCnpj] = useState("");
     const [cpfcnpjFormatado, setCpfCnpjFormatado] = useState("");
     const [telefone, setTelefone] = useState("");
     const [dataNascimento, setDataNascimento] = useState("");
@@ -58,8 +55,8 @@ export default function Perfil() {
         setTelefone(telefoneFormatado);
     };
 
-    const formatarCfpCnpj = (event: React.ChangeEvent<HTMLInputElement>) => {
-        let { value } = event.target;
+    const formatarCfpCnpj = (event: React.ChangeEvent<HTMLInputElement>, cpfcnpj? : any) => {
+        let { value } = cpfcnpj ? { value: cpfcnpj } : event.target;
         value = value.replace(/\D/g, '');
 
         if (value.length <= 11) {
@@ -85,7 +82,6 @@ export default function Perfil() {
     const recuperarUsuarioLogado = async () => {
         const usuarioJson = localStorage.getItem("UsuarioLogado");
         if (usuarioJson) {
-            debugger
             setUsuario(JSON.parse(usuarioJson));
             setListaEnderecos(JSON.parse(usuarioJson).enderecos);
             setNome(JSON.parse(usuarioJson).nome);
@@ -93,8 +89,8 @@ export default function Perfil() {
             setEmail(JSON.parse(usuarioJson).email);
             setSenha(JSON.parse(usuarioJson).senha);
             setDataNascimento(JSON.parse(usuarioJson).dataNascimento);
-            setCpfCnpj(JSON.parse(usuarioJson).cpf);
             setTelefone(JSON.parse(usuarioJson).telefone);
+            formatarCfpCnpj('' as any, JSON.parse(usuarioJson).cpfcnpj);
         }
     }
 
@@ -166,31 +162,42 @@ export default function Perfil() {
     }
 
     const salvarAlteracoes = async () => {
-        debugger
-        if (!nome || !sobrenome || !email || !senha || !dataNascimento || !cpfcnpjFormatado || !telefone) {
-            toast.error("Preencha todos os campos obrigatórios!");
-            return;
-        }
+
 
         const dto = {
+            id: usuario?.id,
             nome,
             sobrenome,
             email,
             senha,
             dataNascimento,
-            cpf: cpfcnpjFormatado,
-            telefone
+            cpfcnpj: cpfcnpjFormatado,
+            telefone,
+            enderecos: listaEnderecos
         }
 
         toast.promise(Api.put(`usuario/editar/${usuario?.id}`, dto).then(() => {
-            recuperarUsuarioLogado();
+            localStorage.setItem("UsuarioLogado", JSON.stringify(dto));
+            atualizarUsuario();
             window.location.href = "/";
         }).catch(() => {
-            toast.error("Erro ao recuperar usuario após cadastrar o endereco");
+            return toast.error("Erro ao atualizar dados cadastrais");
         }), {
             loading: "Salvando...",
             success: "Dados cadastrais atualizados com sucesso!",
             error: "Erro ao atualizar dados cadastrais"
+        });
+    }
+
+    const deletarEndereco = async () => {
+        toast.promise(Api.delete(`endereco/deletar/${enderecoSelecionado?.id}`).then(() => {
+            atualizarUsuario();
+        }).catch(() => {
+            toast.error("Erro ao deletar endereço");
+        }), {
+            loading: "Deletando...",
+            success: "Endereço deletado com sucesso!",
+            error: "Erro ao deletar endereço"
         });
     }
 
@@ -270,7 +277,7 @@ export default function Perfil() {
                                     </Select>
                                 </div>
                                 <div className="flex gap-2">
-                                    <Button variant={"destructive"}>
+                                    <Button onClick={deletarEndereco} variant={"destructive"}>
                                         <TrashIcon className="w-4 h-4" />
                                     </Button>
                                     <Button variant={"outline"} onClick={() => setExpandirDadosEndereco(true)} >Editar</Button>

@@ -3,13 +3,17 @@ import { ToastAction } from "@/components/ui/toast";
 import { useToast } from "@/components/ui/use-toast";
 import Api from "@/infra/helpers/api";
 import { Produto } from "@/types/Produto";
+import { Usuario } from "@/types/Usuario";
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import colunas from "./colunas";
 
 
 export default function Pedido() {
     const [pedido, setPedido] = useState<Produto[]>([]);
     const [loading, setLoading] = useState(false);
+    const [usuario, setUsuario] = useState<Usuario>();
+    const navigate = useNavigate();
     const { toast } = useToast();
 
     useEffect(() => {
@@ -19,6 +23,9 @@ export default function Pedido() {
     const buscarPedido = async () => {
         try {
           setLoading(true);
+          const usuarioJson = localStorage.getItem("UsuarioLogado");
+          if (!usuarioJson) navigate("/entrar");
+
           const { data } = await Api.get('pedido/listar');
           setPedido(data);
           setLoading(false);

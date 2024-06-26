@@ -322,8 +322,8 @@ export default function FinalizacaoPedido() {
                                             </Select>
                                         </div>
                                         <div className="grid gap-2">
-                                            <Label htmlFor="cvc">CVC</Label>
-                                            <Input id="cvc" placeholder="CVC" />
+                                            <Label htmlFor="cvv">CVV</Label>
+                                            <Input id="cvv" placeholder="cvv" />
                                         </div>
                                     </div>
                                 </div>}

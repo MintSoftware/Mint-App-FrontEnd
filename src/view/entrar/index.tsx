@@ -81,9 +81,6 @@ export default function Entrar() {
                             <div className="grid gap-2">
                                 <div className="flex items-center">
                                     <Label htmlFor="password">Senha</Label>
-                                    <Link to="/recuperarsenha" className="ml-auto inline-block text-sm underline">
-                                        Esqueceu sua senha?
-                                    </Link>
                                 </div>
                                 <Input id="password" type="password" placeholder="senha" required onChange={(e) => setSenha(e.target.value)} />
                             </div>

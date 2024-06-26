@@ -32,20 +32,69 @@ export default function Perfil() {
     const [senha, setSenha] = useState("");
     const [email, setEmail] = useState("");
     const [cpfCnpj, setCpfCnpj] = useState("");
+    const [cpfcnpjFormatado, setCpfCnpjFormatado] = useState("");
+    const [telefone, setTelefone] = useState("");
+    const [dataNascimento, setDataNascimento] = useState("");
+    const [sobrenome, setSobrenome] = useState("");
 
     useEffect(() => {
         recuperarUsuarioLogado();
     }, [])
 
+    const formatarTelefone = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const telefone = event.target.value;
+        let telefoneFormatado = telefone.replace(/\D/g, "");
+        if (telefoneFormatado.length <= 11) {
+            telefoneFormatado = telefoneFormatado.replace(
+                /^(\d{2})(\d{5})(\d{4})$/,
+                "($1) $2-$3"
+            );
+        } else if (telefoneFormatado.length <= 10) {
+            telefoneFormatado = telefoneFormatado.replace(
+                /^(\d{2})(\d{4})(\d{4})$/,
+                "($1) $2-$3"
+            );
+        }
+        setTelefone(telefoneFormatado);
+    };
+
+    const formatarCfpCnpj = (event: React.ChangeEvent<HTMLInputElement>) => {
+        let { value } = event.target;
+        value = value.replace(/\D/g, '');
+
+        if (value.length <= 11) {
+            value = value.replace(/(\d{3})(\d)/, '$1.$2');
+            value = value.replace(/(\d{3})(\d)/, '$1.$2');
+            value = value.replace(/(\d{3})(\d{1,2})$/, '$1-$2');
+        } else if (value.length > 11 && value.length <= 14) {
+            value = value.replace(/^(\d{2})(\d)/, '$1.$2');
+            value = value.replace(/^(\d{2})\.(\d{3})(\d)/, '$1.$2.$3');
+            value = value.replace(/\.(\d{3})(\d)/, '.$1/$2');
+            value = value.replace(/(\d{4})(\d)/, '$1-$2');
+        } else {
+            value = value.slice(0, 14);
+            value = value.replace(/^(\d{2})(\d)/, '$1.$2');
+            value = value.replace(/^(\d{2})\.(\d{3})(\d)/, '$1.$2.$3');
+            value = value.replace(/\.(\d{3})(\d)/, '.$1/$2');
+            value = value.replace(/(\d{4})(\d)/, '$1-$2');
+        }
+
+        setCpfCnpjFormatado(value);
+    };
+
     const recuperarUsuarioLogado = async () => {
         const usuarioJson = localStorage.getItem("UsuarioLogado");
         if (usuarioJson) {
+            debugger
             setUsuario(JSON.parse(usuarioJson));
             setListaEnderecos(JSON.parse(usuarioJson).enderecos);
-            setNome(usuario?.nome ?? "");
-            setSenha(usuario?.senha ?? "");
-            setEmail(usuario?.email ?? "");
-            setCpfCnpj(usuario?.cpf ?? "");
+            setNome(JSON.parse(usuarioJson).nome);
+            setSobrenome(JSON.parse(usuarioJson).sobrenome);
+            setEmail(JSON.parse(usuarioJson).email);
+            setSenha(JSON.parse(usuarioJson).senha);
+            setDataNascimento(JSON.parse(usuarioJson).dataNascimento);
+            setCpfCnpj(JSON.parse(usuarioJson).cpf);
+            setTelefone(JSON.parse(usuarioJson).telefone);
         }
     }
 
@@ -116,6 +165,35 @@ export default function Perfil() {
         setEstado("");
     }
 
+    const salvarAlteracoes = async () => {
+        debugger
+        if (!nome || !sobrenome || !email || !senha || !dataNascimento || !cpfcnpjFormatado || !telefone) {
+            toast.error("Preencha todos os campos obrigatórios!");
+            return;
+        }
+
+        const dto = {
+            nome,
+            sobrenome,
+            email,
+            senha,
+            dataNascimento,
+            cpf: cpfcnpjFormatado,
+            telefone
+        }
+
+        toast.promise(Api.put(`usuario/editar/${usuario?.id}`, dto).then(() => {
+            recuperarUsuarioLogado();
+            window.location.href = "/";
+        }).catch(() => {
+            toast.error("Erro ao recuperar usuario após cadastrar o endereco");
+        }), {
+            loading: "Salvando...",
+            success: "Dados cadastrais atualizados com sucesso!",
+            error: "Erro ao atualizar dados cadastrais"
+        });
+    }
+
     return (
         <Card className="w-full max-w-lg mt-[10rem]">
             <CardHeader>
@@ -133,24 +211,42 @@ export default function Perfil() {
                                 </Avatar>
                             </div>
                             <CardContent className="grid gap-6">
-                                <div className="grid grid-cols-2 gap-6">
-                                    <div className="space-y-2">
-                                        <Label htmlFor="cpf-cnpj">CPF/CNPJ</Label>
-                                        <Input value={cpfCnpj} id="cpf-cnpj" placeholder="Digite seu CPF ou CNPJ" onChange={(e) => setCpfCnpj(e.target.value)} />
+                                <div className="grid gap-4">
+                                    <div className="grid grid-cols-2 gap-4">
+                                        <div className="grid gap-2">
+                                            <Label htmlFor="nome">Nome</Label>
+                                            <Input value={nome} id="nome" placeholder="José" required onChange={(e) => setNome(e.target.value)} />
+                                        </div>
+                                        <div className="grid gap-2">
+                                            <Label htmlFor="sobrenome">Sobrenome</Label>
+                                            <Input value={sobrenome} id="sobrenome" placeholder="Silva" required onChange={(e) => setSobrenome(e.target.value)} />
+                                        </div>
                                     </div>
-                                    <div className="space-y-2">
-                                        <Label htmlFor="name">Nome</Label>
-                                        <Input value={nome} id="name" placeholder="Digite seu nome" onChange={(e) => setNome(e.target.value)}/>
+                                    <div className="grid grid-cols-2 gap-4">
+                                        <div className="grid gap-2">
+                                            <Label htmlFor="email">Email</Label>
+                                            <Input value={email} id="email" placeholder="jose.silva@mintecommerce.com.br" required type="email" onChange={(e) => setEmail(e.target.value)} />
+                                        </div>
+                                        <div className="grid gap-2">
+                                            <Label htmlFor="senha">Senha</Label>
+                                            <Input value={senha} id="senha" required type="password" onChange={(e) => setSenha(e.target.value)} />
+                                        </div>
                                     </div>
-                                </div>
-                                <div className="grid grid-cols-2 gap-6">
-                                    <div className="space-y-2">
-                                        <Label htmlFor="surname">Sobrenome</Label>
-                                        <Input type="password" value={senha} id="surname" placeholder="Digite seu sobrenome" onChange={(e) => setSenha(e.target.value)}/>
+                                    <div className="grid grid-cols-2 gap-4">
+                                        <div className="grid gap-2">
+                                            <Label htmlFor="data-nascimento">Data de Nascimento</Label>
+                                            <Input value={dataNascimento} id="data-nascimento" placeholder="dd/mm/aaaa" required type="date" onChange={(e) => setDataNascimento(e.target.value)} />
+                                        </div>
+                                        <div className="grid gap-2">
+                                            <Label htmlFor="cpf">CPF/CNPJ</Label>
+                                            <Input id="cpf" placeholder="000.000.000-00" required onChange={formatarCfpCnpj} value={cpfcnpjFormatado} />
+                                        </div>
                                     </div>
-                                    <div className="space-y-2">
-                                        <Label htmlFor="email">E-mail</Label>
-                                        <Input value={email} id="email" type="email" placeholder="Digite seu e-mail" onChange={(e) => setEmail(e.target.value)}/>
+                                    <div className="grid grid-cols-2 gap-4">
+                                        <div className="grid gap-2">
+                                            <Label htmlFor="telefone">Telefone</Label>
+                                            <Input value={telefone} id="telefone" placeholder="(00) 00000-0000" required onChange={formatarTelefone} />
+                                        </div>
                                     </div>
                                 </div>
                             </CardContent>
@@ -225,9 +321,7 @@ export default function Perfil() {
                 </Tabs>
             </CardHeader>
             <CardFooter className="flex justify-end">
-                <Link to={"/"}>
-                    <Button>Salvar</Button>
-                </Link>
+                <Button onClick={salvarAlteracoes}>Salvar</Button>
             </CardFooter>
             {/* <div className="grid grid-cols-2 gap-6">
                                 <div className="space-y-2">

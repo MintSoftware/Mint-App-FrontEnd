@@ -1,51 +1,31 @@
 import Cabecalho from "@/components/tabela/cabecalho";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
-import { toast } from "@/components/ui/use-toast";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import Api from "@/infra/helpers/api";
 import { Pedido } from "@/types/Pedido";
 import { ColumnDef } from "@tanstack/react-table";
 import { EllipsisVerticalIcon, SearchIcon } from "lucide-react";
 import { Link } from "react-router-dom";
+import { toast } from "sonner";
 
-const inativar = async (pedido: Pedido) => {
-    if (!confirm("Tem certeza que deseja inativar este pedido?")) return;
-
+const finalizarEntrega = async (pedido: Pedido) => {
     try {
-        await Api.put(`/pedido/${pedido.id}/inativar`);
-        toast({
-            title: "Sucesso!",
-            description: "Pedido inativado com sucesso.",
-            variant: "success",
-        });
-    } catch (error: any) {
-        console.log("Erro ao inativar o pedido: ", error);
-        toast({
-            title: "Erro!",
-            description: `Ocorreu um erro ao inativar o pedido: ${error.message}`,
-            variant: "destructive",
-        });
+        await Api.put(`/pedido/atualizarStatus/${pedido.id}`, { status: 2 });
+        toast.success("Entrega finalizada com sucesso!");
+        window.location.href = "/pedidos";
+    } catch (error) {
+        toast.error("Erro ao finalizar entrega!");
     }
 }
 
-const ativar = async (pedido: Pedido) => {
-    if (!confirm("Tem certeza que deseja ativar este pedido?")) return;
-
+const cancelarPedido = async (pedido: Pedido) => {
     try {
-        await Api.put(`/pedido/${pedido.id}/ativar`);
-        toast({
-            title: "Sucesso!",
-            description: "Pedido ativado com sucesso.",
-            variant: "success",
-        });
-    } catch (error: any) {
-        console.log("Erro ao ativar o pedido: ", error);
-        toast({
-            title: "Erro!",
-            description: `Ocorreu um erro ao ativar o pedido: ${error.message}`,
-            variant: "destructive",
-        });
+        await Api.put(`/pedido/atualizarStatus/${pedido.id}`, { status: 3 });
+        toast.success("Entrega cancelada com sucesso!");
+        window.location.href = "/pedidos";
+    } catch (error) {
+        toast.error("Erro ao cancelar entrega!");
     }
 }
 
@@ -73,8 +53,10 @@ export const colunas = (): ColumnDef<Pedido>[] => [
             <Cabecalho column={column} title="Status" />
         ),
         cell: ({ row }) => (
-            <Badge className='w-[60px] justify-center' variant={row.original.status ? "outline" : "secondary"}>
-                {row.original.status.toString() === '0' ? "Digitado" : row.original.status.toString() === '1' ? "Pendente" : row.original.status.toString() === '2' ? "Em Andamento" : row.original.status.toString() === '3' ? "Finalizado" : "Cancelado"}
+            <Badge className='w-[70px] justify-center' variant={row.original.status ? "outline" : "secondary"} style={
+                row.original.status === 0 ? { color: "#FFA500" } : row.original.status === 1 ? { color: "#03bb85" } : row.original.status === 2 ? { color: "#00bfff" } : { color: "#da1b1b" }
+            }>
+                {row.original.status === 0 ? "Pendente" : row.original.status === 1 ? "Pago" : row.original.status === 2 ? "Entregue" : "Cancelado"}
             </Badge>
         ),
     },
@@ -107,14 +89,10 @@ export const colunas = (): ColumnDef<Pedido>[] => [
                         </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end">
-                        <DropdownMenuLabel className="font-bold">Ver</DropdownMenuLabel>
-                        <DropdownMenuItem className="cursor-pointer">Pedido</DropdownMenuItem>
-                        <DropdownMenuSeparator />
                         <DropdownMenuLabel className="font-bold">Ações</DropdownMenuLabel>
-                        <DropdownMenuItem className="cursor-pointer">Editar</DropdownMenuItem>
                         {row.original.status.toString() === '1' ?
-                            <DropdownMenuItem onClick={() => inativar(row.original)} className="cursor-pointer text-red-500">Inativar</DropdownMenuItem>
-                            : <DropdownMenuItem onClick={() => ativar(row.original)} className="cursor-pointer text-green-500">Ativar</DropdownMenuItem>
+                            <DropdownMenuItem onClick={() => finalizarEntrega(row.original)} className="cursor-pointer text-green-500">Finalizar Entrega</DropdownMenuItem>
+                            : row.original.status.toString() === '2' ? <DropdownMenuItem onClick={() => cancelarPedido(row.original)} className="cursor-pointer text-red-500">Cancelar Entrega</DropdownMenuItem> : null
                         }
                     </DropdownMenuContent>
                 </DropdownMenu>

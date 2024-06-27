@@ -120,13 +120,12 @@ export default function CriarConta() {
             const { data } = await Api.post("usuario/entrar", dto);
             const UsuarioLogado = JSON.stringify(data);
             localStorage.setItem("UsuarioLogado", UsuarioLogado);
+            toast.success("Cadastro realizado com sucesso!");
             window.location.href = "/";
         }).catch(() => {
             toast.error("Erro ao cadastrar");
         }), {
             loading: "Cadastrando...",
-            success: "Cadastro realizado com sucesso!",
-            error: "Erro ao cadastrar"
         });
     };
 

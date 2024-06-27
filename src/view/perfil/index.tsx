@@ -127,12 +127,11 @@ export default function Perfil() {
 
         toast.promise(Api.put(`endereco/editar/${enderecoSelecionado?.id}`, endereco).then(() => {
             atualizarUsuario();
+            toast.success("Endereço cadastrado com sucesso!");
         }).catch(() => {
             toast.error("Erro ao recuperar usuario após cadastrar o endereco");
         }), {
             loading: "Salvando...",
-            success: "Endereço cadastrado com sucesso!",
-            error: "Erro ao cadastrar endereço"
         });
     }
 
@@ -178,26 +177,24 @@ export default function Perfil() {
 
         toast.promise(Api.put(`usuario/editar/${usuario?.id}`, dto).then(() => {
             localStorage.setItem("UsuarioLogado", JSON.stringify(dto));
+            toast.success("Dados cadastrais atualizados com sucesso!");
             atualizarUsuario();
             window.location.href = "/";
         }).catch(() => {
             return toast.error("Erro ao atualizar dados cadastrais");
         }), {
             loading: "Salvando...",
-            success: "Dados cadastrais atualizados com sucesso!",
-            error: "Erro ao atualizar dados cadastrais"
         });
     }
 
     const deletarEndereco = async () => {
         toast.promise(Api.delete(`endereco/deletar/${enderecoSelecionado?.id}`).then(() => {
             atualizarUsuario();
+            toast.success("Endereço deletado com sucesso!");
         }).catch(() => {
             toast.error("Erro ao deletar endereço");
         }), {
             loading: "Deletando...",
-            success: "Endereço deletado com sucesso!",
-            error: "Erro ao deletar endereço"
         });
     }
 

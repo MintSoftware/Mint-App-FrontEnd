@@ -79,12 +79,11 @@ export default function FinalizacaoPedido() {
 
         toast.promise(Api.post("endereco/cadastrar", endereco).then(() => {
             atualizarUsuario();
+            toast.success("Endereço cadastrado com sucesso!");
         }).catch(() => {
             toast.error("Erro ao recuperar usuario após cadastrar o endereco");
         }), {
             loading: "Salvando...",
-            success: "Endereço cadastrado com sucesso!",
-            error: "Erro ao cadastrar endereço"
         });
     }
 
@@ -139,8 +138,6 @@ export default function FinalizacaoPedido() {
             toast.error("Erro ao finalizar pedido");
         }), {
             loading: "Finalizando pedido...",
-            success: "Pedido finalizado com sucesso!",
-            error: "Erro ao finalizar pedido"
         });
     }
 

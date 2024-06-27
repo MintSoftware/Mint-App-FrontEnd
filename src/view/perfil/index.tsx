@@ -8,7 +8,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import Api from "@/infra/helpers/api"
 import { Endereco } from "@/types/Endereco"
 import { Usuario } from "@/types/Usuario"
-import { PlusIcon, TrashIcon } from "lucide-react"
+import { PenIcon, PlusIcon, TrashIcon } from "lucide-react"
 import { useEffect, useState } from "react"
 import { toast } from "sonner"
 
@@ -325,10 +325,12 @@ export default function Perfil() {
                                 </div>
                                 <div className="flex gap-2">
                                     <Button variant={"outline"} onClick={() => cadastroEndereco(true)}><PlusIcon className="w-4 h-4"/></Button>
+                                    <Button variant={"outline"} onClick={() => edicaoEndereco(true)} >
+                                        <PenIcon className="w-4 h-4" />
+                                    </Button>
                                     <Button onClick={deletarEndereco} variant={"destructive"}>
                                         <TrashIcon className="w-4 h-4" />
                                     </Button>
-                                    <Button variant={"outline"} onClick={() => edicaoEndereco(true)} >Editar</Button>
                                 </div>
                             </div>
                             {expandirDadosEndereco && <div className="border p-5 rounded-lg mt-5">

@@ -178,7 +178,7 @@ export default function MenuSuperior() {
                                         <Card key={produto.id} className="w-full max-w-sm p-6 grid gap-6">
                                             <div className="grid grid-cols-[100px_1fr] gap-4">
                                                 <img
-                                                    src={'logo.png'}
+                                                    src={produto.imagem ||'logo.png'}
                                                     alt="Product Image"
                                                     width={120}
                                                     height={120}
@@ -187,7 +187,7 @@ export default function MenuSuperior() {
                                                 <div className="grid gap-2">
                                                     <div className="flex items-center justify-between">
                                                         <h3 className="font-semibold">{produto.nome}</h3>
-                                                        <div className="text-2xl font-bold">{produto.preco}</div>
+                                                        <div className="text-2xl font-bold">{produto.preco.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' })}</div>
                                                     </div>
                                                     <p className="text-sm text-gray-500 dark:text-gray-400">
                                                         {produto.descricao}

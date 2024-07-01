@@ -14,7 +14,7 @@ import { Produto } from "@/types/Produto"
 import { Usuario } from "@/types/Usuario"
 import { ArrowLeftIcon, ArrowRightIcon, CreditCardIcon, DollarSignIcon, PlusIcon, ShoppingCartIcon, WalletCardsIcon } from "lucide-react"
 import { useEffect, useState } from "react"
-import { useLocation } from "react-router-dom"
+import { useLocation, useNavigate } from "react-router-dom"
 import { toast } from "sonner"
 
 export default function FinalizacaoPedido() {
@@ -33,6 +33,7 @@ export default function FinalizacaoPedido() {
     const [cidade, setCidade] = useState<string>("");
     const [estado, setEstado] = useState<string>("");
     const [enderecoPedido, setEnderecoPedido] = useState<Endereco>();
+    const navigate = useNavigate();
     const handleClickTab = (tab: any) => {
         (enderecoPedido) ? setActiveTab(tab) : toast.error("Selecione um endereço para continuar");
     }
@@ -133,7 +134,7 @@ export default function FinalizacaoPedido() {
         toast.promise(Api.post("pedido/cadastrar", dto).then(() => {
             toast.success("Pedido finalizado com sucesso!");
             localStorage.setItem("Carrinho", JSON.stringify([]));
-            window.location.href = "/";
+            navigate("/");
         }).catch(() => {
             toast.error("Erro ao finalizar pedido");
         }), {

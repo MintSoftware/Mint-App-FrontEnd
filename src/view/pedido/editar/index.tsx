@@ -93,7 +93,7 @@ export default function EditarPedido() {
                                             <TableRow key={item.id}>
                                                 <TableCell className="hidden md:table-cell">
                                                     <img
-                                                        src="https://github.com/shadcn.png"
+                                                        src={item.produto.imagem ||"https://github.com/shadcn.png"}
                                                         width="64"
                                                         height="64"
                                                         alt="Imagem do Produto"

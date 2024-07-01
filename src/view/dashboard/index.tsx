@@ -227,7 +227,7 @@ export default function PainelDeControle() {
                             <Link to={`/produtos/${produto.id}`} key={produto.id}>
                                 <Card key={produto.id} className="h-[22rem] p-4 cursor-pointer">
                                     <div className="flex flex-col max-h-[22rem]">
-                                        <img src='/logo.png' className="w-full h-48 object-cover mb-4" />
+                                        <img src={produto.imagem || '/logo.png'} className="w-full h-48 object-cover mb-4" />
                                         <h2 className="h-[2rem] overflow-hidden text-lg font-semibold mb-2">{produto.nome}</h2>
                                         <p className="text-gray-600 mb-2">{produto.categoria.nome}</p>
                                         <div className="flex items-center justify-between w-full cursor-pointer">

@@ -95,13 +95,11 @@ export default function PainelProduto() {
             </div>}
             {!loading && <div className="flex flex-col gap-6 px-4 mx-auto py-6 bg-background w-[56.5rem] border rounded-lg h-[54rem]">
                 <div className="flex w-full gap-5 h-[32.7rem] ">
-                    <div className="flex w-full h-full md:gap-10 items-start">
+                    <div className="flex md:gap-10 items-start">
                         <img
                             src={produto?.imagem || "/logo.png"}
                             alt="Product Image"
-                            width={400}
-                            height={500}
-                            className="object-cover border w-full rounded-lg overflow-hidden"
+                            className="w-full h-[33rem] object-cover w-full rounded-lg overflow-hidden"
                         />
                     </div>
                     <div className="flex flex-col gap-5">

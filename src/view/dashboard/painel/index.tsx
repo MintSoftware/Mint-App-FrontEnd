@@ -97,7 +97,7 @@ export default function PainelProduto() {
                 <div className="flex w-full gap-5 h-[32.7rem] ">
                     <div className="flex w-full h-full md:gap-10 items-start">
                         <img
-                            src={"logo.png"}
+                            src={produto?.imagem || "/logo.png"}
                             alt="Product Image"
                             width={400}
                             height={500}

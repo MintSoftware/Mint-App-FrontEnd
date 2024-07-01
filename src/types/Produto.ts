@@ -9,6 +9,7 @@ export type Produto = {
     preco : number;
     quantidade : number;
     quantidadeestoque : number;
+    imagem : string;
     categoria : Categoria;
     temFrete: boolean;
 };

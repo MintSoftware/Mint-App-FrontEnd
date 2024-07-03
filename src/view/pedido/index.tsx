@@ -20,7 +20,6 @@ export default function Pedido() {
   }, []);
 
   const buscarPedido = async () => {
-    debugger;
     try {
       setLoading(true);
       const usuarioJson = localStorage.getItem("UsuarioLogado");

@@ -8,10 +8,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import Api from "@/infra/helpers/api"
 import { Endereco } from "@/types/Endereco"
 import { Usuario } from "@/types/Usuario"
-import { set } from "date-fns"
-import { PlusIcon, TrashIcon } from "lucide-react"
+import { PenIcon, PlusIcon, TrashIcon } from "lucide-react"
 import { useEffect, useState } from "react"
-import { Link } from "react-router-dom"
 import { toast } from "sonner"
 
 export default function Perfil() {
@@ -19,6 +17,7 @@ export default function Perfil() {
     const [usuario, setUsuario] = useState<Usuario>();
     const [listaEnderecos, setListaEnderecos] = useState<Endereco[]>();
     const [expandirDadosEndereco, setExpandirDadosEndereco] = useState(false);
+    const [expandirCadastroEndereco, setExpandirCadastroEndereco] = useState(false);
     const [nomeEndereco, setNomeEndereco] = useState("");
     const [cep, setCep] = useState("");
     const [rua, setRua] = useState("");
@@ -31,7 +30,6 @@ export default function Perfil() {
     const [nome, setNome] = useState("");
     const [senha, setSenha] = useState("");
     const [email, setEmail] = useState("");
-    const [cpfCnpj, setCpfCnpj] = useState("");
     const [cpfcnpjFormatado, setCpfCnpjFormatado] = useState("");
     const [telefone, setTelefone] = useState("");
     const [dataNascimento, setDataNascimento] = useState("");
@@ -58,8 +56,8 @@ export default function Perfil() {
         setTelefone(telefoneFormatado);
     };
 
-    const formatarCfpCnpj = (event: React.ChangeEvent<HTMLInputElement>) => {
-        let { value } = event.target;
+    const formatarCfpCnpj = (event: React.ChangeEvent<HTMLInputElement>, cpfcnpj? : any) => {
+        let { value } = cpfcnpj ? { value: cpfcnpj } : event.target;
         value = value.replace(/\D/g, '');
 
         if (value.length <= 11) {
@@ -85,7 +83,6 @@ export default function Perfil() {
     const recuperarUsuarioLogado = async () => {
         const usuarioJson = localStorage.getItem("UsuarioLogado");
         if (usuarioJson) {
-            debugger
             setUsuario(JSON.parse(usuarioJson));
             setListaEnderecos(JSON.parse(usuarioJson).enderecos);
             setNome(JSON.parse(usuarioJson).nome);
@@ -93,8 +90,8 @@ export default function Perfil() {
             setEmail(JSON.parse(usuarioJson).email);
             setSenha(JSON.parse(usuarioJson).senha);
             setDataNascimento(JSON.parse(usuarioJson).dataNascimento);
-            setCpfCnpj(JSON.parse(usuarioJson).cpf);
             setTelefone(JSON.parse(usuarioJson).telefone);
+            formatarCfpCnpj('' as any, JSON.parse(usuarioJson).cpfcnpj);
         }
     }
 
@@ -111,7 +108,7 @@ export default function Perfil() {
         }
     }, [enderecoSelecionado])
 
-    const cadastrarNovoEndereco = async () => {
+    const editarEndereco = async () => {
         if (!nomeEndereco || !cep || !rua || !numero || !bairro || !cidade || !estado) {
             toast.error("Preencha todos os campos obrigatórios!");
             return;
@@ -131,12 +128,11 @@ export default function Perfil() {
 
         toast.promise(Api.put(`endereco/editar/${enderecoSelecionado?.id}`, endereco).then(() => {
             atualizarUsuario();
+            toast.success("Endereço cadastrado com sucesso!");
         }).catch(() => {
             toast.error("Erro ao recuperar usuario após cadastrar o endereco");
         }), {
             loading: "Salvando...",
-            success: "Endereço cadastrado com sucesso!",
-            error: "Erro ao cadastrar endereço"
         });
     }
 
@@ -166,31 +162,89 @@ export default function Perfil() {
     }
 
     const salvarAlteracoes = async () => {
-        debugger
-        if (!nome || !sobrenome || !email || !senha || !dataNascimento || !cpfcnpjFormatado || !telefone) {
-            toast.error("Preencha todos os campos obrigatórios!");
-            return;
-        }
+
 
         const dto = {
+            id: usuario?.id,
             nome,
             sobrenome,
             email,
             senha,
             dataNascimento,
-            cpf: cpfcnpjFormatado,
-            telefone
+            cpfcnpj: cpfcnpjFormatado,
+            telefone,
+            enderecos: listaEnderecos
         }
 
         toast.promise(Api.put(`usuario/editar/${usuario?.id}`, dto).then(() => {
-            recuperarUsuarioLogado();
+            localStorage.setItem("UsuarioLogado", JSON.stringify(dto));
+            toast.success("Dados cadastrais atualizados com sucesso!");
+            atualizarUsuario();
             window.location.href = "/";
+        }).catch(() => {
+            return toast.error("Erro ao atualizar dados cadastrais");
+        }), {
+            loading: "Salvando...",
+        });
+    }
+
+    const deletarEndereco = async () => {
+        toast.promise(Api.delete(`endereco/deletar/${enderecoSelecionado?.id}`).then(() => {
+            atualizarUsuario();
+            toast.success("Endereço deletado com sucesso!");
+        }).catch(() => {
+            toast.error("Erro ao deletar endereço");
+        }), {
+            loading: "Deletando...",
+        });
+    }
+
+    const cadastroEndereco = (param : boolean) => {
+        setNomeEndereco("");
+        setCep("");
+        setRua("");
+        setNumero("");
+        setComplemento("");
+        setBairro("");
+        setCidade("");
+        setEstado("");
+        setExpandirCadastroEndereco(param);
+    }
+
+    const edicaoEndereco = (param : boolean) => {
+        if (!nomeEndereco || !cep || !rua || !numero || !bairro || !cidade || !estado) {
+            toast.error("Selecione um endereço para editar!");
+            return;
+        }
+        setExpandirDadosEndereco(param);
+    }
+
+    const cadastrarEndereco = async () => {
+        if (!nomeEndereco || !cep || !rua || !numero || !bairro || !cidade || !estado) {
+            toast.error("Preencha todos os campos obrigatórios!");
+            return;
+        }
+
+        const endereco = {
+            nome: nomeEndereco,
+            cep,
+            rua,
+            numero,
+            complemento,
+            bairro,
+            cidade,
+            estado,
+            usuario
+        }
+
+        toast.promise(Api.post("endereco/cadastrar", endereco).then(() => {
+            atualizarUsuario();
+            toast.success("Endereço cadastrado com sucesso!");
+            cadastroEndereco(false);
         }).catch(() => {
             toast.error("Erro ao recuperar usuario após cadastrar o endereco");
         }), {
             loading: "Salvando...",
-            success: "Dados cadastrais atualizados com sucesso!",
-            error: "Erro ao atualizar dados cadastrais"
         });
     }
 
@@ -255,9 +309,9 @@ export default function Perfil() {
                     <TabsContent value="address">
                         <CardContent className="flex flex-col justify-center">
                             <div className="flex gap-6 mt-5">
-                                <div className="flex max-w-[18rem] justify-center">
+                                <div className="flex max-w-[14.3rem] justify-center">
                                     <Select onValueChange={(value) => setEnderecoSelecionado(JSON.parse(value))}>
-                                        <SelectTrigger className="flex w-[20rem]">
+                                        <SelectTrigger className="flex w-[14.3rem]">
                                             <SelectValue className="flex w-full" placeholder="Selecione um endereço" />
                                         </SelectTrigger>
                                         <SelectContent className="cursor-pointer">
@@ -270,10 +324,13 @@ export default function Perfil() {
                                     </Select>
                                 </div>
                                 <div className="flex gap-2">
-                                    <Button variant={"destructive"}>
+                                    <Button variant={"outline"} onClick={() => cadastroEndereco(true)}><PlusIcon className="w-4 h-4"/></Button>
+                                    <Button variant={"outline"} onClick={() => edicaoEndereco(true)} >
+                                        <PenIcon className="w-4 h-4" />
+                                    </Button>
+                                    <Button onClick={deletarEndereco} variant={"destructive"}>
                                         <TrashIcon className="w-4 h-4" />
                                     </Button>
-                                    <Button variant={"outline"} onClick={() => setExpandirDadosEndereco(true)} >Editar</Button>
                                 </div>
                             </div>
                             {expandirDadosEndereco && <div className="border p-5 rounded-lg mt-5">
@@ -312,8 +369,48 @@ export default function Perfil() {
                                     </div>
                                 </div>
                                 <div className="flex justify-end mt-3 gap-3">
-                                    <Button variant={"outline"} onClick={() => setExpandirDadosEndereco(false)}>Cancelar</Button>
-                                    <Button onClick={() => cadastrarNovoEndereco()}><PlusIcon /></Button>
+                                    <Button variant={"outline"} onClick={() => edicaoEndereco(false)}>Cancelar</Button>
+                                    <Button onClick={() => editarEndereco()}><PlusIcon /></Button>
+                                </div>
+                            </div>}
+                            {expandirCadastroEndereco && <div className="border p-5 rounded-lg mt-5">
+                                <div className="grid grid-cols-2 gap-4">
+                                    <div className="grid gap-2">
+                                        <Label htmlFor="nome">Nome</Label>
+                                        <Input value={nomeEndereco} id="nome" placeholder="Casa, trabalho..." required onChange={(e) => setNomeEndereco(e.target.value)} />
+                                    </div>
+                                    <div className="grid gap-2">
+                                        <Label htmlFor="cep">CEP</Label>
+                                        <Input value={cep} id="cep" placeholder="00000-000" required onChange={(e) => setCep(e.target.value)} />
+                                    </div>
+                                    <div className="grid gap-2">
+                                        <Label htmlFor="rua">Rua</Label>
+                                        <Input value={rua} id="rua" placeholder="Rua" required onChange={(e) => setRua(e.target.value)} />
+                                    </div>
+                                    <div className="grid gap-2">
+                                        <Label htmlFor="numero">Número</Label>
+                                        <Input value={numero} id="numero" placeholder="Número" required onChange={(e) => setNumero(e.target.value)} />
+                                    </div>
+                                    <div className="grid gap-2">
+                                        <Label htmlFor="complemento">Complemento</Label>
+                                        <Input value={complemento} id="complemento" placeholder="Apartamento, Casa, etc." onChange={(e) => setComplemento(e.target.value)} />
+                                    </div>
+                                    <div className="grid gap-2">
+                                        <Label htmlFor="bairro">Bairro</Label>
+                                        <Input value={bairro} id="bairro" placeholder="Seu bairro" required onChange={(e) => setBairro(e.target.value)} />
+                                    </div>
+                                    <div className="grid gap-2">
+                                        <Label htmlFor="cidade">Cidade</Label>
+                                        <Input value={cidade} id="cidade" placeholder="Sua cidade" required onChange={(e) => setCidade(e.target.value)} />
+                                    </div>
+                                    <div className="grid gap-2">
+                                        <Label htmlFor="estado">Estado</Label>
+                                        <Input value={estado} id="estado" placeholder="Seu estado" required onChange={(e) => setEstado(e.target.value)} />
+                                    </div>
+                                </div>
+                                <div className="flex justify-end mt-3 gap-3">
+                                    <Button variant={"outline"} onClick={() => cadastroEndereco(false)}>Cancelar</Button>
+                                    <Button onClick={() => cadastrarEndereco()}><PlusIcon /></Button>
                                 </div>
                             </div>}
                         </CardContent>

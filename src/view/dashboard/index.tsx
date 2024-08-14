@@ -207,7 +207,141 @@ export default function MenuInicial() {
                     <CarouselPrevious />
                     <CarouselNext />
                 </Carousel>
+            </div>'
+            <div>
+              <label htmlFor="size" className="block text-gray-700 font-medium mb-2">
+                Tamanho da Quadra
+              </label>
+                <SelectTrigger>
+                  <SelectValue placeholder="Selecione o tamanho" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="small">Pequena</SelectItem>
+                  <SelectItem value="medium">Média</SelectItem>
+                  <SelectItem value="large">Grande</SelectItem>
+                </SelectContent>
             </div>
+            <div>
+              <label htmlFor="amenities" className="block text-gray-700 font-medium mb-2">
+                Comodidades
+              </label>
+              <div className="space-y-2">
+                <Checkbox value="lights">Iluminação</Checkbox>
+                <Checkbox value="showers">Chuveiros</Checkbox>
+                <Checkbox value="scoreboard">Placar</Checkbox>
+              </div>
+            </div>
+            <Button className="w-full">Aplicar Filtros</Button>
+          </div>
+        </div>
+        <div className="flex-1 p-4 lg:p-8">
+          <h2 className="text-2xl font-bold mb-4">Quadras Disponíveis</h2>
+          <Carousel className="w-full">
+            <CarouselContent>
+              <CarouselItem>
+                <div className="bg-white rounded-lg shadow-lg overflow-hidden">
+                  <img src="/placeholder.svg" alt="Quadra 1" className="w-full h-48 object-cover" />
+                  <div className="p-4">
+                    <h3 className="text-xl font-bold mb-2">Quadra 1</h3>
+                    <p className="text-gray-500 mb-4">Localização no Centro</p>
+                    <Link
+                      to="#"
+                      className="inline-flex items-center justify-center px-4 py-2 text-base font-medium rounded-md shadow-sm text-primary-foreground bg-primary hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary"
+                    >
+                      Reserve Agora
+                    </Link>
+                  </div>
+                </div>
+              </CarouselItem>
+              <CarouselItem>
+                <div className="bg-white rounded-lg shadow-lg overflow-hidden">
+                  <img src="/placeholder.svg" alt="Quadra 2" className="w-full h-48 object-cover" />
+                  <div className="p-4">
+                    <h3 className="text-xl font-bold mb-2">Quadra 2</h3>
+                    <p className="text-gray-500 mb-4">Localização na Zona Alta</p>
+                    <Link
+                      to="#"
+                      className="inline-flex items-center justify-center px-4 py-2 text-base font-medium rounded-md shadow-sm text-primary-foreground bg-primary hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary"
+                    >
+                      Reserve Agora
+                    </Link>
+                  </div>
+                </div>
+              </CarouselItem>
+              <CarouselItem>
+                <div className="bg-white rounded-lg shadow-lg overflow-hidden">
+                  <img src="/placeholder.svg" alt="Quadra 3" className="w-full h-48 object-cover" />
+                  <div className="p-4">
+                    <h3 className="text-xl font-bold mb-2">Quadra 3</h3>
+                    <p className="text-gray-500 mb-4">Localização no Subúrbio</p>
+                    <Link
+                      to="#"
+                      className="inline-flex items-center justify-center px-4 py-2 text-base font-medium rounded-md shadow-sm text-primary-foreground bg-primary hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary"
+                    >
+                      Reserve Agora
+                    </Link>
+                  </div>
+                </div>
+              </CarouselItem>
+            </CarouselContent>
+            <CarouselPrevious />
+            <CarouselNext />
+          </Carousel>
+        </div>
+        <div className="flex-1 p-4 lg:p-8">
+          <h2 className="text-2xl font-bold mb-4">Quadras Reservadas</h2>
+          <Carousel className="w-full">
+            <CarouselContent>
+              <CarouselItem>
+                <div className="bg-white rounded-lg shadow-lg overflow-hidden">
+                  <img src="/placeholder.svg" alt="Quadra 4" className="w-full h-48 object-cover" />
+                  <div className="p-4">
+                    <h3 className="text-xl font-bold mb-2">Quadra 4</h3>
+                    <p className="text-gray-500 mb-4">Localização no Centro</p>
+                    <Link
+                      to="#"
+                      className="inline-flex items-center justify-center px-4 py-2 text-base font-medium rounded-md shadow-sm text-primary-foreground bg-primary hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary"
+                    >
+                      Ver Detalhes
+                    </Link>
+                  </div>
+                </div>
+              </CarouselItem>
+              <CarouselItem>
+                <div className="bg-white rounded-lg shadow-lg overflow-hidden">
+                  <img src="/placeholder.svg" alt="Quadra 5" className="w-full h-48 object-cover" />
+                  <div className="p-4">
+                    <h3 className="text-xl font-bold mb-2">Quadra 5</h3>
+                    <p className="text-gray-500 mb-4">Localização na Zona Alta</p>
+                    <Link
+                      to="#"
+                      className="inline-flex items-center justify-center px-4 py-2 text-base font-medium rounded-md shadow-sm text-primary-foreground bg-primary hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary"
+                    >
+                      Ver Detalhes
+                    </Link>
+                  </div>
+                </div>
+              </CarouselItem>
+              <CarouselItem>
+                <div className="bg-white rounded-lg shadow-lg overflow-hidden">
+                  <img src="/placeholder.svg" alt="Quadra 6" className="w-full h-48 object-cover" />
+                  <div className="p-4">
+                    <h3 className="text-xl font-bold mb-2">Quadra 6</h3>
+                    <p className="text-gray-500 mb-4">Localização no Subúrbio</p>
+                    <Link
+                      to="#"
+                      className="inline-flex items-center justify-center px-4 py-2 text-base font-medium rounded-md shadow-sm text-primary-foreground bg-primary hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary"
+                    >
+                      Ver Detalhes
+                    </Link>
+                  </div>
+                </div>
+              </CarouselItem>
+            </CarouselContent>
+            <CarouselPrevious />
+            <CarouselNext />
+          </Carousel>
         </div>
     )
 }
+

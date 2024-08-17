@@ -8,8 +8,6 @@ import PaginaNaoEncontrada from "./view/paginanaoencontrada";
 import Perfil from "./view/perfil";
 import MenuInicial from "./view/dashboard";
 
-
-
 function MainRoutes() {
     const [isLoading, setIsLoading] = useState(true);
 

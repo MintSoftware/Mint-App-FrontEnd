@@ -1,406 +1,192 @@
-import { Button } from "@/components/ui/button"
-import { Carousel, CarouselContent, CarouselItem, CarouselPrevious, CarouselNext } from "@/components/ui/carousel"
-import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar"
-<<<<<<< Updated upstream
-import {  SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-=======
-import { Label } from "@/components/ui/label"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
->>>>>>> Stashed changes
-import { Checkbox } from "@/components/ui/checkbox"
-import { Link } from "react-router-dom"
-import { Label } from "@/components/ui/label"
+import { Input } from "@/components/ui/input";
+import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/ui/select";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Carousel, CarouselContent, CarouselItem, CarouselPrevious, CarouselNext } from "@/components/ui/carousel";
+import { Label } from "@/components/ui/label";
 
-export default function MenuInicial() {
-    return (
-<<<<<<< Updated upstream
-        <div className="flex flex-col min-h-screen">
-            {/* Seção do Carrossel */}
-            <section className="relative h-[500px] overflow-hidden">
-                <div className="absolute inset-0 w-full h-full">
-                    <Carousel className="w-full h-full">
-                        <CarouselContent>
-                            <CarouselItem>
-                                <img src="/placeholder.svg" alt="Quadra de Futebol" className="w-full h-full object-cover" />
-                            </CarouselItem>
-                            <CarouselItem>
-                                <img src="/placeholder.svg" alt="Quadra de Futebol" className="w-full h-full object-cover" />
-                            </CarouselItem>
-                            <CarouselItem>
-                                <img src="/placeholder.svg" alt="Quadra de Futebol" className="w-full h-full object-cover" />
-                            </CarouselItem>
-                        </CarouselContent>
-                        <CarouselPrevious />
-                        <CarouselNext />
-                    </Carousel>
-                </div>
-                <div className="relative z-10 flex flex-col items-center justify-center h-full px-4 text-center text-white">
-                    <div className="absolute top-4 right-4">
-                        <Avatar className="relative overflow-visible">
-                            <span className="absolute -right-1 -top-0 flex h-3 w-3 rounded-full bg-green-600" />
-                            <AvatarImage src="/placeholder-user.jpg" alt="@jaredpalmer" />
-                            <AvatarFallback>JP</AvatarFallback>
-                        </Avatar>
-                    </div>
-                    <Label className="text-4xl font-bold tracking-tight sm:text-5xl lg:text-6xl">
-                        Alugue as Melhores Quadras de Futebol
-                    </Label>
-                    <Label className="mt-3 text-xl sm:mt-5 sm:text-2xl">
-                        Encontre e reserve a quadra de futebol perfeita para seu próximo jogo ou evento.
-                    </Label>
-                    <div className="mt-5 sm:mt-8">
-                        <Link
-                            to="#"
-                            className="inline-flex items-center justify-center px-4 py-2 text-base font-medium rounded-md shadow-sm text-primary-foreground bg-primary hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary"
-                        >
-                            Reserve Agora
-                        </Link>
-                    </div>
-                </div>
-            </section>
-
-            {/* Filtros */}
-            <div className="bg-gray-100 p-4 lg:p-8">
-                <Label className="text-2xl font-bold mb-4">Filtrar Quadras</Label>
-                <div className="space-y-4">
-                    <div>
-                        <label htmlFor="location" className="block text-gray-700 font-medium mb-2">
-                            Localização
-                        </label>
-                        <SelectTrigger className="w-full">
-                            <SelectValue placeholder="Selecione a localização" />
-                        </SelectTrigger>
-                        <SelectContent>
-                            <SelectItem value="downtown">Centro</SelectItem>
-                            <SelectItem value="uptown">Zona Alta</SelectItem>
-                            <SelectItem value="suburban">Subúrbio</SelectItem>
-                        </SelectContent>
-                    </div>
-                    <div>
-                        <label htmlFor="size" className="block text-gray-700 font-medium mb-2">
-                            Tamanho da Quadra
-                        </label>
-                        <SelectTrigger className="w-full">
-                            <SelectValue placeholder="Selecione o tamanho" />
-                        </SelectTrigger>
-                        <SelectContent>
-                            <SelectItem value="small">Pequena</SelectItem>
-                            <SelectItem value="medium">Média</SelectItem>
-                            <SelectItem value="large">Grande</SelectItem>
-                        </SelectContent>
-                    </div>
-                    <div>
-                        <Label htmlFor="amenities" className="block text-gray-700 font-medium mb-2">
-                            Comodidades
-                        </Label>
-                        <div className="space-y-2">
-                            <Checkbox id="lights" value="lights">Iluminação</Checkbox>
-                            <Checkbox id="showers" value="showers">Chuveiros</Checkbox>
-                            <Checkbox id="scoreboard" value="scoreboard">Placar</Checkbox>
-                        </div>
-                    </div>
-                    <Button className="w-full">Aplicar Filtros</Button>
-                </div>
+export default function Component() {
+  return (
+    <div className="p-4 space-y-4 text-gray-900"> {/* Fundo preto claro */}
+      <div className="flex flex-col items-center">
+        <img src="/placeholder.svg" alt="Logo" className="w-16 h-16" />
+      </div>
+      <div className="bg-white p-4 rounded-lg shadow-md border border-black"> {/* Filtros com fundo branco e contorno preto */}
+        <div className="flex flex-col space-y-4">
+          <Label className="text-lg font-bold">Filters</Label>
+          <div className="space-y-2">
+            <Input type="date" placeholder="Date" className="border border-black" />
+            <div className="grid grid-cols-2 gap-2">
+              <Input type="time" placeholder="Start Time" className="border border-black" />
+              <Input type="time" placeholder="End Time" className="border border-black" />
             </div>
-
-            {/* Quadras Disponíveis */}
-            <div className="flex-1 p-4 lg:p-8">
-                <Label className="text-2xl font-bold mb-4">Quadras Disponíveis</Label>
-                <Carousel className="w-full">
-                    <CarouselContent>
-                        <CarouselItem>
-                            <div className="bg-white rounded-lg shadow-lg overflow-hidden">
-                                <img src="/placeholder.svg" alt="Quadra 1" className="w-full h-48 object-cover" />
-                                <div className="p-4">
-                                    <Label className="text-xl font-bold mb-2">Quadra 1</Label>
-                                    <Label className="text-gray-500 mb-4">Localização no Centro</Label>
-                                    <Link
-                                        to="#"
-                                        className="inline-flex items-center justify-center px-4 py-2 text-base font-medium rounded-md shadow-sm text-primary-foreground bg-primary hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary"
-                                    >
-                                        Reserve Agora
-                                    </Link>
-                                </div>
-                            </div>
-                        </CarouselItem>
-                        <CarouselItem>
-                            <div className="bg-white rounded-lg shadow-lg overflow-hidden">
-                                <img src="/placeholder.svg" alt="Quadra 2" className="w-full h-48 object-cover" />
-                                <div className="p-4">
-                                    <Label className="text-xl font-bold mb-2">Quadra 2</Label>
-                                    <Label className="text-gray-500 mb-4">Localização na Zona Alta</Label>
-                                    <Link
-                                        to="#"
-                                        className="inline-flex items-center justify-center px-4 py-2 text-base font-medium rounded-md shadow-sm text-primary-foreground bg-primary hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary"
-                                    >
-                                        Reserve Agora
-                                    </Link>
-                                </div>
-                            </div>
-                        </CarouselItem>
-                        <CarouselItem>
-                            <div className="bg-white rounded-lg shadow-lg overflow-hidden">
-                                <img src="/placeholder.svg" alt="Quadra 3" className="w-full h-48 object-cover" />
-                                <div className="p-4">
-                                    <Label className="text-xl font-bold mb-2">Quadra 3</Label>
-                                    <Label className="text-gray-500 mb-4">Localização no Subúrbio</Label>
-                                    <Link
-                                        to="#"
-                                        className="inline-flex items-center justify-center px-4 py-2 text-base font-medium rounded-md shadow-sm text-primary-foreground bg-primary hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary"
-                                    >
-                                        Reserve Agora
-                                    </Link>
-                                </div>
-                            </div>
-                        </CarouselItem>
-                    </CarouselContent>
-                    <CarouselPrevious />
-                    <CarouselNext />
-                </Carousel>
-=======
-      <div className="flex flex-col min-h-screen bg-gray-900">
-          <div className="absolute inset-0 w-full h-full">
-            <Carousel className="w-full h-full">
-              <CarouselContent>
-                <CarouselItem>
-                  <img src="/menuInicial/placeholder.svg" alt="Quadra de Futebol" className="w-full h-full object-cover" />
-                </CarouselItem>
-                <CarouselItem>
-                  <img src="/menuInicial/placeholder.svg" alt="Quadra de Futebol" className="w-full h-full object-cover" />
-                </CarouselItem>
-                <CarouselItem>
-                  <img src="/menuInicial/placeholder.svg" alt="Quadra de Futebol" className="w-full h-full object-cover" />
-                </CarouselItem>
-              </CarouselContent>
-              <CarouselPrevious />
-              <CarouselNext />
-            </Carousel>
-          </div>
-          <div className="relative z-10 flex flex-col items-center justify-center h-full px-2 text-center text-white bg-opacity-75 bg-black">
-            <div className="absolute top-2 right-2">
-              <Avatar className="relative overflow-visible w-10 h-10">
-                <AvatarImage src="/menuInicial/placeholder-user.jpg" alt="@jaredpalmer" />
-                <AvatarFallback>JP</AvatarFallback>
-              </Avatar>
+            <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
+              <Input type="text" placeholder="City" className="border border-black" />
+              <Select>
+                <SelectTrigger className="border border-black">
+                  <SelectValue placeholder="State" />
+                </SelectTrigger>
+                <SelectContent className="border border-black">
+                  <SelectItem value="SC">SC</SelectItem>
+                  <SelectItem value="SP">SP</SelectItem>
+                  <SelectItem value="RJ">RJ</SelectItem>
+                </SelectContent>
+              </Select>
             </div>
-              <Label className="text-2xl sm:text-3xl font-bold tracking-tight">Alugue as Melhores Quadras de Futebol</Label>
-              <Label className="mt-2 text-base sm:mt-3 sm:text-lg">
-                Encontre e reserve a quadra de futebol perfeita para seu próximo jogo ou evento.
-              </Label>
-              </div>
-              <div className="bg-gray-100 p-2 sm:p-4 lg:p-6">
             <div className="space-y-2">
-            <div>
-              <Label htmlFor="location" className="block text-gray-700 font-medium mb-1 text-sm sm:text-base">
-                Localização
-              </Label>
-              <Select>
-                <SelectTrigger>
-                  <SelectValue placeholder="Selecione a localização" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="downtown">Centro</SelectItem>
-                  <SelectItem value="uptown">Zona Alta</SelectItem>
-                  <SelectItem value="suburban">Subúrbio</SelectItem>
-                </SelectContent>
-              </Select>
->>>>>>> Stashed changes
-            </div>
-
-            {/* Quadras Reservadas */}
-            <div className="flex-1 p-4 lg:p-8">
-                <Label className="text-2xl font-bold mb-4">Quadras Reservadas</Label>
-                <Carousel className="w-full">
-                    <CarouselContent>
-                        <CarouselItem>
-                            <div className="bg-white rounded-lg shadow-lg overflow-hidden">
-                                <img src="/placeholder.svg" alt="Quadra 4" className="w-full h-48 object-cover" />
-                                <div className="p-4">
-                                    <Label className="text-xl font-bold mb-2">Quadra 4</Label>
-                                    <Label className="text-gray-500 mb-4">Localização no Centro</Label>
-                                    <Link
-                                        to="#"
-                                        className="inline-flex items-center justify-center px-4 py-2 text-base font-medium rounded-md shadow-sm text-primary-foreground bg-primary hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary"
-                                    >
-                                        Ver Detalhes
-                                    </Link>
-                                </div>
-                            </div>
-                        </CarouselItem>
-                        <CarouselItem>
-                            <div className="bg-white rounded-lg shadow-lg overflow-hidden">
-                                <img src="/placeholder.svg" alt="Quadra 5" className="w-full h-48 object-cover" />
-                                <div className="p-4">
-                                    <Label className="text-xl font-bold mb-2">Quadra 5</Label>
-                                    <Label className="text-gray-500 mb-4">Localização na Zona Alta</Label>
-                                    <Link
-                                        to="#"
-                                        className="inline-flex items-center justify-center px-4 py-2 text-base font-medium rounded-md shadow-sm text-primary-foreground bg-primary hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary"
-                                    >
-                                        Ver Detalhes
-                                    </Link>
-                                </div>
-                            </div>
-                        </CarouselItem>
-                        <CarouselItem>
-                            <div className="bg-white rounded-lg shadow-lg overflow-hidden">
-                                <img src="/placeholder.svg" alt="Quadra 6" className="w-full h-48 object-cover" />
-                                <div className="p-4">
-                                    <Label className="text-xl font-bold mb-2">Quadra 6</Label>
-                                    <Label className="text-gray-500 mb-4">Localização no Subúrbio</Label>
-                                    <Link
-                                        to="#"
-                                        className="inline-flex items-center justify-center px-4 py-2 text-base font-medium rounded-md shadow-sm text-primary-foreground bg-primary hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary"
-                                    >
-                                        Ver Detalhes
-                                    </Link>
-                                </div>
-                            </div>
-                        </CarouselItem>
-                    </CarouselContent>
-                    <CarouselPrevious />
-                    <CarouselNext />
-                </Carousel>
-            </div>'
-            <div>
-              <Label htmlFor="size" className="block text-gray-700 font-medium mb-1 text-sm sm:text-base">
-                Tamanho da Quadra
-              </Label>
-              <Select>
-                <SelectTrigger>
-                  <SelectValue placeholder="Selecione o tamanho" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="small">Pequena</SelectItem>
-                  <SelectItem value="medium">Média</SelectItem>
-                  <SelectItem value="large">Grande</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-            <div>
-              <Label htmlFor="amenities" className="block text-gray-700 font-medium mb-1 text-sm sm:text-base">
-                Comodidades
-              </Label>
-              <div className="space-y-1">
-                <Checkbox value="lights">Iluminação</Checkbox>
-                <Checkbox value="showers">Chuveiros</Checkbox>
-                <Checkbox value="scoreboard">Placar</Checkbox>
+              <Label className="text-sm font-medium">Sports</Label>
+              <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
+                <div className="flex items-center space-x-2">
+                  <Checkbox id="volei" className="border border-black" />
+                  <Label htmlFor="volei">Volleyball</Label>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <Checkbox id="futsal" className="border border-black" />
+                  <Label htmlFor="futsal">Futsal</Label>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <Checkbox id="beach-tennis" className="border border-black" />
+                  <Label htmlFor="beach-tennis">Beach Tennis</Label>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <Checkbox id="futebol-society" className="border border-black" />
+                  <Label htmlFor="futebol-society">Soccer</Label>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <Checkbox id="futevolei" className="border border-black" />
+                  <Label htmlFor="futevolei">Footvolley</Label>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <Checkbox id="volei-de-praia" className="border border-black" />
+                  <Label htmlFor="volei-de-praia">Beach Volleyball</Label>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <Checkbox id="tenis" className="border border-black" />
+                  <Label htmlFor="tenis">Tennis</Label>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <Checkbox id="basquete" className="border border-black" />
+                  <Label htmlFor="basquete">Basketball</Label>
+                </div>
               </div>
             </div>
-            <Button className="w-full text-sm sm:text-base py-1 sm:py-2">Aplicar Filtros</Button>
           </div>
         </div>
-        <div className="flex-1 p-2 lg:p-6">
-          <Label className="text-xl font-bold mb-2">Quadras Disponíveis</Label>
-          <Carousel className="w-full">
-            <CarouselContent>
-              <CarouselItem>
-                <div className="bg-white rounded-lg shadow-lg overflow-hidden">
-                  <img src="/menuInicial/placeholder.svg" alt="Quadra 1" className="w-full h-40 object-cover" />
-                  <div className="p-2">
-                    <Label className="text-lg font-bold mb-1">Quadra 1</Label>
-                    <Label className="text-gray-500 mb-2">Localização no Centro</Label>
-                    <Link
-                      to="#"
-                      className="inline-flex items-center justify-center px-3 py-1 text-sm font-medium rounded-md shadow-sm text-primary-foreground bg-primary hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary"
-                    >
-                      Reserve Agora
-                    </Link>
+      </div>
+      <div className="space-y-4">
+        <Label className="text-lg font-bold text-white">Photos</Label>
+        <Carousel className="w-full">
+          <CarouselContent>
+            <CarouselItem className="flex-shrink-0 w-full sm:w-1/2 md:w-1/3 lg:w-1/4">
+              <div className="p-1">
+                <div className="bg-white rounded-lg overflow-hidden border border-black">
+                  <div className="aspect-w-16 aspect-h-9">
+                    <img src="/abandonado.png" alt="Location 1" className="w-full h-48 object-cover mb-4" />
+                  </div>
+                  <div className="mt-2 p-2">
+                    <Label className="text-sm font-medium text-white">Arena Rio Maina</Label>
+                    <Label className="text-sm text-gray-600">Court 01</Label>
+                    <Label className="text-sm text-gray-600">Criciúma, SC</Label>
+                    <Label className="text-sm font-bold">R$ 110,00</Label>
                   </div>
                 </div>
-              </CarouselItem>
-              <CarouselItem>
-                <div className="bg-white rounded-lg shadow-lg overflow-hidden">
-                  <img src="/menuInicial/placeholder.svg" alt="Quadra 2" className="w-full h-40 object-cover" />
-                  <div className="p-2">
-                    <Label className="text-lg font-bold mb-1">Quadra 2</Label>
-                    <Label className="text-gray-500 mb-2">Localização na Zona Alta</Label>
-                    <Link
-                      to="#"
-                      className="inline-flex items-center justify-center px-3 py-1 text-sm font-medium rounded-md shadow-sm text-primary-foreground bg-primary hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary"
-                    >
-                      Reserve Agora
-                    </Link>
+              </div>
+            </CarouselItem>
+            <CarouselItem className="flex-shrink-0 w-full sm:w-1/2 md:w-1/3 lg:w-1/4">
+              <div className="p-1">
+                <div className="bg-white rounded-lg overflow-hidden border border-black">
+                  <div className="aspect-w-16 aspect-h-9">
+                  <img src="/forever_alone.png" alt="Location 1" className="w-full h-48 object-cover mb-4" />
+                  </div>
+                  <div className="mt-2 p-2">
+                    <Label className="text-sm font-medium">Arena Criciúma</Label>
+                    <Label className="text-sm text-gray-600">Outdoor Court 01</Label>
+                    <Label className="text-sm text-gray-600">Criciúma, SC</Label>
+                    <Label className="text-sm font-bold">R$ 80,00</Label>
                   </div>
                 </div>
-              </CarouselItem>
-              <CarouselItem>
-                <div className="bg-white rounded-lg shadow-lg overflow-hidden">
-                  <img src="/menuInicial/placeholder.svg" alt="Quadra 3" className="w-full h-40 object-cover" />
-                  <div className="p-2">
-                    <Label className="text-lg font-bold mb-1">Quadra 3</Label>
-                    <Label className="text-gray-500 mb-2">Localização no Subúrbio</Label>
-                    <Link
-                      to="#"
-                      className="inline-flex items-center justify-center px-3 py-1 text-sm font-medium rounded-md shadow-sm text-primary-foreground bg-primary hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary"
-                    >
-                      Reserve Agora
-                    </Link>
+              </div>
+            </CarouselItem>
+            <CarouselItem className="flex-shrink-0 w-full sm:w-1/2 md:w-1/3 lg:w-1/4">
+              <div className="p-1">
+                <div className="bg-white rounded-lg overflow-hidden border border-black">
+                  <div className="aspect-w-16 aspect-h-9">
+                  <img src="/quadra_arlivre.png" alt="Location 1" className="w-full h-48 object-cover mb-4" />
+                  </div>
+                  <div className="mt-2 p-2">
+                    <Label className="text-sm font-medium">VeraCruz</Label>
+                    <Label className="text-sm text-gray-600">Futsal Court</Label>
+                    <Label className="text-sm text-gray-600">Criciúma, SC</Label>
+                    <Label className="text-sm font-bold">R$ 100,00</Label>
                   </div>
                 </div>
-              </CarouselItem>
-            </CarouselContent>
-            <CarouselPrevious />
-            <CarouselNext />
-          </Carousel>
-        </div>
-        <div className="flex-1 p-2 lg:p-6">
-          <Label className="text-xl font-bold mb-2">Quadras Reservadas</Label>
-          <Carousel className="w-full">
-            <CarouselContent>
-              <CarouselItem>
-                <div className="bg-white rounded-lg shadow-lg overflow-hidden">
-                  <img src="/menuInicial/placeholder.svg" alt="Quadra 4" className="w-full h-40 object-cover" />
-                  <div className="p-2">
-                    <Label className="text-lg font-bold mb-1">Quadra 4</Label>
-                    <Label className="text-gray-500 mb-2">Localização no Centro</Label>
-                    <Link
-                      to="#"
-                      className="inline-flex items-center justify-center px-3 py-1 text-sm font-medium rounded-md shadow-sm text-primary-foreground bg-primary hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary"
-                    >
-                      Ver Detalhes
-                    </Link>
+              </div>
+            </CarouselItem>
+          </CarouselContent>
+          <CarouselPrevious />
+          <CarouselNext />
+        </Carousel>
+      </div>
+      <div className="space-y-4">
+        <Label className="text-lg font-bold text-white">Latest Bookings</Label>
+        <Carousel className="w-full">
+          <CarouselContent>
+            <CarouselItem className="flex-shrink-0 w-full sm:w-1/2 md:w-1/3 lg:w-1/4">
+              <div className="p-1">
+                <div className="bg-white rounded-lg overflow-hidden border border-black">
+                  <div className="aspect-w-16 aspect-h-9">
+                  <img src="/quadra_boa.png" alt="Location 1" className="w-full h-48 object-cover mb-4" />
+                  </div>
+                  <div className="mt-2 p-2">
+                    <Label className="text-sm text-gray-600">Date: 09/12/2023</Label>
+                    <Label className="text-sm text-gray-600">Time: 2pm - 3pm</Label>
+                    <Label className="text-sm font-medium">Arena Rio Maina</Label>
+                    <Label className="text-sm text-gray-600">Court 01</Label>
+                    <Label className="text-sm text-gray-600">Criciúma, SC</Label>
+                    <Label className="text-sm font-bold">R$ 110,00</Label>
                   </div>
                 </div>
-              </CarouselItem>
-              <CarouselItem>
-                <div className="bg-white rounded-lg shadow-lg overflow-hidden">
-                  <img src="/menuInicial/placeholder.svg" alt="Quadra 5" className="w-full h-40 object-cover" />
-                  <div className="p-2">
-                    <Label className="text-lg font-bold mb-1">Quadra 5</Label>
-                    <Label className="text-gray-500 mb-2">Localização na Zona Alta</Label>
-                    <Link
-                      to="#"
-                      className="inline-flex items-center justify-center px-3 py-1 text-sm font-medium rounded-md shadow-sm text-primary-foreground bg-primary hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary"
-                    >
-                      Ver Detalhes
-                    </Link>
+              </div>
+            </CarouselItem>
+            <CarouselItem className="flex-shrink-0 w-full sm:w-1/2 md:w-1/3 lg:w-1/4">
+              <div className="p-1">
+                <div className="bg-white rounded-lg overflow-hidden border border-black">
+                  <div className="aspect-w-16 aspect-h-9">
+                    <img src="/quadra_campo.png" alt="Booking 2" className="w-full h-40 object-cover" style={{ aspectRatio: "1/1", objectFit: "cover" }} />
+                  </div>
+                  <div className="mt-2 p-2">
+                    <Label className="text-sm text-gray-600">Date: 09/11/2023</Label>
+                    <Label className="text-sm text-gray-600">Time: 4pm - 5pm</Label>
+                    <Label className="text-sm font-medium">Resenha da Bola</Label>
+                    <Label className="text-sm text-gray-600">Covered Court 01</Label>
+                    <Label className="text-sm text-gray-600">Criciúma, SC</Label>
+                    <Label className="text-sm font-bold">R$ 100,00</Label>
                   </div>
                 </div>
-              </CarouselItem>
-              <CarouselItem>
-                <div className="bg-white rounded-lg shadow-lg overflow-hidden">
-                <img
-                  alt="abandonado"
-                  className="w-full h-40 object-cover"
-                  src="/menuInicial/abandonado.png"
-                 />
-                  <div className="p-2">
-                    <h3 className="text-lg font-bold mb-1">Quadra 6</h3>
-                    <Link
-                      to="#"
-                      className="inline-flex items-center justify-center px-3 py-1 text-sm font-medium rounded-md shadow-sm text-primary-foreground bg-primary hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary"
-                    >
-                      Ver Detalhes
-                    </Link>
+              </div>
+            </CarouselItem>
+            <CarouselItem className="flex-shrink-0 w-full sm:w-1/2 md:w-1/3 lg:w-1/4">
+              <div className="p-1">
+                <div className="bg-white rounded-lg overflow-hidden border border-black">
+                  <div className="aspect-w-16 aspect-h-9">
+                    <img src="/placeholder.svg" alt="Booking 3" className="w-full h-40 object-cover" style={{ aspectRatio: "1/1", objectFit: "cover" }} />
+                  </div>
+                  <div className="mt-2 p-2">
+                    <Label className="text-sm text-gray-600">Date: 09/10/2023</Label>
+                    <Label className="text-sm text-gray-600">Time: 6pm - 7pm</Label>
+                    <Label className="text-sm font-medium">Parque da Prefa</Label>
+                    <Label className="text-sm text-gray-600">Basketball Court</Label>
+                    <Label className="text-sm text-gray-600">Criciúma, SC</Label>
+                    <Label className="text-sm font-bold">R$ 25,00</Label>
                   </div>
                 </div>
-              </CarouselItem>
-            </CarouselContent>
-            <CarouselPrevious />
-            <CarouselNext />
-          </Carousel>
-        </div>
-    )
+              </div>
+            </CarouselItem>
+          </CarouselContent>
+          <CarouselPrevious />
+          <CarouselNext />
+        </Carousel>
+      </div>
+    </div>
+  );
 }
-
+           

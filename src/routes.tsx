@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { Route, Routes, } from "react-router-dom";
 import CriarConta from "./view/criarconta";
 import Entrar from "./view/entrar";
-import { Layout } from "./view/layout";
 import LoadingScreen from "./view/loading/Loading";
 import PaginaNaoEncontrada from "./view/paginanaoencontrada";
 import Perfil from "./view/perfil";
@@ -32,7 +31,6 @@ function MainRoutes() {
     }
 
     return (
-        <Layout>
             <Routes>
                 <Route path="/" element={< MenuInicial />} />
                {/*} <Route path="/produtos/:id" element={<PainelProduto />} />*/}
@@ -41,7 +39,6 @@ function MainRoutes() {
                 <Route path="/criarconta" element={<CriarConta />} />
                 <Route path="/perfil" element={<Perfil />} />
             </Routes>
-        </Layout>
     )
 }
 

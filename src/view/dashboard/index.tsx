@@ -14,7 +14,7 @@ import {
 
 export default function MenuInicial() {
   return (
-    <div className="p-2 space-y-2 text-muted-foreground"> 
+    <div className="p-2 space-y-2"> 
       <div className="flex flex-col items-center">
         <img src="/logo.png" alt="Logo" className="w-20 h-17 mx-6 my-6" /> 
       </div>

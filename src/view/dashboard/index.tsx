@@ -14,9 +14,9 @@ import {
 
 export default function MenuInicial() {
   return (
-    <div className="p-2 space-y-2"> 
+    <div className="p-2 h-[100vh]"> 
       <div className="flex flex-col items-center">
-        <img src="/logo.png" alt="Logo" className="w-20 h-17 mx-6 my-6" /> 
+        <img src="/logo.png" alt="Logo" className="w-20 h-17 mx-6 mb-6" /> 
       </div>
       <div className=" p-2 rounded-lg shadow-md "> 
         <Accordion type="single" collapsible>
@@ -24,7 +24,7 @@ export default function MenuInicial() {
           <div className="relative">
           <Label className="absolute top-5 z-20">Filtros</Label>
             <AccordionTrigger><div>     </div></AccordionTrigger>
-            <AccordionContent>
+            <AccordionContent className="p-2">
               <div className="flex flex-col space-y-2">
                 <Input type="text" placeholder="Pesquisa por nome" className="border border-muted/40 text-sm" /> 
                 <div className="space-y-1">
@@ -192,6 +192,7 @@ export default function MenuInicial() {
           </CarouselContent>
         </Carousel>
       </div>
+      
     </div>
   );
 }

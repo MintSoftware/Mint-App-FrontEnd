@@ -11,49 +11,114 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion"
+import { useState } from "react";
 
 export default function MenuInicial() {
+  const [nomePesquisa, setNomePesquisa] = useState("");
+  const [data, setData] = useState("");
+  const [horaInicio, setHoraInicio] = useState("00:00");
+  const [horaFim, setHoraFim] = useState("00:00");
+  const [estado, setEstado] = useState("");
+  const [cidade, setCidade] = useState("");
+  // const [esportes, setEsportes] = useState({
+  //   volei: false,
+  //   futsal: false,
+  //   beachTennis: false,
+  //   futebolSociety: false,
+  //   voleiDePraia: false,
+  //   tenis: false,
+  //   basquete: false,
+  // });
+
+  // const handleCheckboxChange = () => {
+  //   const { id, checked } = e.target;
+  //   setEsportes((prevEsportes) => ({
+  //     ...prevEsportes,
+  //     [id]: checked,
+  //   }));
+  // };
+
+  const handleFilter = () => {
+    console.log({
+      nomePesquisa,
+      data,
+      horaInicio,
+      horaFim,
+      estado,
+      cidade,
+    });
+  };
+
   return (
     <div className="p-2 h-[100vh]"> 
       <div className="flex flex-col items-center">
         <img src="/logo.png" alt="Logo" className="w-20 h-17 mx-6 mb-6" /> 
       </div>
-      <div className=" p-2 rounded-lg shadow-md "> 
+      <div className="p-2 rounded-lg shadow-md"> 
         <Accordion type="single" collapsible>
           <AccordionItem value="item-1">
-          <div className="relative">
-          <Label className="absolute top-5 z-20">Filtros</Label>
-            <AccordionTrigger><div>     </div></AccordionTrigger>
-            <AccordionContent className="p-2">
-              <div className="flex flex-col space-y-2">
-                <Input type="text" placeholder="Pesquisa por nome" className="border border-muted/40 text-sm" /> 
-                <div className="space-y-1">
-                  <Label className="text-sm font-bold">Data</Label> 
-                  <Input type="date" placeholder="Date" className="border border-muted/40 text-sm" /> 
-                  <div className="flex space-x-2">
-                    <div className="flex items-center space-x-2">
-                      <Label className="text-sm font-bold">Hora inicio</Label>
-                      <Input id="inicio" type="time" value="00:00" className="time-input ml-2 w-1/2" />
-                    </div>
-                    <div className="flex items-center space-x-2 m-2">
-                      <Label className="text-sm font-bold">Hora fim</Label>
-                      <Input id="fim" type="time" value="00:00" className="time-input ml-2 w-1/2" />
-                    </div>
-                  </div>
-                  <div className="grid grid-cols-1 gap-1 sm:grid-cols-2">
-                    <Select>
-                      <SelectTrigger className="border border-muted/40 text-sm">
-                        <SelectValue placeholder="Escolha um estado" />
-                      </SelectTrigger>
-                      <SelectContent className="border border-muted/40 text-sm">
-                        {mostraTodosEstadosBrasileiros().map((estado) => (
-                          <SelectItem key={estado} value={estado}>{estado}</SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                    <Input type="text" placeholder="Escolha uma Cidade" className="border border-muted/40 text-sm" /> 
-                  </div>
+            <div className="relative">
+              <Label className="absolute top-5 z-20">Filtros</Label>
+              <AccordionTrigger><div>     </div></AccordionTrigger>
+              <AccordionContent className="p-2">
+                <div className="flex flex-col space-y-2">
+                  <Input 
+                    type="text" 
+                    placeholder="Pesquisa por nome" 
+                    className="border border-muted/40 border-white text-sm" 
+                    value={nomePesquisa}
+                    onChange={(e) => setNomePesquisa(e.target.value)}
+                  /> 
                   <div className="space-y-1">
+                    <Label className="text-sm font-bold">Data</Label> 
+                    <Input 
+                      type="date" 
+                      placeholder="Date" 
+                      className="border border-muted/40 border-white text-sm" 
+                      value={data}
+                      onChange={(e) => setData(e.target.value)}
+                    /> 
+                    <div className="flex space-x-2">
+                      <div className="flex items-center space-x-2">
+                        <Label className="text-sm font-bold">Hora inicio</Label>
+                        <Input 
+                          id="inicio" 
+                          type="time" 
+                          value={horaInicio} 
+                          className="time-input border-white ml-2 w-1/2" 
+                          onChange={(e) => setHoraInicio(e.target.value)}
+                        />
+                      </div>
+                      <div className="flex items-center space-x-2 m-2">
+                        <Label className="text-sm font-bold">Hora fim</Label>
+                        <Input 
+                          id="fim" 
+                          type="time" 
+                          value={horaFim} 
+                          className="time-input border-white ml-2 w-1/2" 
+                          onChange={(e) => setHoraFim(e.target.value)}
+                        />
+                      </div>
+                    </div>
+                    <div className="grid grid-cols-1 gap-1 sm:grid-cols-2">
+                      <Select value={estado} onValueChange={setEstado}>
+                        <SelectTrigger className="border border-muted/40 text-sm border-white">
+                          <SelectValue placeholder="Escolha um estado" />
+                        </SelectTrigger>
+                        <SelectContent className="border border-muted/40 text-sm">
+                          {mostraTodosEstadosBrasileiros().map((estado) => (
+                            <SelectItem key={estado} value={estado}>{estado}</SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                      <Input 
+                        type="text" 
+                        placeholder="Escolha uma Cidade" 
+                        className="border border-muted/40 text-sm border-white" 
+                        value={cidade}
+                        onChange={(e) => setCidade(e.target.value)}
+                      />
+                      <div className="space-y-1">
                     <Label className="text-xs font-medium">Sports</Label> 
                     <div className="grid grid-cols-2 gap-1 sm:grid-cols-3">
                       <div className="flex items-center space-x-1">
@@ -85,11 +150,12 @@ export default function MenuInicial() {
                         <Label htmlFor="basquete" className="text-xs text-w">Volêi de Praia</Label> 
                       </div>
                     </div>
+                  </div> 
+                    </div>
                   </div>
                 </div>
-              </div>
-              <Button className="w-full">Pesquisar</Button>
-            </AccordionContent>
+                <Button className="w-full" onClick={handleFilter}>Pesquisar</Button>
+              </AccordionContent>
             </div>
           </AccordionItem>
         </Accordion>
@@ -192,7 +258,6 @@ export default function MenuInicial() {
           </CarouselContent>
         </Carousel>
       </div>
-      
     </div>
   );
 }

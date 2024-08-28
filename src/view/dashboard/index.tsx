@@ -152,7 +152,7 @@ export default function MenuInicial() {
                                 id={sport} 
                                 className="border border-muted/40 border-white" 
                                 checked={esportes[sport as keyof Esportes]}
-                                onChange={handleCheckboxChange}
+                                //onChange={handleCheckboxChange}
                               />
                               <Label htmlFor={sport} className="text-xs">{sport.replace(/([A-Z])/g, ' $1').toUpperCase()}</Label>
                             </div>

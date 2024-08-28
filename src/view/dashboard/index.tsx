@@ -37,6 +37,14 @@ export default function MenuInicial() {
     tenis: false,
     basquete: false,
   });
+  // Arranca fora depoois
+  let arranca_fora_depois = () => {
+    setEsportes((prevEsportes) => ({
+      ...prevEsportes,
+      //[id]: checked,
+    }));
+  };
+  console.log(arranca_fora_depois);
 
   useEffect(() => {
     if (estado) {
@@ -48,13 +56,13 @@ export default function MenuInicial() {
     }
   }, [estado]);
 
-  const handleCheckboxChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const { id, checked } = e.target;
-    setEsportes((prevEsportes) => ({
-      ...prevEsportes,
-      [id]: checked,
-    }));
-  };
+  // const handleCheckboxChange = (e: ChangeEvent<HTMLInputElement>) => {
+  //   const { id, checked } = e.target;
+  //   setEsportes((prevEsportes) => ({
+  //     ...prevEsportes,
+  //     [id]: checked,
+  //   }));
+  // };
 
   const handleFilter = () => {
     console.log({

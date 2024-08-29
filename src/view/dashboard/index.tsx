@@ -1,4 +1,3 @@
-// pages/MenuInicial.tsx
 import { Input } from "@/components/ui/input";
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -8,7 +7,7 @@ import { mostraTodosEstadosBrasileiros, obterCidadesPorEstado } from "@/lib/util
 import { Button } from "@/components/ui/button";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { ChangeEvent, useEffect, useState } from "react";
-import CarouselItemComponent from "@/components/CarouselItemComponent";
+import CarouselItemComponent from "@/components/CarouselItemComponent";'1'
 
 interface Esportes {
   volei: boolean;
@@ -37,6 +36,8 @@ export default function MenuInicial() {
     tenis: false,
     basquete: false,
   });
+
+
   // Arranca fora depoois
   let arranca_fora_depois = () => {
     setEsportes((prevEsportes) => ({
@@ -55,14 +56,6 @@ export default function MenuInicial() {
       setCidadeSelecionada("");
     }
   }, [estado]);
-
-  // const handleCheckboxChange = (e: ChangeEvent<HTMLInputElement>) => {
-  //   const { id, checked } = e.target;
-  //   setEsportes((prevEsportes) => ({
-  //     ...prevEsportes,
-  //     [id]: checked,
-  //   }));
-  // };
 
   const handleFilter = () => {
     console.log({
@@ -140,7 +133,7 @@ export default function MenuInicial() {
                       <Select 
                         value={cidadeSelecionada} 
                         onValueChange={(value) => setCidadeSelecionada(value)}
-                        disabled={!estado} // Desabilita o campo se o estado não estiver preenchido
+                        disabled={!estado} 
                       >
                         <SelectTrigger className="border border-muted/40 text-sm border-white">
                           <SelectValue placeholder="Escolha uma cidade" />
@@ -184,19 +177,34 @@ export default function MenuInicial() {
               imageSrc="/abandonado.png" 
               title="Bar do Zé" 
               location="Criciúma, SC" 
-              price="R$150,00" 
+              price="R$150,00"
+              additionalInfo={{
+                sports: "Futebol, Vôlei",
+                characteristics: "Coberto, Grama sintética",
+                hourlyRate: "R$ 100,00"
+              }}
             />
             <CarouselItemComponent 
               imageSrc="/forever_alone.png" 
               title="Presidio Santa Augusta1" 
               location="Criciúma, SC" 
               price="R$ 110,00" 
+              additionalInfo={{
+                sports: "Futebol, Vôlei",
+                characteristics: "Coberto, Grama sintética",
+                hourlyRate: "R$ 100,00"
+              }}
             />
             <CarouselItemComponent 
               imageSrc="/quadra_arlivre.png" 
               title="Arranca a Sola" 
               location="Meleiro, SC" 
               price="R$ 180,00" 
+              additionalInfo={{
+                sports: "Futebol, Vôlei",
+                characteristics: "Coberto, Grama sintética",
+                hourlyRate: "R$ 100,00"
+              }}
             />
           </CarouselContent>
         </Carousel>
@@ -210,12 +218,22 @@ export default function MenuInicial() {
               title="Quadra de Futebol" 
               location="São Paulo, SP" 
               price="R$100,00" 
+              additionalInfo={{
+                sports: "Futebol, Vôlei",
+                characteristics: "Coberto, Grama sintética",
+                hourlyRate: "R$ 100,00"
+              }}
             />
             <CarouselItemComponent 
               imageSrc="/quadra_campo.png" 
               title="Campo de Vôlei" 
               location="Rio de Janeiro, RJ" 
               price="R$120,00" 
+              additionalInfo={{
+                sports: "Futebol, Vôlei",
+                characteristics: "Coberto, Grama sintética",
+                hourlyRate: "R$ 100,00"
+              }}
             />
           </CarouselContent>
         </Carousel>

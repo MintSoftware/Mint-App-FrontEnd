@@ -49,53 +49,53 @@ export default function MobileReservationApp() {
     { 
       id: 1, 
       name: 'Quadra Poliesportiva', 
-      image: '/placeholder.svg?height=200&width=300',
+      image: '/forever_alone.png?height=300&width=400',
       description: 'Quadra versátil para diversos esportes',
       address: 'Rua das Flores, 123',
       price: 'R$ 50/hora',
       images: [
-        '/placeholder.svg?height=300&width=400',
-        '/placeholder.svg?height=300&width=400',
-        '/placeholder.svg?height=300&width=400',
+        '/forever_alone.png?height=300&width=400',
+        '/forever_alone.png?height=300&width=400',
+        '/forever_alone.png?height=300&width=400',
       ]
     },
     { 
       id: 2, 
       name: 'Campo de Futebol', 
-      image: '/placeholder.svg?height=200&width=300',
+      image: '/abandonado.png?height=300&width=400',
       description: 'Campo oficial para partidas de futebol',
       address: 'Av. dos Esportes, 456',
       price: 'R$ 80/hora',
       images: [
-        '/placeholder.svg?height=300&width=400',
-        '/placeholder.svg?height=300&width=400',
-        '/placeholder.svg?height=300&width=400',
+        '/abandonado.png?height=300&width=400',
+        '/abandonado.png?height=300&width=400',
+        '/abandonado.png?height=300&width=400',
       ]
     },
     { 
       id: 3, 
       name: 'Quadra de Tênis', 
-      image: '/placeholder.svg?height=200&width=300',
+      image: '/quadra_arlivre.png?height=300&width=400',
       description: 'Quadra profissional de tênis',
       address: 'Praça da Raquete, 789',
       price: 'R$ 60/hora',
       images: [
-        '/placeholder.svg?height=300&width=400',
-        '/placeholder.svg?height=300&width=400',
-        '/placeholder.svg?height=300&width=400',
+        '/quadra_arlivre.png?height=300&width=400',
+        '/quadra_arlivre.png?height=300&width=400',
+        '/quadra_arlivre.png?height=300&width=400',
       ]
     },
     { 
       id: 4, 
       name: 'Ginásio Coberto', 
-      image: '/placeholder.svg?height=200&width=300',
+      image: '/quadra_campo.png?height=200&width=300',
       description: 'Espaço coberto para eventos esportivos',
       address: 'Rua do Ginásio, 1010',
       price: 'R$ 100/hora',
       images: [
-        '/placeholder.svg?height=300&width=400',
-        '/placeholder.svg?height=300&width=400',
-        '/placeholder.svg?height=300&width=400',
+        '/quadra_campo.png?height=200&width=300',
+        '/quadra_campo.png?height=200&width=300',
+        '/quadra_campo.png?height=200&width=300',
       ]
     },
   ]
@@ -103,54 +103,28 @@ export default function MobileReservationApp() {
   const recommendedLocations = [
     { 
       id: 5, 
-      name: 'Piscina Olímpica', 
-      image: '/placeholder.svg?height=200&width=300',
-      description: 'Piscina de tamanho olímpico para natação',
-      address: 'Av. Aquática, 2020',
-      price: 'R$ 70/hora',
+      name: 'Ginásio Coberto', 
+      image: '/quadra_campo.png?height=200&width=300',
+      description: 'Espaço coberto para eventos esportivos',
+      address: 'Rua do Ginásio, 1010',
+      price: 'R$ 100/hora',
       images: [
-        '/placeholder.svg?height=300&width=400',
-        '/placeholder.svg?height=300&width=400',
-        '/placeholder.svg?height=300&width=400',
+        '/quadra_campo.png?height=200&width=300',
+        '/quadra_campo.png?height=200&width=300',
+        '/quadra_campo.png?height=200&width=300',
       ]
     },
     { 
       id: 6, 
-      name: 'Pista de Atletismo', 
-      image: '/placeholder.svg?height=200&width=300',
-      description: 'Pista oficial para corridas e saltos',
-      address: 'Rua da Corrida, 3030',
-      price: 'R$ 40/hora',
+      name: 'Ginásio Coberto', 
+      image: '/quadra_campo.png?height=200&width=300',
+      description: 'Espaço coberto para eventos esportivos',
+      address: 'Rua do Ginásio, 1010',
+      price: 'R$ 100/hora',
       images: [
-        '/placeholder.svg?height=300&width=400',
-        '/placeholder.svg?height=300&width=400',
-        '/placeholder.svg?height=300&width=400',
-      ]
-    },
-    { 
-      id: 7, 
-      name: 'Quadra de Basquete', 
-      image: '/placeholder.svg?height=200&width=300',
-      description: 'Quadra especializada para basquete',
-      address: 'Praça da Cesta, 4040',
-      price: 'R$ 55/hora',
-      images: [
-        '/placeholder.svg?height=300&width=400',
-        '/placeholder.svg?height=300&width=400',
-        '/placeholder.svg?height=300&width=400',
-      ]
-    },
-    { 
-      id: 8, 
-      name: 'Campo de Vôlei de Praia', 
-      image: '/placeholder.svg?height=200&width=300',
-      description: 'Arena de areia para vôlei de praia',
-      address: 'Av. da Praia, 5050',
-      price: 'R$ 45/hora',
-      images: [
-        '/placeholder.svg?height=300&width=400',
-        '/placeholder.svg?height=300&width=400',
-        '/placeholder.svg?height=300&width=400',
+        '/quadra_campo.png?height=200&width=300',
+        '/quadra_campo.png?height=200&width=300',
+        '/quadra_campo.png?height=200&width=300',
       ]
     },
   ]
@@ -162,7 +136,7 @@ export default function MobileReservationApp() {
   return (
     <div className="min-h-screen bg-background text-foreground">
       <header className="p-4 flex justify-center border-b">
-        <img src="/placeholder.svg?height=50&width=150" alt="Logo" className="h-12" />
+        <img src="/logo.png?height=50&width=150" alt="Logo" className="h-12" />
       </header>
 
       <main className="p-4">

@@ -1,0 +1,292 @@
+import  { useState } from 'react'
+import { ChevronDown, Search } from 'lucide-react'
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import { Checkbox } from "@/components/ui/checkbox"
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "@/components/ui/carousel"
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog"
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover"
+import { Label } from '@/components/ui/label'
+
+type Location = {
+  id: number
+  name: string
+  image: string
+  description: string
+  address: string
+  price: string
+  images: string[]
+}
+
+
+export default function MobileReservationApp() {
+  const [selectedLocation, setSelectedLocation] = useState<Location | null>(null); 
+
+  const sports = [
+    { id: 'futebol', label: 'Futebol' },
+    { id: 'volei', label: 'Vôlei' },
+    { id: 'basquete', label: 'Basquete' },
+    { id: 'tenis', label: 'Tênis' },
+  ]
+
+  const availableLocations = [
+    { 
+      id: 1, 
+      name: 'Quadra Poliesportiva', 
+      image: '/placeholder.svg?height=200&width=300',
+      description: 'Quadra versátil para diversos esportes',
+      address: 'Rua das Flores, 123',
+      price: 'R$ 50/hora',
+      images: [
+        '/placeholder.svg?height=300&width=400',
+        '/placeholder.svg?height=300&width=400',
+        '/placeholder.svg?height=300&width=400',
+      ]
+    },
+    { 
+      id: 2, 
+      name: 'Campo de Futebol', 
+      image: '/placeholder.svg?height=200&width=300',
+      description: 'Campo oficial para partidas de futebol',
+      address: 'Av. dos Esportes, 456',
+      price: 'R$ 80/hora',
+      images: [
+        '/placeholder.svg?height=300&width=400',
+        '/placeholder.svg?height=300&width=400',
+        '/placeholder.svg?height=300&width=400',
+      ]
+    },
+    { 
+      id: 3, 
+      name: 'Quadra de Tênis', 
+      image: '/placeholder.svg?height=200&width=300',
+      description: 'Quadra profissional de tênis',
+      address: 'Praça da Raquete, 789',
+      price: 'R$ 60/hora',
+      images: [
+        '/placeholder.svg?height=300&width=400',
+        '/placeholder.svg?height=300&width=400',
+        '/placeholder.svg?height=300&width=400',
+      ]
+    },
+    { 
+      id: 4, 
+      name: 'Ginásio Coberto', 
+      image: '/placeholder.svg?height=200&width=300',
+      description: 'Espaço coberto para eventos esportivos',
+      address: 'Rua do Ginásio, 1010',
+      price: 'R$ 100/hora',
+      images: [
+        '/placeholder.svg?height=300&width=400',
+        '/placeholder.svg?height=300&width=400',
+        '/placeholder.svg?height=300&width=400',
+      ]
+    },
+  ]
+
+  const recommendedLocations = [
+    { 
+      id: 5, 
+      name: 'Piscina Olímpica', 
+      image: '/placeholder.svg?height=200&width=300',
+      description: 'Piscina de tamanho olímpico para natação',
+      address: 'Av. Aquática, 2020',
+      price: 'R$ 70/hora',
+      images: [
+        '/placeholder.svg?height=300&width=400',
+        '/placeholder.svg?height=300&width=400',
+        '/placeholder.svg?height=300&width=400',
+      ]
+    },
+    { 
+      id: 6, 
+      name: 'Pista de Atletismo', 
+      image: '/placeholder.svg?height=200&width=300',
+      description: 'Pista oficial para corridas e saltos',
+      address: 'Rua da Corrida, 3030',
+      price: 'R$ 40/hora',
+      images: [
+        '/placeholder.svg?height=300&width=400',
+        '/placeholder.svg?height=300&width=400',
+        '/placeholder.svg?height=300&width=400',
+      ]
+    },
+    { 
+      id: 7, 
+      name: 'Quadra de Basquete', 
+      image: '/placeholder.svg?height=200&width=300',
+      description: 'Quadra especializada para basquete',
+      address: 'Praça da Cesta, 4040',
+      price: 'R$ 55/hora',
+      images: [
+        '/placeholder.svg?height=300&width=400',
+        '/placeholder.svg?height=300&width=400',
+        '/placeholder.svg?height=300&width=400',
+      ]
+    },
+    { 
+      id: 8, 
+      name: 'Campo de Vôlei de Praia', 
+      image: '/placeholder.svg?height=200&width=300',
+      description: 'Arena de areia para vôlei de praia',
+      address: 'Av. da Praia, 5050',
+      price: 'R$ 45/hora',
+      images: [
+        '/placeholder.svg?height=300&width=400',
+        '/placeholder.svg?height=300&width=400',
+        '/placeholder.svg?height=300&width=400',
+      ]
+    },
+  ]
+
+  const handleLocationClick = (location: any) => {
+    setSelectedLocation(location)
+  }
+
+  return (
+    <div className="min-h-screen bg-background text-foreground">
+      <header className="p-4 flex justify-center border-b">
+        <img src="/placeholder.svg?height=50&width=150" alt="Logo" className="h-12" />
+      </header>
+
+      <main className="p-4">
+        <Popover>
+          <PopoverTrigger asChild>
+            <Button variant="outline" className="w-full justify-between">
+              <div className="flex items-center">
+                <Search className="mr-2 h-4 w-4" />
+                Filtros
+              </div>
+              <ChevronDown className="h-4 w-4" />
+            </Button>
+          </PopoverTrigger>
+          <PopoverContent className="w-80">
+            <div className="space-y-4">
+              <div>
+                <label htmlFor="name" className="block text-sm font-medium mb-1">Nome</label>
+                <Input id="name" type="text" placeholder="Nome do local" />
+              </div>
+              <div>
+                <label htmlFor="date" className="block text-sm font-medium mb-1">Data</label>
+                <Input id="date" type="date" />
+              </div>
+              <div className="flex gap-2">
+                <div className="flex-1">
+                  <label htmlFor="startTime" className="block text-sm font-medium mb-1">Hora Início</label>
+                  <Input id="startTime" type="time" />
+                </div>
+                <div className="flex-1">
+                  <label htmlFor="endTime" className="block text-sm font-medium mb-1">Hora Fim</label>
+                  <Input id="endTime" type="time" />
+                </div>
+              </div>
+              <div>
+                <label htmlFor="state" className="block text-sm font-medium mb-1">Estado</label>
+                <Input id="state" type="text" placeholder="Estado" />
+              </div>
+              <div>
+                <label htmlFor="city" className="block text-sm font-medium mb-1">Cidade</label>
+                <Input id="city" type="text" placeholder="Cidade" />
+              </div>
+              <div>
+                <label className="block text-sm font-medium mb-2">Esportes</label>
+                <div className="grid grid-cols-2 gap-2">
+                  {sports.map((sport) => (
+                    <div key={sport.id} className="flex items-center space-x-2">
+                      <Checkbox id={sport.id} />
+                      <label htmlFor={sport.id} className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+                        {sport.label}
+                      </label>
+                    </div>
+                  ))}
+                </div>
+              </div>
+              <Button className="w-full">Aplicar Filtros</Button>
+            </div>
+          </PopoverContent>
+        </Popover>
+
+        <h2 className="text-xl font-bold mb-4 mt-6">Locais Disponíveis</h2>
+        <Carousel className="w-full max-w-xs mx-auto mb-8">
+        <CarouselContent className='gap-2'>
+            {availableLocations.map((location) => (
+              <CarouselItem key={location.id} className="basis-4/5 bg-muted-foreground border rounded-xl">
+                <div className="p-1">
+                  <div 
+                    className="flex aspect-square items-center justify-center p-2 cursor-pointer"
+                    onClick={() => handleLocationClick(location)}
+                  >
+                    <img src={location.image} alt={location.name} className="rounded-lg object-cover w-full h-full" />
+                  </div>
+                  <h3 className="text-center mt-2 font-semibold">{location.name}</h3>
+                </div>
+              </CarouselItem>
+            ))}
+          </CarouselContent>
+        </Carousel>
+
+        <h2 className="text-xl font-bold mb-4">Locais Recomendados</h2>
+        <Carousel className="w-full max-w-xs mx-auto">
+          <CarouselContent className='gap-2'>
+            {recommendedLocations.map((location) => (
+              <CarouselItem key={location.id} className="basis-4/5 bg-muted-foreground border rounded-xl">
+                <div className="p-1">
+                  <div 
+                    className="flex aspect-square items-center justify-center p-2 cursor-pointer"
+                    onClick={() => handleLocationClick(location)}
+                  >
+                    <img src={location.image} alt={location.name} className="rounded-lg object-cover w-full h-full" />
+                  </div>
+                  <h3 className="text-center mt-2 font-semibold">{location.name}</h3>
+                </div>
+              </CarouselItem>
+            ))}
+          </CarouselContent>
+        </Carousel>
+      </main>
+
+      <Dialog open={!!selectedLocation} onOpenChange={() => setSelectedLocation(null)}>
+        <DialogContent className="sm:max-w-[425px]">
+          <DialogHeader>
+            <DialogTitle>{selectedLocation?.name}</DialogTitle>
+            <DialogDescription>{selectedLocation?.description}</DialogDescription>
+          </DialogHeader>
+          <div className="mt-4">
+            <Carousel className="w-full max-w-xs mx-auto ">
+              <CarouselContent className=''>
+                {selectedLocation?.images.map((image, index) => (
+                  <CarouselItem key={index}>
+                    <img src={image} alt={`${selectedLocation.name} - Imagem ${index + 1}`} className="rounded-lg object-cover w-full h-48" />
+                  </CarouselItem>
+                ))}
+              </CarouselContent>
+              <CarouselPrevious />
+              <CarouselNext />
+            </Carousel>
+          </div>
+          <div className="mt-4 space-y-2">
+            <Label >Endereço: {selectedLocation?.address}</Label>
+            <Label >Preço: {selectedLocation?.price}</Label>
+          </div>
+          <Button className="w-full mt-4" onClick={() => setSelectedLocation(null)}>Fechar</Button>
+        </DialogContent>
+      </Dialog>
+    </div>
+  )
+}

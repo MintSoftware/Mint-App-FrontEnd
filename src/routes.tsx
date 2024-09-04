@@ -5,7 +5,7 @@ import Entrar from "./view/entrar";
 import LoadingScreen from "./view/loading/Loading";
 import PaginaNaoEncontrada from "./view/paginanaoencontrada";
 import Perfil from "./view/perfil";
-import MenuInicial from "./view/dashboard";
+import MenuInicial from "./view/modules";
 
 function MainRoutes() {
     const [isLoading, setIsLoading] = useState(true);

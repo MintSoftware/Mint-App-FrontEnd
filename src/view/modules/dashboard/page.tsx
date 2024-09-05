@@ -1,4 +1,3 @@
-import  { useState } from 'react'
 import { ChevronDown, Search } from 'lucide-react'
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -23,115 +22,19 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover"
 import { Label } from '@/components/ui/label'
+import { pageViewModel } from './pageViewModel'
 
-type Location = {
-  id: number
-  name: string
-  image: string
-  description: string
-  address: string
-  price: string
-  images: string[]
-}
+
 
 
 export default function MobileReservationApp() {
-  const [selectedLocation, setSelectedLocation] = useState<Location | null>(null); 
-
-  const sports = [
-    { id: 'futebol', label: 'Futebol' },
-    { id: 'volei', label: 'Vôlei' },
-    { id: 'basquete', label: 'Basquete' },
-    { id: 'tenis', label: 'Tênis' },
-  ]
-
-  const availableLocations = [
-    { 
-      id: 1, 
-      name: 'Quadra Poliesportiva', 
-      image: '/forever_alone.png?height=300&width=400',
-      description: 'Quadra versátil para diversos esportes',
-      address: 'Rua das Flores, 123',
-      price: 'R$ 50/hora',
-      images: [
-        '/forever_alone.png?height=300&width=400',
-        '/forever_alone.png?height=300&width=400',
-        '/forever_alone.png?height=300&width=400',
-      ]
-    },
-    { 
-      id: 2, 
-      name: 'Campo de Futebol', 
-      image: '/abandonado.png?height=300&width=400',
-      description: 'Campo oficial para partidas de futebol',
-      address: 'Av. dos Esportes, 456',
-      price: 'R$ 80/hora',
-      images: [
-        '/abandonado.png?height=300&width=400',
-        '/abandonado.png?height=300&width=400',
-        '/abandonado.png?height=300&width=400',
-      ]
-    },
-    { 
-      id: 3, 
-      name: 'Quadra de Tênis', 
-      image: '/quadra_arlivre.png?height=300&width=400',
-      description: 'Quadra profissional de tênis',
-      address: 'Praça da Raquete, 789',
-      price: 'R$ 60/hora',
-      images: [
-        '/quadra_arlivre.png?height=300&width=400',
-        '/quadra_arlivre.png?height=300&width=400',
-        '/quadra_arlivre.png?height=300&width=400',
-      ]
-    },
-    { 
-      id: 4, 
-      name: 'Ginásio Coberto', 
-      image: '/quadra_campo.png?height=200&width=300',
-      description: 'Espaço coberto para eventos esportivos',
-      address: 'Rua do Ginásio, 1010',
-      price: 'R$ 100/hora',
-      images: [
-        '/quadra_campo.png?height=200&width=300',
-        '/quadra_campo.png?height=200&width=300',
-        '/quadra_campo.png?height=200&width=300',
-      ]
-    },
-  ]
-
-  const recommendedLocations = [
-    { 
-      id: 5, 
-      name: 'Ginásio Coberto', 
-      image: '/quadra_campo.png?height=200&width=300',
-      description: 'Espaço coberto para eventos esportivos',
-      address: 'Rua do Ginásio, 1010',
-      price: 'R$ 100/hora',
-      images: [
-        '/quadra_campo.png?height=200&width=300',
-        '/quadra_campo.png?height=200&width=300',
-        '/quadra_campo.png?height=200&width=300',
-      ]
-    },
-    { 
-      id: 6, 
-      name: 'Ginásio Coberto', 
-      image: '/quadra_campo.png?height=200&width=300',
-      description: 'Espaço coberto para eventos esportivos',
-      address: 'Rua do Ginásio, 1010',
-      price: 'R$ 100/hora',
-      images: [
-        '/quadra_campo.png?height=200&width=300',
-        '/quadra_campo.png?height=200&width=300',
-        '/quadra_campo.png?height=200&width=300',
-      ]
-    },
-  ]
-
-  const handleLocationClick = (location: any) => {
-    setSelectedLocation(location)
-  }
+  const {
+    selectedLocation,
+    sports,
+    availableLocations,
+    recommendedLocations,
+    handleLocationClick,
+} = pageViewModel();
 
   return (
     <div className="min-h-screen bg-background text-foreground">
@@ -235,7 +138,7 @@ export default function MobileReservationApp() {
         </Carousel>
       </main>
 
-      <Dialog open={!!selectedLocation} onOpenChange={() => setSelectedLocation(null)}>
+      <Dialog open={!!selectedLocation} onOpenChange={() => handleLocationClick(null)}>
         <DialogContent className="sm:max-w-[425px]">
           <DialogHeader>
             <DialogTitle>{selectedLocation?.name}</DialogTitle>
@@ -247,7 +150,7 @@ export default function MobileReservationApp() {
                 {selectedLocation?.images.map((image, index) => (
                   <CarouselItem key={index}>
                     <img src={image} alt={`${selectedLocation.name} - Imagem ${index + 1}`} className="rounded-lg object-cover w-full h-48" />
-                  </CarouselItem>
+                  </CarouselItem> 
                 ))}
               </CarouselContent>
               <CarouselPrevious />
@@ -258,7 +161,7 @@ export default function MobileReservationApp() {
             <Label >Endereço: {selectedLocation?.address}</Label>
             <Label >Preço: {selectedLocation?.price}</Label>
           </div>
-          <Button className="w-full mt-4" onClick={() => setSelectedLocation(null)}>Fechar</Button>
+          <Button className="w-full mt-4" onClick={() => handleLocationClick(null)}>Fechar</Button>
         </DialogContent>
       </Dialog>
     </div>

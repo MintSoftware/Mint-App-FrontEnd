@@ -1,4 +1,4 @@
-import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog"; 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
@@ -44,7 +44,6 @@ export default function MenuSuperior() {
                         <Button variant={"ghost"} className="gap-3">
                             {usuarioLogado ? (
                                 <>
-                                    <Label className="text-white cursor-pointer">Olá, {usuarioLogado?.nome}</Label>
                                     <Avatar className="flex h-8 w-8">
                                         <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" />
                                         <AvatarFallback>{usuarioLogado.nome.charAt(0)}</AvatarFallback>
@@ -68,11 +67,32 @@ export default function MenuSuperior() {
                                         Minha conta
                                     </Link>
                                 </DropdownMenuItem>
+                                <DropdownMenuItem asChild>
+                                    <Link className="cursor-pointer" to="/MinhasReservas">
+                                        Minhas Reservas
+                                    </Link>
+                                </DropdownMenuItem>
                                 <DropdownMenuSeparator />
                                 <DropdownMenuItem>
-                                    <AlertDialogTrigger className="w-full text-left">
-                                        Sair
-                                    </AlertDialogTrigger>
+                                    <AlertDialog>
+                                        <AlertDialogTrigger asChild>
+                                            <Button variant="ghost" className="w-full text-left">Sair</Button>
+                                        </AlertDialogTrigger>
+                                        <AlertDialogContent>
+                                            <AlertDialogHeader>
+                                                <AlertDialogTitle>Sair</AlertDialogTitle>
+                                                <AlertDialogDescription>
+                                                    Deseja realmente sair?
+                                                </AlertDialogDescription>
+                                            </AlertDialogHeader>
+                                            <AlertDialogFooter>
+                                                <AlertDialogCancel>Cancelar</AlertDialogCancel>
+                                                <AlertDialogAction >
+                                                    <Link to="/entrar">Sair</Link>
+                                                </AlertDialogAction>
+                                            </AlertDialogFooter>
+                                        </AlertDialogContent>
+                                    </AlertDialog>
                                 </DropdownMenuItem>
                             </>
                         ) : (
@@ -91,24 +111,6 @@ export default function MenuSuperior() {
                         )}
                     </DropdownMenuContent>
                 </DropdownMenu>
-                {usuarioLogado && (
-                    <AlertDialog>
-                        <AlertDialogContent>
-                            <AlertDialogHeader>
-                                <AlertDialogTitle>Sair</AlertDialogTitle>
-                                <AlertDialogDescription>
-                                    Deseja realmente sair?
-                                </AlertDialogDescription>
-                            </AlertDialogHeader>
-                            <AlertDialogFooter>
-                                <AlertDialogCancel>Cancelar</AlertDialogCancel>
-                                <AlertDialogAction onClick={() => sair()}>
-                                    <Link to="/">Sair</Link>
-                                </AlertDialogAction>
-                            </AlertDialogFooter>
-                        </AlertDialogContent>
-                    </AlertDialog>
-                )}
             </div>
         </div>
     );

@@ -10,6 +10,7 @@ import { Endereco } from "@/types/Endereco"
 import { Usuario } from "@/types/Usuario"
 import { PenIcon, PlusIcon, TrashIcon } from "lucide-react"
 import { useEffect, useState } from "react"
+import { Link } from "react-router-dom"
 import { toast } from "sonner"
 
 export default function Perfil() {
@@ -108,34 +109,6 @@ export default function Perfil() {
         }
     }, [enderecoSelecionado])
 
-    const editarEndereco = async () => {
-        if (!nomeEndereco || !cep || !rua || !numero || !bairro || !cidade || !estado) {
-            toast.error("Preencha todos os campos obrigatórios!");
-            return;
-        }
-
-        const endereco = {
-            nome: nomeEndereco,
-            cep,
-            rua,
-            numero,
-            complemento,
-            bairro,
-            cidade,
-            estado,
-            usuario
-        }
-
-        toast.promise(Api.put(`endereco/editar/${enderecoSelecionado?.id}`, endereco).then(() => {
-            atualizarUsuario();
-            toast.success("Endereço cadastrado com sucesso!");
-        }).catch(() => {
-            toast.error("Erro ao recuperar usuario após cadastrar o endereco");
-        }), {
-            loading: "Salvando...",
-        });
-    }
-
     const atualizarUsuario = async () => {
         const dto = {
             email: usuario?.email,
@@ -162,8 +135,6 @@ export default function Perfil() {
     }
 
     const salvarAlteracoes = async () => {
-
-
         const dto = {
             id: usuario?.id,
             nome,
@@ -188,17 +159,6 @@ export default function Perfil() {
         });
     }
 
-    const deletarEndereco = async () => {
-        toast.promise(Api.delete(`endereco/deletar/${enderecoSelecionado?.id}`).then(() => {
-            atualizarUsuario();
-            toast.success("Endereço deletado com sucesso!");
-        }).catch(() => {
-            toast.error("Erro ao deletar endereço");
-        }), {
-            loading: "Deletando...",
-        });
-    }
-
     const cadastroEndereco = (param : boolean) => {
         setNomeEndereco("");
         setCep("");
@@ -209,14 +169,6 @@ export default function Perfil() {
         setCidade("");
         setEstado("");
         setExpandirCadastroEndereco(param);
-    }
-
-    const edicaoEndereco = (param : boolean) => {
-        if (!nomeEndereco || !cep || !rua || !numero || !bairro || !cidade || !estado) {
-            toast.error("Selecione um endereço para editar!");
-            return;
-        }
-        setExpandirDadosEndereco(param);
     }
 
     const cadastrarEndereco = async () => {
@@ -308,117 +260,47 @@ export default function Perfil() {
                     </TabsContent>
                     <TabsContent value="address">
                         <CardContent className="flex flex-col justify-center">
-                            <div className="flex gap-6 mt-5">
-                                <div className="flex max-w-[14.3rem] justify-center">
-                                    <Select onValueChange={(value) => setEnderecoSelecionado(JSON.parse(value))}>
-                                        <SelectTrigger className="flex w-[14.3rem]">
-                                            <SelectValue className="flex w-full" placeholder="Selecione um endereço" />
-                                        </SelectTrigger>
-                                        <SelectContent className="cursor-pointer">
-                                            {listaEnderecos?.map((endereco) => (
-                                                <SelectItem key={endereco.id} value={JSON.stringify(endereco)}>
-                                                    {endereco.nome} - {endereco.rua}, {endereco.numero} - {endereco.bairro}, {endereco.cidade} - {endereco.estado}, {endereco.cep}
-                                                </SelectItem>
-                                            ))}
-                                        </SelectContent>
-                                    </Select>
+                            <div className="grid grid-cols-2 gap-4 pt-4">
+                                <div className="grid gap-2">
+                                    <Label htmlFor="nome">Nome</Label>
+                                    <Input value={nomeEndereco} id="nome" placeholder="Casa, trabalho..." required onChange={(e) => setNomeEndereco(e.target.value)} />
                                 </div>
-                                <div className="flex gap-2">
-                                    <Button variant={"outline"} onClick={() => cadastroEndereco(true)}><PlusIcon className="w-4 h-4"/></Button>
-                                    <Button variant={"outline"} onClick={() => edicaoEndereco(true)} >
-                                        <PenIcon className="w-4 h-4" />
-                                    </Button>
-                                    <Button onClick={deletarEndereco} variant={"destructive"}>
-                                        <TrashIcon className="w-4 h-4" />
-                                    </Button>
+                                <div className="grid gap-2">
+                                    <Label htmlFor="cep">CEP</Label>
+                                    <Input value={cep} id="cep" placeholder="00000-000" required onChange={(e) => setCep(e.target.value)} />
+                                </div>
+                                <div className="grid gap-2">
+                                    <Label htmlFor="rua">Rua</Label>
+                                    <Input value={rua} id="rua" placeholder="Rua" required onChange={(e) => setRua(e.target.value)} />
+                                </div>
+                                <div className="grid gap-2">
+                                    <Label htmlFor="numero">Número</Label>
+                                    <Input value={numero} id="numero" placeholder="Número" required onChange={(e) => setNumero(e.target.value)} />
+                                </div>
+                                <div className="grid gap-2">
+                                    <Label htmlFor="complemento">Complemento</Label>
+                                    <Input value={complemento} id="complemento" placeholder="Apartamento, Casa, etc." onChange={(e) => setComplemento(e.target.value)} />
+                                </div>
+                                <div className="grid gap-2">
+                                    <Label htmlFor="bairro">Bairro</Label>
+                                    <Input value={bairro} id="bairro" placeholder="Seu bairro" required onChange={(e) => setBairro(e.target.value)} />
+                                </div>
+                                <div className="grid gap-2">
+                                    <Label htmlFor="cidade">Cidade</Label>
+                                    <Input value={cidade} id="cidade" placeholder="Sua cidade" required onChange={(e) => setCidade(e.target.value)} />
+                                </div>
+                                <div className="grid gap-2">
+                                    <Label htmlFor="estado">Estado</Label>
+                                    <Input value={estado} id="estado" placeholder="Seu estado" required onChange={(e) => setEstado(e.target.value)} />
                                 </div>
                             </div>
-                            {expandirDadosEndereco && <div className="border p-5 rounded-lg mt-5">
-                                <div className="grid grid-cols-2 gap-4">
-                                    <div className="grid gap-2">
-                                        <Label htmlFor="nome">Nome</Label>
-                                        <Input value={nomeEndereco} id="nome" placeholder="Casa, trabalho..." required onChange={(e) => setNomeEndereco(e.target.value)} />
-                                    </div>
-                                    <div className="grid gap-2">
-                                        <Label htmlFor="cep">CEP</Label>
-                                        <Input value={cep} id="cep" placeholder="00000-000" required onChange={(e) => setCep(e.target.value)} />
-                                    </div>
-                                    <div className="grid gap-2">
-                                        <Label htmlFor="rua">Rua</Label>
-                                        <Input value={rua} id="rua" placeholder="Rua" required onChange={(e) => setRua(e.target.value)} />
-                                    </div>
-                                    <div className="grid gap-2">
-                                        <Label htmlFor="numero">Número</Label>
-                                        <Input value={numero} id="numero" placeholder="Número" required onChange={(e) => setNumero(e.target.value)} />
-                                    </div>
-                                    <div className="grid gap-2">
-                                        <Label htmlFor="complemento">Complemento</Label>
-                                        <Input value={complemento} id="complemento" placeholder="Apartamento, Casa, etc." onChange={(e) => setComplemento(e.target.value)} />
-                                    </div>
-                                    <div className="grid gap-2">
-                                        <Label htmlFor="bairro">Bairro</Label>
-                                        <Input value={bairro} id="bairro" placeholder="Seu bairro" required onChange={(e) => setBairro(e.target.value)} />
-                                    </div>
-                                    <div className="grid gap-2">
-                                        <Label htmlFor="cidade">Cidade</Label>
-                                        <Input value={cidade} id="cidade" placeholder="Sua cidade" required onChange={(e) => setCidade(e.target.value)} />
-                                    </div>
-                                    <div className="grid gap-2">
-                                        <Label htmlFor="estado">Estado</Label>
-                                        <Input value={estado} id="estado" placeholder="Seu estado" required onChange={(e) => setEstado(e.target.value)} />
-                                    </div>
-                                </div>
-                                <div className="flex justify-end mt-3 gap-3">
-                                    <Button variant={"outline"} onClick={() => edicaoEndereco(false)}>Cancelar</Button>
-                                    <Button onClick={() => editarEndereco()}><PlusIcon /></Button>
-                                </div>
-                            </div>}
-                            {expandirCadastroEndereco && <div className="border p-5 rounded-lg mt-5">
-                                <div className="grid grid-cols-2 gap-4">
-                                    <div className="grid gap-2">
-                                        <Label htmlFor="nome">Nome</Label>
-                                        <Input value={nomeEndereco} id="nome" placeholder="Casa, trabalho..." required onChange={(e) => setNomeEndereco(e.target.value)} />
-                                    </div>
-                                    <div className="grid gap-2">
-                                        <Label htmlFor="cep">CEP</Label>
-                                        <Input value={cep} id="cep" placeholder="00000-000" required onChange={(e) => setCep(e.target.value)} />
-                                    </div>
-                                    <div className="grid gap-2">
-                                        <Label htmlFor="rua">Rua</Label>
-                                        <Input value={rua} id="rua" placeholder="Rua" required onChange={(e) => setRua(e.target.value)} />
-                                    </div>
-                                    <div className="grid gap-2">
-                                        <Label htmlFor="numero">Número</Label>
-                                        <Input value={numero} id="numero" placeholder="Número" required onChange={(e) => setNumero(e.target.value)} />
-                                    </div>
-                                    <div className="grid gap-2">
-                                        <Label htmlFor="complemento">Complemento</Label>
-                                        <Input value={complemento} id="complemento" placeholder="Apartamento, Casa, etc." onChange={(e) => setComplemento(e.target.value)} />
-                                    </div>
-                                    <div className="grid gap-2">
-                                        <Label htmlFor="bairro">Bairro</Label>
-                                        <Input value={bairro} id="bairro" placeholder="Seu bairro" required onChange={(e) => setBairro(e.target.value)} />
-                                    </div>
-                                    <div className="grid gap-2">
-                                        <Label htmlFor="cidade">Cidade</Label>
-                                        <Input value={cidade} id="cidade" placeholder="Sua cidade" required onChange={(e) => setCidade(e.target.value)} />
-                                    </div>
-                                    <div className="grid gap-2">
-                                        <Label htmlFor="estado">Estado</Label>
-                                        <Input value={estado} id="estado" placeholder="Seu estado" required onChange={(e) => setEstado(e.target.value)} />
-                                    </div>
-                                </div>
-                                <div className="flex justify-end mt-3 gap-3">
-                                    <Button variant={"outline"} onClick={() => cadastroEndereco(false)}>Cancelar</Button>
-                                    <Button onClick={() => cadastrarEndereco()}><PlusIcon /></Button>
-                                </div>
-                            </div>}
                         </CardContent>
                     </TabsContent>
                 </Tabs>
             </CardHeader>
             <CardFooter className="flex justify-end">
                 <Button onClick={salvarAlteracoes}>Salvar</Button>
+                <Link className="ml-3" to="/menuInicial">{" "} Voltar</Link>
             </CardFooter>
             
         </Card>

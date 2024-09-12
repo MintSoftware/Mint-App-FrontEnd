@@ -6,6 +6,7 @@ import LoadingScreen from "./view/loading/Loading";
 import PaginaNaoEncontrada from "./view/paginanaoencontrada";
 import Perfil from "./view/perfil";
 import MenuInicial from "./view/modules/dashboard/page";
+import { Layout } from "./view/layout";
 
 function MainRoutes() {
     const [isLoading, setIsLoading] = useState(true);
@@ -31,14 +32,16 @@ function MainRoutes() {
     }
 
     return (
+        <Layout>
             <Routes>
-                <Route path="/" element={< MenuInicial />} />
+                <Route path="/menuInicial" element={< MenuInicial />} />
                {/*} <Route path="/produtos/:id" element={<PainelProduto />} />*/}
                 <Route path="*" element={<PaginaNaoEncontrada />} />
-                <Route path="/entrar" element={<Entrar />} />
+                <Route path="/" element={<Entrar />} />
                 <Route path="/criarconta" element={<CriarConta />} />
                 <Route path="/perfil" element={<Perfil />} />
             </Routes>
+        </Layout>
     )
 }
 

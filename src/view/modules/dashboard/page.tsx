@@ -23,7 +23,6 @@ import {
 } from "@/components/ui/popover"
 import { Label } from '@/components/ui/label'
 import { pageViewModel } from './pageViewModel'
-import TopBar from './topBar/topBar'
 
 
 
@@ -39,11 +38,6 @@ export default function MobileReservationApp() {
 
   return (
     <div className="min-h-screen bg-background text-foreground">
-      <TopBar />
-      <header className="p-4 flex justify-center border-b">
-        <img src="/logo.png?height=50&width=150" alt="Logo" className="h-12" />
-      </header>
-
       <main className="p-4">
         <Popover>
           <PopoverTrigger asChild>

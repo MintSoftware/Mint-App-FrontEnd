@@ -38,10 +38,6 @@ export default function MobileReservationApp() {
 
   return (
     <div className="min-h-screen bg-background text-foreground">
-      <header className="p-4 flex justify-center border-b">
-        <img src="/logo.png?height=50&width=150" alt="Logo" className="h-12" />
-      </header>
-
       <main className="p-4">
         <Popover>
           <PopoverTrigger asChild>
@@ -101,17 +97,17 @@ export default function MobileReservationApp() {
 
         <h2 className="text-xl font-bold mb-4 mt-6">Locais Disponíveis</h2>
         <Carousel className="w-full max-w-xs mx-auto mb-8">
-        <CarouselContent className='gap-2'>
+        <CarouselContent className='gap-2 '>
             {availableLocations.map((location) => (
-              <CarouselItem key={location.id} className="basis-4/5 bg-muted-foreground border rounded-xl">
-                <div className="p-1">
+              <CarouselItem key={location.id} className=" bg-emerald-500 basis-4/5  border rounded-xl">
+                <div className="p-2 ">
                   <div 
                     className="flex aspect-square items-center justify-center p-2 cursor-pointer"
                     onClick={() => handleLocationClick(location)}
                   >
                     <img src={location.image} alt={location.name} className="rounded-lg object-cover w-full h-full" />
                   </div>
-                  <h3 className="text-center mt-2 font-semibold">{location.name}</h3>
+                  <h3 className="text-center mt-2 font-semibold ">{location.name}</h3>
                 </div>
               </CarouselItem>
             ))}
@@ -122,7 +118,7 @@ export default function MobileReservationApp() {
         <Carousel className="w-full max-w-xs mx-auto">
           <CarouselContent className='gap-2'>
             {recommendedLocations.map((location) => (
-              <CarouselItem key={location.id} className="basis-4/5 bg-muted-foreground border rounded-xl">
+              <CarouselItem key={location.id} className="basis-4/5 bg-emerald-500 border rounded-xl">
                 <div className="p-1">
                   <div 
                     className="flex aspect-square items-center justify-center p-2 cursor-pointer"
@@ -158,8 +154,17 @@ export default function MobileReservationApp() {
             </Carousel>
           </div>
           <div className="mt-4 space-y-2">
-            <Label >Endereço: {selectedLocation?.address}</Label>
-            <Label >Preço: {selectedLocation?.price}</Label>
+            <div className=''>
+              <Label >Endereço: {selectedLocation?.address}</Label>
+            </div>
+            <div className=''>
+              <Label className='font-bold'>Valor Hora: </Label>
+              <Label className=''>{selectedLocation?.price}</Label>
+            </div>
+            <div className=''>
+              <Label className='font-bold'>Características : </Label>
+              <Label className=''>{selectedLocation?.price}</Label>
+            </div>            
           </div>
           <Button className="w-full mt-4" onClick={() => handleLocationClick(null)}>Fechar</Button>
         </DialogContent>

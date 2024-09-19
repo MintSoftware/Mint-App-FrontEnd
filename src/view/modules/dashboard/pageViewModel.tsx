@@ -24,53 +24,53 @@ export function pageViewModel() {
     { 
       id: 1, 
       name: 'Quadra Poliesportiva', 
-      image: '/forever_alone.png?height=300&width=400',
+      image: '/quadra_campo.png?height=300&width=400',
       description: 'Quadra versátil para diversos esportes',
       address: 'Rua das Flores, 123',
       price: 'R$ 50/hora',
       images: [
-        '/forever_alone.png?height=300&width=400',
-        '/forever_alone.png?height=300&width=400',
-        '/forever_alone.png?height=300&width=400',
+        '/quadra_campo.png?height=300&width=400',
+        '/quadra_campo.png?height=300&width=400',
+        '/quadra_campo.png?height=300&width=400',
       ]
     },
-    { 
+    {   
       id: 2, 
       name: 'Campo de Futebol', 
-      image: '/abandonado.png?height=300&width=400',
+      image: '/fute.png?height=300&width=400',
       description: 'Campo oficial para partidas de futebol',
       address: 'Av. dos Esportes, 456',
       price: 'R$ 80/hora',
       images: [
-        '/abandonado.png?height=300&width=400',
-        '/abandonado.png?height=300&width=400',
-        '/abandonado.png?height=300&width=400',
+        '/fute.png.jpg?height=300&width=400',
+        '/fute.png?height=300&width=400',
+        '/fute.png?height=300&width=400',
       ]
     },
     { 
       id: 3, 
-      name: 'Quadra de Tênis', 
-      image: '/quadra_arlivre.png?height=300&width=400',
+      name: 'Quadra de futebol de salão', 
+      image: '/campo.png?height=300&width=400',
       description: 'Quadra profissional de tênis',
       address: 'Praça da Raquete, 789',
       price: 'R$ 60/hora',
       images: [
-        '/quadra_arlivre.png?height=300&width=400',
-        '/quadra_arlivre.png?height=300&width=400',
-        '/quadra_arlivre.png?height=300&width=400',
+        '/campo.png?height=300&width=400',
+        '/campo.png?height=300&width=400',
+        '/campo.png?height=300&width=400',
       ]
     },
     { 
       id: 4, 
       name: 'Ginásio Coberto', 
-      image: '/quadra_campo.png?height=200&width=300',
+      image: '/quadra_azul.png?height=200&width=300',
       description: 'Espaço coberto para eventos esportivos',
       address: 'Rua do Ginásio, 1010',
       price: 'R$ 100/hora',
       images: [
-        '/quadra_campo.png?height=200&width=300',
-        '/quadra_campo.png?height=200&width=300',
-        '/quadra_campo.png?height=200&width=300',
+        '/quadra_azul.png?height=200&width=300',
+        '/quadra_azul.png?height=200&width=300',
+        '/quadra_azul.png?height=200&width=300',
       ]
     },
   ]
@@ -79,27 +79,27 @@ export function pageViewModel() {
     { 
       id: 5, 
       name: 'Ginásio Coberto', 
-      image: '/quadra_campo.png?height=200&width=300',
+      image: '/TENIS.png?height=200&width=300',
       description: 'Espaço coberto para eventos esportivos',
       address: 'Rua do Ginásio, 1010',
       price: 'R$ 100/hora',
       images: [
-        '/quadra_campo.png?height=200&width=300',
-        '/quadra_campo.png?height=200&width=300',
-        '/quadra_campo.png?height=200&width=300',
+        '/TENIS.png?height=200&width=300',
+        '/TENIS.png?height=200&width=300',
+        '/TENIS.png?height=200&width=300',
       ]
     },
     { 
       id: 6, 
       name: 'Ginásio Coberto', 
-      image: '/quadra_campo.png?height=200&width=300',
+      image: '/beach_tenis.png?height=200&width=300',
       description: 'Espaço coberto para eventos esportivos',
       address: 'Rua do Ginásio, 1010',
       price: 'R$ 100/hora',
       images: [
-        '/quadra_campo.png?height=200&width=300',
-        '/quadra_campo.png?height=200&width=300',
-        '/quadra_campo.png?height=200&width=300',
+        '/beach_tenis.png?height=200&width=300',
+        '/beach_tenis.png?height=200&width=300',
+        '/beach_tenis.png?height=200&width=300',
       ]
     },
   ]

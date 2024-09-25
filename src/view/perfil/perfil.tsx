@@ -82,7 +82,7 @@ const [activeTab, setActiveTab] = useState("general")
             setSenha(JSON.parse(usuarioJson).senha);
             setDataNascimento(JSON.parse(usuarioJson).dataNascimento);
             setTelefone(JSON.parse(usuarioJson).telefone);
-            formatarCfpCnpj('' as any, JSON.parse(usuarioJson).cpfcnpj);
+            formatarCfpCnpj(JSON.parse(usuarioJson).cpfcnpj);
         }
     }
 
@@ -144,7 +144,7 @@ const [activeTab, setActiveTab] = useState("general")
         }
     }
 
-    const cadastroEndereco = (param : boolean) => {
+    const cadastroEndereco = () => {
         setNomeEndereco("");
         setCep("");
         setRua("");
@@ -176,7 +176,7 @@ const [activeTab, setActiveTab] = useState("general")
         toast.promise(Api.post("endereco/cadastrar", endereco).then(() => {
             atualizarUsuario();
             toast.success("Endereço cadastrado com sucesso!");
-            cadastroEndereco(false);
+            cadastroEndereco();
         }).catch(() => {
             toast.error("Erro ao recuperar usuario após cadastrar o endereco");
         }), {

@@ -1,5 +1,5 @@
 import { ReactNode } from "react"
-import MenuSuperior from "./menusuperior"
+import MenuSuperior from "./menusuperior/menuSuperior"
 
 interface props {
     children?: ReactNode

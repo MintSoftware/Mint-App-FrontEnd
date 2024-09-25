@@ -4,9 +4,10 @@ import CriarConta from "./view/criarconta";
 import Entrar from "./view/entrar";
 import LoadingScreen from "./view/loading/Loading";
 import PaginaNaoEncontrada from "./view/paginanaoencontrada";
-import Perfil from "./view/perfil";
 import MenuInicial from "./view/modules/dashboard/page";
 import { Layout } from "./view/layout";
+import Perfil from "./view/perfil/perfil";
+import MinhasReservas from "./view/minhasReservas/minhasReservas";
 
 function MainRoutes() {
     const [isLoading, setIsLoading] = useState(true);
@@ -40,6 +41,9 @@ function MainRoutes() {
                 <Route path="/" element={<Entrar />} />
                 <Route path="/criarconta" element={<CriarConta />} />
                 <Route path="/perfil" element={<Perfil />} />
+                <Route path="/minhasReservas" element={<MinhasReservas onClose={function (): void {
+                    throw new Error("Function not implemented.");
+                } } />} />
             </Routes>
         </Layout>
     )

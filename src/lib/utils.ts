@@ -71,3 +71,21 @@ export function obterCidadesPorEstado(estado: string): string[] {
 
   return cidadesPorEstado[estado] || [];
 }
+
+
+function validarCampos(usuario: { nome: any; email: string; senha: string | any[]; }) {
+  if (!usuario.nome || !usuario.email || !usuario.senha) {
+      return "Preencha todos os campos obrigatórios!";
+  }
+
+  const regexEmail = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
+  if (!regexEmail.test(usuario.email)) {
+      return "Email inválido!";
+  }
+
+  if (usuario.senha.length < 6) {
+      return "A senha deve ter pelo menos 6 caracteres!";
+  }
+
+  return null;
+}
